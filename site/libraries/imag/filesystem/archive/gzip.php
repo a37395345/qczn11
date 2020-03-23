@@ -1,0 +1,119 @@
+<?php
+// Check to ensure this file is within the rest of the framework
+
+/**
+ * Gzip format adapter for the JArchive class
+ *
+ * This class is inspired from and draws heavily in code and concept from the Compress package of
+ * The Horde Project <http://www.horde.org>
+ *
+ * @contributor  Michael Slusarz <slusarz@horde.org>
+ * @contributor  Michael Cochrane <mike@graftonhall.co.nz>
+ *
+ * @package 	Imag.Framework
+ * @subpackage	FileSystem
+ * @modify by   gary wang (wangbaogang123@hotmail.com)
+ * 
+ */
+class ArchiveGzip extends Object
+{
+	/**
+	 * Gzip file flags.
+	 * @var array
+	 */
+	private $_flags = array (
+		'FTEXT' => 0x01,
+		'FHCRC' => 0x02,
+		'FEXTRA' => 0x04,
+		'FNAME' => 0x08,
+		'FCOMMENT' => 0x10
+	);
+
+	/**
+	 * Gzip file data buffer
+	 * @var string
+	 */
+	private $_data = null;
+
+	/**
+	* Extract a Gzip compressed file to a given path
+	*
+	* @access	public
+	* @param	string	$archive		Path to ZIP archive to extract
+	* @param	string	$destination	Path to extract archive to
+	* @param	array	$options		Extraction options [unused]
+	* @return	boolean	True if successful
+	*/
+	public function extract($archive, $destination, $options = array ())
+	{
+		// Initialize variables
+		$this->_data = null;
+
+		if (!extension_loaded('zlib')) {
+			$this->set('error.message', 'Zlib Not Supported');
+			return new Exception($this->get('error.message'));
+		}
+
+		if (!$this->_data = FuseFile::read($archive)) {
+			$this->set('error.message', 'Unable to read archive');
+			return new Exception($this->get('error.message'));
+		}
+
+		$position = $this->_getFilePosition();
+		$buffer = gzinflate(substr($this->_data, $position, strlen($this->_data) - $position));
+		if (empty ($buffer)) {
+			$this->set('error.message', 'Unable to decompress data');
+			return new Exception($this->get('error.message'));
+		}
+
+		if (FuseFile::write($destination, $buffer) === false) {
+			$this->set('error.message', 'Unable to write archive');
+			return new Exception($this->get('error.message'));
+		}
+		return true;
+	}
+
+	/**
+	* Get file data offset for archive
+	*
+	* @access	public
+	* @return	int	Data position marker for archive
+	*/
+	private function _getFilePosition()
+	{
+		// gzipped file... unpack it first
+		$position = 0;
+		$info = @ unpack('CCM/CFLG/VTime/CXFL/COS', substr($this->_data, $position +2));
+		if (!$info) {
+			$this->set('error.message', 'Unable to decompress data');
+			return false;
+		}
+		$position += 10;
+
+		if ($info['FLG'] & $this->_flags['FEXTRA']) {
+			$XLEN = unpack('vLength', substr($this->_data, $position +0, 2));
+			$XLEN = $XLEN['Length'];
+			$position += $XLEN +2;
+		}
+
+		if ($info['FLG'] & $this->_flags['FNAME']) {
+			$filenamePos = strpos($this->_data, "\x0", $position);
+			$filename = substr($this->_data, $position, $filenamePos - $position);
+			$position = $filenamePos +1;
+		}
+
+		if ($info['FLG'] & $this->_flags['FCOMMENT']) {
+			$commentPos = strpos($this->_data, "\x0", $position);
+			$comment = substr($this->_data, $position, $commentPos - $position);
+			$position = $commentPos +1;
+		}
+
+		if ($info['FLG'] & $this->_flags['FHCRC']) {
+			$hcrc = unpack('vCRC', substr($this->_data, $position +0, 2));
+			$hcrc = $hcrc['CRC'];
+			$position += 2;
+		}
+
+		return $position;
+	}
+}

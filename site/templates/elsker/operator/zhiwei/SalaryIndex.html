@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>职位工资结构管理</title>
+    <link rel="shortcut icon" href="favicon.ico"> <link href="../../../crm1/css/bootstrap.min.css?v=3.3.6" rel="stylesheet">
+    <link href="../../../crm1/css/font-awesome.css?v=4.4.0" rel="stylesheet">
+
+    <link href="../../../crm1/css/animate.css" rel="stylesheet">
+    <link href="../../../crm1/css/style.css?v=4.1.0" rel="stylesheet">
+    <link href="../../../crm1/css/plugins/treeview/bootstrap-treeview.css" rel="stylesheet">
+
+    <link href="../../../crm/css/plugins/sweetalert/sweetalert.css" rel="stylesheet">
+  <script src="../../../crm/js/plugins/sweetalert/sweetalert.min.js"></script>
+
+
+
+    <script type="text/javascript" src="../../../js/jquery.js">
+</script>
+    <link href="../../../js/jbox/jBox/Skins/GreyBlue/jbox.css?a=2" rel="stylesheet">
+  <script type="text/javascript" src="../../../js/jbox/jBox/jquery.jBox-2.3.min.js?a=5"></script>
+  <script type="text/javascript" src="../../../js/jbox/jBox/i18n/jquery.jBox-zh-CN.js?a=1"></script>
+</head>
+
+<body class="gray-bg">
+    <div class="row wrapper wrapper-content animated fadeInRight">
+        
+       
+       
+        <div class="col-sm-12">
+          <div class="ibox float-e-margins" >
+               <div class="ibox-title" style="    padding-top: 5px">
+                <h5 style="padding-top: 10px">职位工资结构管理</h5>
+               
+              
+            </div>
+            <table class="table table-bordered table-hover" data-height="400" style="margin-bottom:0px" data-mobile-responsive="true">
+                            <thead>
+                            <tr>
+                                <th style="text-align: center;width: 10%">
+                                    排序
+                                </th>
+                                <th style="text-align: center;width: 15%">
+                                    职位名称
+                                </th>
+                                <th style="text-align: center;width: 15%">
+                                    试用期底薪
+                                </th>
+                                <th style="text-align: center;width: 15%">
+                                    正式期底薪
+                                </th>
+                                <th style="text-align: center;width: 15%">
+                                    试用期
+                                </th>
+                                <th style="text-align: center;width: 15%">
+                                    休息方式
+                                </th>
+                                <th style="text-align: center;width: 15%">
+                                    操作
+                                </th>
+
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {foreach from=$list key=i item=rows}
+                            <tr>
+                              <td style="text-align: center;">
+                                {$i+1}
+                              </td>
+                              <td>{$rows.zhiwei_name}</td>
+                              <td>{$rows.zhiwei_shiyong_dixin}</td>
+                              <td>{$rows.zhiwei_zhengshi_dixin}</td>
+                              <td>{$rows.zhiwei_shiyongqi}月</td>
+
+                              <td>{if $rows.zhiwei_xiuxi==0}单休
+                                {elseif $rows.zhiwei_xiuxi==1}双休
+                                {elseif $rows.zhiwei_xiuxi==2}一月休4天
+                                {elseif $rows.zhiwei_xiuxi==3}不休
+                                {/if}
+                              </td>
+                              <td>
+                                {if $rule_xiangxi==1}
+                              <a href="index.php?task=xiangxi&id={$rows.id}">详细</a> &nbsp;&nbsp;&nbsp;
+                              {/if}
+                               {if $rule_Salary==1}
+                              <a href="index.php?task=Salary&id={$rows.id}">修改</a> &nbsp;&nbsp;&nbsp;
+                              {/if}
+                            </td>
+                            </tr>
+                            {/foreach}
+                        </tbody>
+                    </table>
+                </div>
+        </div> 
+    </div>
+    </div>
+    <!-- 全局js -->
+    
+    <script src="../../../crm1/js/bootstrap.min.js?v=3.3.6"></script>
+    <!-- Bootstrap-Treeview plugin javascript -->
+    <script src="../../../crm1/js/plugins/treeview/bootstrap-treeview.js"></script>
+
+
+
+
+</body>
+
+</html>

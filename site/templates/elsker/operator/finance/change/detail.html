@@ -1,0 +1,88 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>管理后台</title>
+<link href="../../../../css/style.css" rel="stylesheet" type="text/css">
+<link href="../../../../js/jbox/jBox/Skins/GreyBlue/jbox.css" rel="stylesheet"  />
+<script type="text/javascript" src="../../../../js/jquery.js"></script>
+<script type="text/javascript" src="../../../../js/common.js"></script>
+<script type="text/javascript" src="../../../../js/fancybox/jquery.mousewheel-3.0.4.pack.js"></script>
+<script type="text/javascript" src="../../../../js/fancybox/jquery.fancybox-1.3.4.pack.js"></script>
+<script type="text/javascript" src="../../../../js/jbox/jBox/jquery.jBox-2.3.min.js"></script>
+<script type="text/javascript" src="../../../../js/jbox/jBox/i18n/jquery.jBox-zh-CN.js"></script>
+
+<style>
+/*{literal}*/
+	.navi_name{font-size:14px;font-weight:bold;}
+	.indent{padding-left:40px;}
+/*{/literal}*/
+</style>
+</head>
+<body>
+<div class="so_main">
+  <div class="page_tit">{if $item==1}其他收入{elseif $item==2}其他付款{else}资金账户变动{/if}</div>
+  <div class="form2">
+	  	<dl class="lineD">
+		  <dt>经手人：</dt>
+		  <dd>{$list.input_man}</dd>
+		</dl>
+		<dl class="lineD">
+		  <dt>操作日期：</dt>
+		  <dd>{$list.add_time}</dd>
+		</dl>
+		{if $item==1 || $item==0}
+	  	<dl class="lineD">
+		  <dt>收款方式：</dt>
+		  <dd>{$list.payment_name_to}</dd>
+		</dl>
+		<dl class="lineD">
+		  <dt>收款账号：</dt>
+		  <dd>{$list.bank_name_to}</dd>
+		</dl>
+		{/if}
+		{if $item==2 || $item==0}
+		<dl class="lineD">
+		  <dt>付款方式：</dt>
+		  <dd>{$list.payment_name_from}</dd>
+		</dl>
+		<dl class="lineD">
+		  <dt>付款账号：</dt>
+		  <dd>{$list.bank_name_from}</dd>
+		</dl>
+		
+		{/if}
+		<dl class="lineD">
+		  <dt>金额：</dt>
+		  <dd>{$list.money}元</dd>
+		</dl>
+		<dl class="lineD">
+		  <dt>备注说明：</dt>
+		  <dd>{$list.baoxiao_remarks}</dd>
+		</dl>
+		<dl class="lineD">
+	      <dt>附件：</dt>
+	      <dd>
+	      <div>
+	        <ul>
+	        {foreach from=$list.finance_imglist key=i item=rows name=foo}
+	         <li style="float:left;text-align:center;"><a href="../baoxiao/picture.php?finance_id={$list.id}&nowserial={$smarty.foreach.foo.index+1}" title="点击查看原图" target="_blank"><img src="../../../../thumb/{$rows.images}" width="100" height="100" /></a><br />{$smarty.foreach.foo.index+1}</li>
+	        {/foreach}
+	        </ul>
+	        </div>
+			<input onclick="uploadfile({$list.id})" type="button" class="btn_b" value="补传附件" style="float:right;"/>
+	      </dd>
+		</dl>
+  </div>
+</div>
+
+<!-{literal}->
+<script>
+	function uploadfile(bid){
+		demo_iframe('list.php?task=upload&f_id='+bid,'上传附件',950,560,'login_js');
+	}
+</script>
+<!-{/literal}->
+</body>
+</html>

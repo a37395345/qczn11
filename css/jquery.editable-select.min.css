@@ -1,0 +1,33 @@
+.cssINPUT
+        {
+            height: 18PX;
+            
+            margin: 0PX;
+            border: 1PX SOLID #C0C0C0;
+            font-family: 宋体,arial;
+            font-size: 9pt;
+        }
+        .select_div_list
+        {
+            position: absolute;
+            border: 1px solid black;
+            background-color: White;
+            overflow: hidden;
+            overflow-y: auto;
+        }
+        .select_div_list_ul
+        {
+            margin: 0px;
+            padding: 0px;
+            list-style-type: none;
+        }
+        .select_div_list_ul li
+        {
+            cursor: pointer;
+            padding-left: 3px;
+            font-family: 宋体,arial;
+            font-size: 9pt; *padding:0px;*height:20px;_height:14px;_margin:0px;_height:14px;*margin:0px;line-height:14px;}
+        .selectSPAN
+        {
+            background-color: Yellow;
+        }

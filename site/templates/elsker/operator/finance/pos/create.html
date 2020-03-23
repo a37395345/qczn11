@@ -1,0 +1,60 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>管理后台</title>
+<link href="../../../../css/style.css" rel="stylesheet" type="text/css">
+<script type="text/javascript" src="../../../../js/jquery.js"></script>
+<script type="text/javascript" src="../../../../js/common.js"></script>
+
+<style>
+/*{literal}*/
+	.navi_name{font-size:14px;font-weight:bold;}
+	.indent{padding-left:40px;}
+/*{/literal}*/
+</style>
+</head>
+<body>
+<div class="so_main">
+  <div class="page_tit">处理</div>  
+  <form method="post" action="list.php" name="form1">
+  <div class="form2">
+	  	<dl class="lineD">
+		  <dt>刷卡金额：</dt>
+		  <dd>{$list.money}</dd>
+		</dl>
+	  	<dl class="lineD">
+		  <dt>手续费：</dt>
+		  <dd><input type="text" name="fee" id="fee" size="10" value="{$list.fee}" /></dd>
+		</dl>
+		<dl class="lineD">
+		  <dt>成本：</dt>
+		  <dd><input type="text" name="cost" id="cost" size="10" value="{$list.cost}" /></dd>
+		</dl>
+		<dl class="lineD">
+		  <dt>利润：</dt>
+		  <dd><input type="text" name="profit" id="profit" size="10" value="{$list.profit}" readonly="readonly" /></dd>
+		</dl>
+		
+    <div class="page_btm">
+      <input type="submit" class="btn_b" value="确定" />
+    </div>
+  </div>
+  <input type="hidden" name="uid" value="{$list.id}" />
+  <input type="hidden" name="task" value="{$task}" />
+  </form>
+</div>
+<!-{literal}->
+<script>
+$(document).ready(function(){
+	$("#fee,#cost").live('input propertychange',function(){
+		a=$("#fee").val()==""? 0 : parseFloat($("#fee").val());
+		b=$("#cost").val()==""? 0 : parseFloat($("#cost").val());
+		$("#profit").val(a-b);
+	});
+});
+</script>
+<!-{/literal}->
+</body>
+</html>

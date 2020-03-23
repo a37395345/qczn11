@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+
+
+<!-- Mirrored from www.zi-han.net/theme/hplus/table_bootstrap.html by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 20 Jan 2016 14:20:03 GMT -->
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+    <title>员工换岗</title>
+    <meta name="keywords" content="H+后台主题,后台bootstrap框架,会员中心主题,后台HTML,响应式后台">
+    <meta name="description" content="H+是一个完全响应式，基于Bootstrap3最新版本开发的扁平化主题，她采用了主流的左右两栏式布局，使用了Html5+CSS3等现代技术">
+
+    <link rel="shortcut icon" href="favicon.ico"> <link href="../../../crm/css/bootstrap.min14ed.css?v=3.3.6" rel="stylesheet">
+    <link href="../../../crm/css/font-awesome.min93e3.css?v=4.4.0" rel="stylesheet">
+    <link href="../../../crm/css/plugins/bootstrap-table/bootstrap-table.min.css" rel="stylesheet">
+    <link href="../../../crm/css/animate.min.css" rel="stylesheet">
+    <link href="../../../crm/css/style.min862f.css?v=4.1.0" rel="stylesheet">
+    <script type="text/javascript" src="../../../js/jquery.js"></script>
+
+</head>
+
+<body class="gray-bg">
+    <div class="wrapper wrapper-content animated fadeInRight">
+        
+        <!-- Panel Other -->
+        <div class="ibox float-e-margins">
+            <div class="ibox-title">
+                <h5>员工换岗</h5>
+                <div class="ibox-tools">
+                   
+                </div>
+            </div>
+            <form method="post" action="index.php?task=huangang_action" name="form1">
+            <div class="ibox-content">
+                <div class="row row-lg">
+                    <div class="col-sm-12">
+                        <!-- Example Events -->
+                        <div class="example-wrap">
+                            <div class="example">
+                                                                
+                                <table class="table table-bordered">
+                        <tr>
+                            <th style="background-color:#F5F5F6" width="15%">
+                                <span style="color:#000">换前职位：</span>
+                            </th>
+                             <td width="35%">
+                               <input type="text"    class="form-control input-sm" placeholder="" value="{$data.zhiwei_name}">
+                            </td>
+
+
+                            <th style="background-color:#F5F5F6" width="15%">
+                                <span style="color:#000">换后职位：</span>
+                            </th>
+                            <td width="35%">
+                               <select class="form-control input-sm" id="emp_zhiweiid" name="emp_zhiweiid">
+                                            <option value="0">请选择</option>
+                                {foreach from=$list_zhiwei key=i item=rows}
+                                        <option value="{$rows.id}" {if $data.emp_zhiweiid==$rows.id}selected{/if}>
+                                                {$rows.zhiwei_name}
+                                        </option>
+                                 {/foreach}
+                                </select>
+                            
+                            </td>
+
+                           
+                        </tr>
+
+                        <tr>
+                             <th style="background-color:#F5F5F6" width="15%">
+                                <span style="color:#000">换前门店：</span>
+                            </th>
+                            <td width="35%">
+                               <input type="text" id="script"   class="form-control input-sm" placeholder="" value="{$data.shop_name}">
+                            </td>
+
+                            
+
+                            <th style="background-color:#F5F5F6" width="15%">
+                                <span style="color:#000">换后门店：</span>
+                            </th>
+                            
+
+                               <td width="35%">
+                               <select class="form-control input-sm" id="emp_shopid" name="emp_shopid">
+                                            <option value="0">请选择</option>
+                                {foreach from=$list_shop key=i item=rows}
+                                        <option value="{$rows.shop_id}" {if $data.emp_shopid==$rows.shop_id}selected{/if}>
+                                                {$rows.shop_name}
+                                        </option>
+                                 {/foreach}
+                                </select>
+                            
+                            
+                            </td>
+                        </tr>
+
+                        
+                        
+                    </table>
+                    <input type="hidden" name="zhiwei" id="zhiwei" value="{$data.emp_zhiweiid}" />
+                    <input type="hidden" name="shop" id="shop" value="{$data.emp_shopid}" />
+
+                    <input type="hidden" name="emp_id" value="{$data.emp_id}" />
+                    <input type="submit" id="submit" class="btn btn-outline btn-default" value="提交" style="width: 10%;margin-left: 45%;display: block;">
+           
+                            </div>
+                        </div>
+                        <!-- End Example Events -->
+                    </div>
+                </div>
+            </div>
+            </form>
+        </div>
+        <!-- End Panel Other -->
+    </div>
+    
+    <script src="../../../crm/js/jquery.min.js?v=2.1.4"></script>
+    <script src="../../../crm/js/bootstrap.min.js?v=3.3.6"></script>
+    
+    <script src="../../../crm/js/plugins/bootstrap-table/bootstrap-table.min.js"></script>
+    <script src="../../../crm/js/plugins/bootstrap-table/bootstrap-table-mobile.min.js"></script>
+    <script src="../../../crm/js/plugins/bootstrap-table/locale/bootstrap-table-zh-CN.min.js"></script>
+    <script src="../../../crm/js/demo/bootstrap-table-demo.min.js"></script>
+    <script type="text/javascript" src="http://tajs.qq.com/stats?sId=9051096" charset="UTF-8"></script>
+    
+</body>  
+<script type="text/javascript">
+    $("#submit").click(function(){
+        var zhiwei= parseInt($("#zhiwei").val());
+        var shop= parseInt($("#shop").val());
+        var emp_shopid= parseInt($("#emp_shopid").val());
+        var emp_zhiweiid= parseInt($("#emp_zhiweiid").val());
+        
+        if(emp_zhiweiid==0){
+            alert('请选择换后职位');
+            return false;
+        }
+        if(emp_shopid==0){
+            alert('请选择换后部门');
+            return false;
+        }
+        if(zhiwei==emp_zhiweiid&&shop==emp_shopid){
+            alert('换前与换后职位，部门都一样，不能切换！');
+            return false;
+        }
+        
+    });
+
+    
+</script>
+
+    
+
+<!-- Mirrored from www.zi-han.net/theme/hplus/table_bootstrap.html by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 20 Jan 2016 14:20:06 GMT -->
+</html>

@@ -1,0 +1,113 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>管理后台</title>
+<link href="../../../css/style.css" rel="stylesheet" type="text/css">
+<script type="text/javascript" src="../../../js/jquery.js"></script>
+<script type="text/javascript" src="../../../js/common.js"></script>
+<script type="text/javascript" src="../../../js/calendar.js"></script>
+<script type="text/javascript" src="../../../js/check_form.js"></script>
+<style>
+/*{literal}*/
+	.navi_name{font-size:14px;font-weight:bold;}
+	.indent{padding-left:40px;}
+/*{/literal}*/
+</style>
+</head>
+<body>
+<div class="so_main">
+  <div class="page_tit">配件采购申请</div>
+  <form method="post" action="list.php" onsubmit="return fitting_check(this)" name="form1">
+  <input type="hidden" name="fid" value="{$fid}" />
+  <input type="hidden" name="task" value="{$task}" />
+  <div class="list">
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+	<tr>
+	<th>配件名称</th>
+	<th>品牌</th>
+	<th>型号/规格</th>
+	<th>采购数量</th>
+	<th>计量单位</th>
+	<th>单价</th>
+	<th>金额</th>
+	<th>备注</th>
+	</tr>
+{if $task=="insert"}	
+{section name=total loop=8}
+	<tr>
+	  <td><input type='text' name='fitting_name[]' value="" size='12' class="noborder" /></td>
+	  <td><input type='text' name='fitting_brand[]' value="" size='12' /></td>
+	  <td><input type='text' name='fitting_model[]' value="" size='12' /></td>
+	  <td><input type='text' name='fitting_num[]' value="" size='2' /></td>
+	  <td><input type='text' name='fitting_unit[]' value="" size='2' /></td>
+	  <td><input type='text' name='fitting_price[]' value="" size='3' /></td>
+	  <td><input type='text' name='fitting_sum[]' value="" size='4' /></td>
+	  <td><input type='text' name='fitting_remark[]' value="" size='64' /></td>
+	</tr>
+{/section}
+{/if}
+{if $task=="update"}
+{foreach from=$list item=row name=foo}
+{$total_sum=$total_sum+$row.fitting_innum*$row.fitting_price}
+{$total_num=$total_num+$row.fitting_innum}
+	<tr>
+	  <td><input type="hidden" name="fitting_id[]" value="{$row.fitting_id}">
+	  <input type='text' name='fitting_name[]' value="{$row.fitting_name}" size='12' class="noborder" /></td>
+	  <td><input type='text' name='fitting_brand[]' value="{$row.fitting_brand}" size='12' /></td>
+	  <td><input type='text' name='fitting_model[]' value="{$row.fitting_model}" size='12' /></td>
+	  <td><input type='text' name='fitting_num[]' value="{$row.fitting_innum}" size='2' /></td>
+	  <td><input type='text' name='fitting_unit[]' value="{$row.fitting_unit}" size='2' /></td>
+	  <td><input type='text' name='fitting_price[]' value="{$row.fitting_price}" size='3' /></td>
+	  <td><input type='text' name='fitting_sum[]' value="{$row.fitting_innum*$row.fitting_price}" size='4' /></td>
+	  <td><input type='text' name='fitting_remark[]' value="{$row.fitting_remark}" size='64' /></td>
+	</tr>
+{/foreach}
+{/if}
+	<tr>
+	  <td>合计</td>
+	  <td colspan="2">&nbsp;</td>
+	  <td><input type='text' name='total_num' id='total_num' value="{$total_num}" size='2' /></td>
+	  <td colspan="2">&nbsp;</td>
+	  <td><input type='text' name='total_sum' id='total_sum' value="{$total_sum}" size='2' /></td>
+	  <td>&nbsp;</td>
+	</tr>
+	<tr>
+	  <td colspan="13"><input type="submit" id="submit" value="提 交" /></td>
+	</tr>
+	</table>
+  </div>
+  <input type="hidden" name="task" value="{$task}" />
+
+  </form>
+</div>
+<!-{literal}->
+<script>
+$(document).ready(function(){
+	$("input[name=fitting_num[]]").live('input propertychange',function(){
+		calTotal();
+	});
+	$("input[name=fitting_price[]]").live('input propertychange',function(){
+		calTotal();
+	});
+});
+function calTotal(){
+	var tmpSum=0;
+	var Total_Num=0;
+	var Total_Sum=0; 
+	$.each($('input[name=fitting_num[]]'), function(i, n){
+		if ($('input[name=fitting_price[]]').eq(i).val()!="" && $(n).val()!=""){
+			tmpSum=parseFloat($('input[name=fitting_price[]]').eq(i).val())*parseFloat($(n).val());
+			Total_Num+= parseFloat($(n).val());
+			Total_Sum+=tmpSum;
+			$('input[name=fitting_sum[]]').eq(i).val(tmpSum);
+		}
+	});
+	$("#total_num").val(Total_Num);
+	$("#total_sum").val(Total_Sum);
+}
+</script>
+<!-{/literal}->
+</body>
+</html>

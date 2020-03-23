@@ -1,0 +1,14 @@
+ #jbox-content{
+                -webkit-overflow-scrolling:touch;
+                overflow:auto!important;
+            }
+            @media(max-width: 768px){
+                #jbox-content{
+                    -webkit-overflow-scrolling:touch;
+                    overflow:auto!important;
+                }
+            }
+
+#jbox-iframe{
+	height: 420px!important;
+}

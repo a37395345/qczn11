@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+
+<!-- Mirrored from www.zi-han.net/theme/hplus/table_bootstrap.html by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 20 Jan 2016 14:20:03 GMT -->
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>切换车辆存放状态</title>
+    <meta name="keywords" content="H+后台主题,后台bootstrap框架,会员中心主题,后台HTML,响应式后台">
+    <meta name="description" content="H+是一个完全响应式，基于Bootstrap3最新版本开发的扁平化主题，她采用了主流的左右两栏式布局，使用了Html5+CSS3等现代技术">
+
+    <link rel="shortcut icon" href="favicon.ico"> <link href="../../../crm/css/bootstrap.min14ed.css?v=3.3.6" rel="stylesheet">
+    <link href="../../../crm/css/font-awesome.min93e3.css?v=4.4.0" rel="stylesheet">
+    <link href="../../../crm/css/plugins/bootstrap-table/bootstrap-table.min.css" rel="stylesheet">
+    <link href="../../../crm/css/animate.min.css" rel="stylesheet">
+    <link href="../../../crm/css/style.min862f.css?v=4.1.0" rel="stylesheet">
+    <script type="text/javascript" src="../../../js/jquery.js"></script>
+    <script type="text/javascript" src="../../../js/laydate/laydate.js"></script>
+
+    <object classid="clsid:F1317711-6BDE-4658-ABAA-39E31D3704D3" codebase="SDRdCard.cab#version=1,3,5,0" width="330" height="0" align="center" hspace="0" vspace="0" id="idcard" name="rdcard"></object>
+    <style type="text/css">
+    
+    .span1{
+        margin-bottom: 5px;    color: inherit;
+    background-color: transparent;
+    -webkit-transition: all .5s;
+    transition: all .5s;    border-color: #c2c2c2;border-radius: 3px;    display: inline-block;
+    padding: 6px 12px;
+    }
+
+</style>
+
+</head>
+
+<body class="gray-bg">
+    <div class="wrapper wrapper-content animated fadeInRight">
+        
+        <!-- Panel Other -->
+        <div class="ibox float-e-margins">
+            <div class="ibox-title">
+                <h5>切换车辆存放状态</h5>
+            </div>
+            <form method="post" action="index.php?task=update_qiehuan" name="form1" enctype="multipart/form-data">
+            <div class="ibox-content">
+                <div class="row row-lg">
+                    <div class="col-sm-12">
+                        <!-- Example Events -->
+                        <div class="example-wrap">
+                            <div class="example">
+                             
+                             <table class="table table-bordered">
+                            <tr>
+                                    <th style="background-color:#F5F5F6" width="15%">
+                                        <span style="color:#000">存放门店</span>
+                                    </th>
+                                    <td width="35%">
+                                        <select class="form-control input-sm" name="car_nowSite" id="car_nowSite">
+                                            {foreach from=$shop_list key=i item=rows}
+                                              <option {if $car['car_nowSite']==$rows.shop_id}selected{/if} value="{$rows.shop_id}">{$rows.shop_name}</option>
+                                            {/foreach}
+                                        </select>
+                                    </td>
+                                    <th style="background-color:#F5F5F6" width="15%">
+                                        <span style="color:#000">维修状态</span>
+                                    </th>
+                                    <td width="35%">
+                                        <select class="form-control input-sm" name="weixiu" id="weixiu">
+                                            <option value="0" {if $car.car_status!=2}selected{/if}>正常</option>
+                                            <option value="3" {if $car.car_status==2&&$car.car_maintreason==2}selected{/if}>待维修</option>
+                                            <option value="1" {if $car.car_status==2&&$car.car_maintreason==0}selected{/if}>故障维修</option>
+                                            <option value="2" {if $car.car_status==2&&$car.car_maintreason==1}selected{/if}>异常/被骗</option>
+                                              
+                                            
+                                        </select>
+                                    </td>
+                                
+                            </tr>
+                           
+                    </table>
+                    <input type="hidden" name="car_id" value="{$car.car_id}">
+                    <input type="submit" id="submit" class="btn btn-outline btn-default" value="提交" style="width: 10%;margin-left: 45%;display: block;">
+                    
+                
+                                
+                            </div>
+                        </div>
+                        <!-- End Example Events -->
+                    </div>
+                </div>
+            </div>
+            </form>
+        </div>
+        <!-- End Panel Other -->
+    </div>
+    
+    <script src="../../../crm/js/jquery.min.js?v=2.1.4"></script>
+    <script src="../../../crm/js/bootstrap.min.js?v=3.3.6"></script>
+    
+    <script src="../../../crm/js/plugins/bootstrap-table/bootstrap-table.min.js"></script>
+    <script src="../../../crm/js/plugins/bootstrap-table/bootstrap-table-mobile.min.js"></script>
+    <script src="../../../crm/js/plugins/bootstrap-table/locale/bootstrap-table-zh-CN.min.js"></script>
+    <script src="../../../crm/js/demo/bootstrap-table-demo.min.js"></script>
+    <script type="text/javascript" src="http://tajs.qq.com/stats?sId=9051096" charset="UTF-8"></script>
+   
+</body>  
+<script type="text/javascript">
+  
+
+    
+   
+
+
+</script>
+
+    
+
+<!-- Mirrored from www.zi-han.net/theme/hplus/table_bootstrap.html by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 20 Jan 2016 14:20:06 GMT -->
+</html>

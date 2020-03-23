@@ -1,0 +1,144 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>管理后台</title>
+<link href="../../../../css/style.css" rel="stylesheet" type="text/css">
+<link href="../../../../js/jbox/jBox/Skins/GreyBlue/jbox.css" rel="stylesheet"  />
+<script type="text/javascript" src="../../../../js/jquery.js"></script>
+<script type="text/javascript" src="../../../../js/common.js"></script>
+<script type="text/javascript" src="../../../../js/calendar.js"></script>
+<script type="text/javascript" src="../../../../js/fancybox/jquery.mousewheel-3.0.4.pack.js"></script>
+<script type="text/javascript" src="../../../../js/fancybox/jquery.fancybox-1.3.4.pack.js"></script>
+<script type="text/javascript" src="../../../../js/jbox/jBox/jquery.jBox-2.3.min.js"></script>
+<script type="text/javascript" src="../../../../js/jbox/jBox/i18n/jquery.jBox-zh-CN.js"></script>
+</head>
+<body>
+
+<div class="so_main">
+  <div class="page_tit">支出明细1---时间范围：{$sdate}&nbsp;&nbsp;到&nbsp;&nbsp;{$edate}</div>
+  {if $list1 && ($b_type==0 || $b_type=="")}
+  <div class="Toolbar_inbox"><span>司机报销</span></div>
+  <div class="list">
+  <table width="100%" border="0" cellspacing="0" cellpadding="0">
+  <tr>
+	<th>序号1</th>
+	<th>报销日期</th>
+	<th>报销人</th>
+	<th>过路费</th>
+	<th>停车费</th>
+	<th>加油费</th>
+	<th>住宿费</th>
+	<th>就餐费</th>
+	<th>派车单号</th>
+	<th>录入时间</th>
+	<th>报销单号</th>
+  </tr>
+  
+  {foreach from=$list1 item=row name=foo}
+  <tr overstyle='on' id="badge_{$row.baoxiao_id}" {if ($smarty.foreach.foo.index+1) mod 2 ==0}style="background-color:#EAF2D3;"{/if}>
+	  	<td>{$smarty.foreach.foo.index+1}</td>
+	  	<td>{$row.baoxiao_isOverTime}</td>
+	    <td>{$row.emp_name}</td>
+	    <td>{$row.baoxiao_roadQiao}</td>
+	    <td>{$row.baoxiao_stopCar}</td>
+	    <td>{$row.baoxiao_oil}</td>
+	    <td>{$row.baoxiao_room}</td>
+	    <td>{$row.baoxiao_meal}</td>
+	    <td><a href="../../business/detail.php?uid={$row.baoxiaoPaicheId}" target="_blank">{$row.baoxiaoPaicheContractNum}</a></td>
+	    <td>{$row.baoxiao_times}</td>
+	    <td><a href="../../finance/baoxiao/detail.php?uid={$row.baoxiao_id}" target="_blank">{$row.baoxiao_code}</a></td>
+ </tr>
+ {/foreach}
+ {foreach from=$list10 item=row name=foo}
+ <tr style="background-color:#FE6E47;">
+    <td>合计</td>
+    <td colspan="2">&nbsp;</td>
+    <td>{$row.total_money11}</td>
+    <td>{$row.total_money15}</td>
+    <td>{$row.total_money12}</td>
+    <td>{$row.total_money13}</td>
+	<td>{$row.total_money14}</td>
+    <td >{$row.total_money11+$row.total_money15+$row.total_money12+$row.total_money13+$row.total_money14}</td>
+    <td colspan="2">&nbsp;</td>
+  </tr>
+  {/foreach}
+ </table>
+ </div>
+ {/if}
+ {if $list2 && ($b_type!=0 || $b_type=="")}
+ {$all_money=0}
+ <div class="Toolbar_inbox"><span>其他报销</span></div>
+ <div class="list">
+  <table width="100%" border="0" cellspacing="0" cellpadding="0">
+  <tr>
+	<th>序号1</th>
+	<th>报销日期</th>
+	<th>报销人</th>
+	<th>金额</th>
+	<th>报销类型</th>
+	<th>付款方式</th>
+	<th>付款账号</th>
+	<th width="35%">报销内容</th>
+	<th>录入时间</th>
+	<th>门店</th>
+	<th>报销单号</th>
+  </tr>
+  {foreach from=$list2 item=row name=foo}
+  {if ($b_type=="" && $row.baoxiao_type!="打款蒋政") || $b_type==$row.typeid}
+  {$all_money=$all_money+$row.baoxiao_money}
+  {$count=$count+1}
+  <tr overstyle='on' id="badge_{$row.baoxiao_id}" {if ($smarty.foreach.foo.index+1) mod 2 ==0}style="background-color:#EAF2D3;"{/if}>
+	  	<td>{$count}</td>
+	  	<td>{$row.baoxiao_isOverTime}</td>
+	    <td>{$row.emp_name}</td>
+	    <td>{$row.baoxiao_money}</td>
+	    <td>{$row.baoxiao_type}</td>
+	    <td>{$row.payment_name}</td>
+	    <td>{$row.bank_name}</td>
+	    <td>{$row.baoxiao_content}</td>
+	    <td>{$row.baoxiao_times}</td>
+	    <td>{$row.shop_name}</td>
+	    <td><a href="../../finance/baoxiao/detail.php?uid={$row.baoxiao_id}" target="_blank">{$row.baoxiao_code}</a></td>
+ </tr>
+ {/if}
+ {/foreach}
+ <tr style="background-color:#FE6E47;">
+    <td>合计</td>
+    <td colspan="2">&nbsp;</td>
+    <td>{$all_money}</td>
+    <td colspan="7">&nbsp;</td>
+  </tr>
+  </table>
+  </div>
+ {/if}
+ 
+ 
+</div>
+<!-{literal}->
+<script>
+	//鼠标移动表格效果
+	$(document).ready(function(){
+        $("a.zoomIn").fancybox({
+            'overlayShow'   : false,
+            'transitionIn'  : 'elastic',
+            'transitionOut' : 'elastic'
+        });         
+        
+		$("tr[overstyle='on']").hover(
+		  function () {
+		    $(this).addClass("bg_hover");
+		  },
+		  function () {
+		    $(this).removeClass("bg_hover");
+		  }
+		);
+	});	
+	
+
+</script>
+<!-{/literal}->
+
+</body>
+</html>

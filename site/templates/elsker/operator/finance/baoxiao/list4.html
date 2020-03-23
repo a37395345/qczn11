@@ -1,0 +1,181 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>管理后台</title>
+<link href="../../../../css/style.css" rel="stylesheet" type="text/css">
+<link href="../../../../js/jbox/jBox/Skins/GreyBlue/jbox.css" rel="stylesheet"  />
+<script type="text/javascript" src="../../../../js/jquery.js"></script>
+<script type="text/javascript" src="../../../../js/common.js"></script>
+<script type="text/javascript" src="../../../../js/calendar.js"></script>
+<script type="text/javascript" src="../../../../js/fancybox/jquery.mousewheel-3.0.4.pack.js"></script>
+<script type="text/javascript" src="../../../../js/fancybox/jquery.fancybox-1.3.4.pack.js"></script>
+<script type="text/javascript" src="../../../../js/jbox/jBox/jquery.jBox-2.3.min.js"></script>
+<script type="text/javascript" src="../../../../js/jbox/jBox/i18n/jquery.jBox-zh-CN.js"></script>
+</head>
+<body>
+<div class="so_main">
+  <div class="page_tit">待跟踪费用报销记录</div>
+  <div class="Toolbar_inbox">
+  	<div class="page right">&nbsp;&nbsp;&nbsp;</div>
+  	&nbsp;&nbsp;<a onclick="location.href='list1.php?search_user={$search_user}';" href="javascript:void(0);" class="btn_a"><span>返回</span></a>
+  </div>
+  <div class="list">
+  {if $list1}
+  <table width="100%" border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <th width="7%">审核日期</th>
+    <th width="7%">报销日期</th>
+    <th width="4%">报销人</th>
+	<th width="4%">桥路费</th>
+	<th width="4%">停车费</th>
+	<th width="4%">油费</th>
+	<th width="4%">住宿费</th>
+	<th width="4%">餐费</th>
+	<th width="8%">付款方式</th>
+	<th width="9%">合同号</th>
+	<th width="12%">用车时间</th>
+	<th width="15%">开车线路</th>
+	<th>报销备注</th>
+	<th class="line_l" width="12%">操作</th>
+  </tr>
+  {foreach from=$list1 item=row name=foo}
+  <tr overstyle='on' id="badge_{$row.baoxiao_id}">
+	<td>{$row.baoxiao_isCheckTime}</td>
+	<td>{$row.baoxiao_date}</td>
+	<td>{$row.emp_name}</td>
+	<td>{$row.baoxiao_roadQiao}</td>
+	<td>{$row.baoxiao_stopCar}</td>
+	<td>{$row.baoxiao_oil}</td>
+	<td>{$row.baoxiao_room}</td>
+	<td>{$row.baoxiao_meal}</td>
+	<td>{$row.payment_name}<hr/>{$row.bank_name}</td>
+	<td><a href="../../business/detail.php?uid={$row.baoxiaoPaicheId}" target="_blank">{$row.baoxiaoPaicheContractNum}</a></td>
+	<td>{$row.paiche_startDate}<hr />{$row.paiche_endDate}</td>
+	<td style="text-align:left;">{$row.paiche_line}</td>
+	<td>{$row.baoxiao_remarks}</td>
+	<td>
+	<a href="detail.php?uid={$row.baoxiao_id}" target="_blank">明细</a>&nbsp;|&nbsp;<a href="javascript:trancheck({$row.baoxiao_id});">取消跟踪</a>
+	</td>
+</tr>
+ {/foreach}
+ </table>
+ <br /><br />
+ {/if}
+ {if $list2}
+ <table width="100%" border="0" cellspacing="0" cellpadding="0">
+  <tr>
+	<th width="7%">审核日期</th>
+	<th width="7%">报销日期</th>
+	<th width="4%">报销人</th>
+	<th width="10%">费用类型</th>
+	<th width="5%">金额</th>
+	<th width="13%">付款方式</th>
+	<th width="25%">报销内容</th>
+	<th width="15%">报销备注</th>
+	<th width="4%">店铺</th>
+	<th class="line_l" width="15%">操作</th>
+  </tr>
+  {foreach from=$list2 item=row name=foo}
+  <tr overstyle='on' id="badge_{$row.baoxiao_id}">
+	<td>{$row.baoxiao_isCheckTime}</td>
+	<td>{$row.baoxiao_date}</td>
+	<td>{$row.emp_name}</td>
+	<td>{$row.baoxiao_type}</td>
+	<td>{$row.baoxiao_money}</td>
+	<td>{$row.payment_name}<hr/>{$row.bank_name}</td>
+	<td style="text-align:left;">{$row.baoxiao_content}</td>
+	<td>{$row.baoxiao_remarks}</td>
+	<td>{$row.shop_name}</td>
+	<td>
+	<a href="detail.php?uid={$row.baoxiao_id}" target="_blank">明细</a>&nbsp;|&nbsp;<a href="javascript:trancheck({$row.baoxiao_id});">取消跟踪</a>
+	</td>
+</tr>
+ {/foreach}
+ </table>
+ {/if}
+ </div>
+
+<!-{literal}->
+<script>
+
+	//鼠标移动表格效果
+	$(document).ready(function(){
+        $("a.zoomIn").fancybox({
+            'overlayShow'   : false,
+            'transitionIn'  : 'elastic',
+            'transitionOut' : 'elastic'
+        });         
+        
+		$("tr[overstyle='on']").hover(
+		  function () {
+		    $(this).addClass("bg_hover");
+		  },
+		  function () {
+		    $(this).removeClass("bg_hover");
+		  }
+		);
+		
+		
+	});
+	
+	function checkAll(o){
+		if( o.checked == true ){
+			$('input[name="checkbox"]').attr('checked','true');
+			$('tr[overstyle="on"]').addClass("bg_on");
+		}else{
+			$('input[name="checkbox"]').removeAttr('checked');
+			$('tr[overstyle="on"]').removeClass("bg_on");
+		}
+	}
+	
+	//获取已选择记录的ID数组
+	function getChecked() {
+		var uids = new Array();
+		$.each($('table input:checked'), function(i, n){
+			uids.push( $(n).val() );
+		});
+		return uids;
+	}
+	
+	var isSearchHidden = 1;
+    function searchNews() {
+      if(isSearchHidden == 1) {
+        $("#searchTopic_div").slideDown("fast");
+        isSearchHidden = 0;
+      }else {
+        $("#searchTopic_div").slideUp("fast");
+        isSearchHidden = 1;
+      }
+    }
+	
+	function trancheck(bid){
+		if(confirm('是否确定取消跟踪该报销单？')){
+			$.ajax({
+	      		  type:'POST',
+	      		  url:'list.php',
+	      		  data:{"task":"cancel_track","uid":bid},
+	      		  dataType:"json",
+	      		  cache: false,
+	      		  async: false,
+	      		  error: function(){
+	      		      return false;
+	      		  },
+	      		  success:function(jsonmsg){
+	      		      if (jsonmsg.result==1){
+	      		    	  alert("操作成功！");
+	      					location.reload();
+	      		      }else{
+	      			  		
+	      		      }
+	      		  }
+	      	});
+		}
+	}
+	
+</script>
+<!-{/literal}->
+
+</body>
+</html>

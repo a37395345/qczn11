@@ -1,0 +1,952 @@
+<!DOCTYPE html>
+<html>
+<!-- Mirrored from www.zi-han.net/theme/hplus/table_bootstrap.html by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 20 Jan 2016 14:20:03 GMT -->
+<head>
+    
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>管理后台</title>
+<link rel="shortcut icon" href="favicon.ico">
+<link href="../../../crm/fonts1/iconfont.css?a=2" rel="stylesheet">
+<link href="../../../crm/css/bootstrap.min14ed.css" rel="stylesheet">
+<link href="../../../crm/css/font-awesome.min93e3.css?v=3" rel="stylesheet">
+<link href="../../../crm/css/plugins/bootstrap-table/bootstrap-table.min.css" rel="stylesheet">
+<script type="text/javascript" src="../../../js/laydate/laydate.js"></script>
+<link href="../../../crm/css/animate.min.css" rel="stylesheet">
+<link href="../../../crm/css/style.min862f.css" rel="stylesheet">
+<link href="../../../css/conmone.css" rel="stylesheet">
+
+<link href="../../../crm/css/plugins/sweetalert/sweetalert.css" rel="stylesheet">
+<script type="text/javascript" src="../../../js/jquery.js">
+</script>
+<link href="../../../js/jbox/jBox/Skins/GreyBlue/jbox.css?a=2" rel="stylesheet">
+<script type="text/javascript" src="../../../js/jbox/jBox/jquery.jBox-2.3.min.js?a=5"></script>
+
+<script type="text/javascript" src="../../../js/jbox/jBox/i18n/jquery.jBox-zh-CN1.js?a=101"></script>
+
+<script type="text/javascript">
+        function isDel() {
+            swal(
+                {ldelim}title:"您确定要删除这条信息吗",
+                      text:"删除后将无法恢复，请谨慎操作！",
+                      type:"warning",
+                      showCancelButton:true,
+                      confirmButtonColor:"#DD6B55",
+                      confirmButtonText:"确定",
+                      cancelButtonText:"取消",
+                      closeOnConfirm:false,
+                      closeOnCancel:false{rdelim},
+                      function(isConfirm){
+                        if(isConfirm){
+                            swal("删除成功！","您已经永久删除了这条信息。",
+                                 "success"
+                            )
+                        }else{
+                            swal("已取消",
+                                 "您取消了删除操作！","error"
+                            )
+                        }
+                    }
+                )
+        };
+    </script>
+    <style type="text/css">
+        tr{
+            font-size: 12px;line-height: 10px;
+        }
+        td{
+            
+margin: 0;padding: 1px !important;list-style: none;color: #000000;
+        }
+
+        @media only screen and (max-width: 800px) {
+            .width100 {
+                width: 100%;
+            }
+            .width98 {
+                width: 98%;
+            }
+            .width48 {
+                width: 48%;
+            }
+        }
+        
+    </style>
+</head>
+<body class="gray-bg">
+    <div id="back" style="width: 100%;height: 100%;z-index: 2;display: none;position: fixed;text-align: center;padding-top: 10px;">
+        <a href="javascript:hidden();" class="btn btn-outline btn-default" style="background-color: #293846;float: right;margin-right: 6%;font-size: 18px;">
+            X
+        </a>
+        <div style="width: 80%;height: 500px;margin: 0px auto;">     
+            <video id="course" src="https://gfjugyu.oss-cn-shanghai.aliyuncs.com/MyVideo_1.mp4" controls playsinline="true"></video>
+        </div>
+    </div>
+<div class="wrapper wrapper-content animated fadeInRight" style="z-index: 1;">
+    <!-- Panel Other -->
+    <div class="ibox float-e-margins">
+        <div class="ibox-title">
+            <h5>临时自驾派车管理&nbsp;&nbsp;<a style="float: right;margin-top: -9px;" href="javascript:play();" class="btn btn-outline btn-default">
+                使用教程
+            </a> </h5>
+            
+        </div>
+        <form id="form1" action="zijia_list.php" method="get">
+            <div class="wrapper wrapper-content animated fadeInRight" style=" margin: 0; padding: 0;">
+                <div class="ibox float-e-margins" style="margin:0">
+                     <div class="ibox-title" style=" margin: 0; padding: 0; float: left;margin-bottom: 5px;width: 100%;">
+
+                        <div class="ibox-tools" style="padding-top: 12px; padding-left: 10px;float: left">
+                            <span style="color:#000;">状态:</span>
+                        </div>
+                         <div class="ibox-tools" style="padding-top: 6px; padding-right: 20px;float: left">
+                            <select class="form-control input-sm" name="search_status" id="search_status">
+                                <option {if $search_status=="qb"}selected{/if} value="qb">全部</a></option>
+                                <option {if $search_status=="yy"}selected{/if} value="yy">预约单</option>
+                                <option {if $search_status=="qx"}selected{/if} value="qx">取消单</option>
+                                <option {if $search_status=="ss"}selected{/if} value="ss">正在运行中</option>
+                                <!--<option {if $search_status=="cswh"}selected{/if} value="cswh">调车超时未还车</option>-->
+                                <option {if $search_status=="yh"}selected{/if} value="yh">已还车未结账</option>
+
+                                 <option {if $search_status=="yj"}selected{/if} value="yj">已结账</option>
+                                <!--
+                                 <option {if $search_status=="cswh"}selected{/if} value="cswh" >超时4小时未续</option>
+                                 <option {if $search_status=="zjyy"}selected{/if} value="zjyy" >72h预约订单</option>
+                               -->
+                            </select>
+                            <input type="hidden" name="search_status_a" value={$search_status}>
+                        </div>
+                        <h5 style="padding-top: 15px; padding-left: 10px;">搜索
+                        </h5>
+
+                        <div class="ibox-tools" style="padding-top: 14px; padding-left: 10px;float: left;">
+                            <a class="collapse-link">
+                            <i class="fa fa-chevron-down" id="up"></i>
+                            </a>
+                        </div>
+                         
+                        
+                        <div class="ibox-tools" style=" padding-right: 0;float: left;">
+                            <div class="width100" style="float: left;margin-bottom: -18px;" >
+                                <div class="width48" style="margin: 10px 1px;float: left;" >
+                                    <a style="width: 98%;" href="zijia_list.php?search_status=cswh" class="btn btn-outline btn-default">超时4小时未续：<span style="color:red">{$chaoshiweihuan}</span>个
+                                    </a><br />
+                                    <a style="width: 98%;" href="zijia_list.php?search_status=cswh&paicheCounterShop={$nowshopid}" class="btn btn-outline btn-default">业务门店超时4小时未续:<span style="color:red">{$chaoshiweihuan_b}</span>个
+                                    </a>
+                                </div>
+    
+                                <div class="width48" style="margin: 10px 1px;float: left;" >  
+                                    <a style="width: 98%;" href="zijia_list.php?search_status=zjyy" class="btn btn-outline btn-default">72h预约订单：<span style="color:red">{$getzuijinyueyue}</span>个
+                                    </a><br />
+                                    <a style="width: 98%;" href="zijia_list.php?search_status=zjyy&paicheCounterShop={$nowshopid}" class="btn btn-outline btn-default">业务门店72h预约订单:<span style="color:red">{$getzuijinyueyue_b}</span>个
+                                    </a>
+                                </div>
+                            </div>
+                            
+                            <div class="width100" style="float: left;" >
+                                <div class="width48" style="margin: 10px 1px;float: left;" >  
+                                    <a style="width: 98%;" href="zijia_list.php?search_status=yh" class="btn btn-outline btn-default">已还车未结账的订单:<span style="color:red">{$getyhwj}</span>个
+                                    </a><br />
+                                    <a style="width: 98%;" href="zijia_list.php?search_status=yh&paicheCounterShop={$nowshopid}" class="btn btn-outline btn-default">业务门店已还车未结账的订单:<span style="color:red">{$getyhwj_b}</span>个
+                                    </a>
+                                </div>
+    
+                                <div class="width48" style="margin: 10px 1px;float: left;" >  
+                                     {if $zijia_create==1}
+                                    <a style="width: 98%;" href="zijia_create.php" class="btn btn-outline btn-default">
+                                    <i class="glyphicon glyphicon-plus" aria-hidden="true"></i>
+                                    新建预约单  
+                                    </a><br />
+                                    {/if}
+         
+                                    {if $zijia_create==1}
+                                    <a style="width: 98%;" href="zijia_create.php?paidan_type_b=s" class="btn btn-outline btn-default">
+                                    <i class="glyphicon glyphicon-plus" aria-hidden="true"></i>
+                                    新建实时单
+                                    </a>
+                                    {/if}
+                                </div>
+                            </div>
+                            
+                        </div> 
+                   
+                    </div>
+                    <div class="ibox-content" id="content" style=" margin: 0px; padding: 0px;display: none">
+                        <div class="row row-lg">
+                            <div class="col-sm-12">
+                                <!-- Example Events -->
+                                <div class="example-wrap">
+                                    <div class="example">
+                                        <table class="table table-bordered">
+                                        <tr>
+                                            <th width="15%" style="background-color:#F5F5F6">
+                                                <span style="color:#000;">&nbsp;&nbsp;&nbsp;&nbsp;合同号:</span>
+                                            </th>
+                                            <td width="35%">
+                                                <input type="text" class="form-control input-sm" placeholder="合同号" name="paiche_contractNum">
+                                            </td>
+
+                                             <th width="15%" style="background-color:#F5F5F6">
+                                                <span style="color:#000;">&nbsp;&nbsp;&nbsp;&nbsp;客户来源:</span>
+                                            </th>
+                                            <td width="35%">
+                                                <select class="form-control input-sm" name="paiche_kehu" id="paiche_kehu">
+                                                    <option value="0">请选择</option>
+                                                    <option value="1">临时散客</option>
+                                                    <option value="2">平台用户</option>
+                                                    <option value="3">凹凸代步车</option>
+                                                    <option value="4">违章冻结</option>
+                                                    <option value="5">境外客户</option>
+
+                                                </select>
+                                            </td>
+                                           
+                                        </tr>
+                                        <tr>
+                                             <th width="15%" style="background-color:#F5F5F6">
+                                                <span style="color:#000">&nbsp;&nbsp;&nbsp;&nbsp;车牌号:</span>
+                                            </th>
+                                            <td>
+                                                <input type="text" class="form-control input-sm" placeholder="车牌号" name="paiche_car">
+                                            </td>
+                                            <th width="15%" style="background-color:#F5F5F6">
+                                                <span style="color:#000;">&nbsp;&nbsp;&nbsp;&nbsp;客户类型:</span>
+                                            </th>
+                                            <td width="35%">
+                                                <select class="form-control input-sm" name="paiche_pintaiid" id="paiche_pintaiid">
+                                                <option value="0" >请选择</option>
+                                                {foreach from=$pintai_list key=i item=rows}
+                                                    <option value="{$rows.id}">{$rows.name}</option>
+                                                {/foreach}
+                                                </select>
+                                               
+                                                 <input type="text" class="form-control input-sm" placeholder="客户类型" name="paiche_pintaiida" id="paiche_pintaiida" readonly="readonly" unselectable="on">
+                                            </td>
+                                            
+                                        </tr>
+                                        <tr>
+                                            <th width="15%" style="background-color:#F5F5F6">
+                                                <span style="color:#000">&nbsp;&nbsp;&nbsp;&nbsp;联系人:</span>
+                                            </th>
+                                            <td width="35%">
+                                                <input type="text" class="form-control input-sm" placeholder="联系人" name="paiche_linker">
+                                            </td>
+                                            <th width="15%" style="background-color:#F5F5F6">
+                                                <span style="color:#000;">&nbsp;&nbsp;&nbsp;&nbsp;业绩店铺:</span>
+                                            </th>
+                                            <td width="35%">
+                                                <select class="form-control input-sm" name="paicheCounterShop">
+                                                    <option value="0">请选择</option>
+                                                {foreach from=$shoplist key=i item=rows}
+                                                    <option value="{$rows.shop_id}" {if $paicheCounterShop==$rows.shop_id}selected{/if}>{$rows.shop_name}</option>
+                                                {/foreach}
+                                                </select>
+                                            </td>
+                                            
+                                        </tr>
+                                        <tr>
+                                             <th width="15%" style="background-color:#F5F5F6">
+                                                <span style="color:#000">&nbsp;&nbsp;&nbsp;&nbsp;联系电话:</span>
+                                            </th>
+                                            <td width="35%">
+                                                <input type="text" class="form-control input-sm" placeholder="联系电话" name="paiche_linkerPhone">
+                                            </td>
+                                            <th width="15%" style="background-color:#F5F5F6">
+                                                <span style="color:#000;">&nbsp;&nbsp;&nbsp;&nbsp;调度店铺:</span>
+                                            </th>
+                                            <td width="35%">
+                                                <select class="form-control input-sm" name="paiche_shopid">
+                                                    <option value="0">请选择</option>
+                                                {foreach from=$shoplist key=i item=rows}
+                                                    <option value="{$rows.shop_id}">{$rows.shop_name}</option>
+                                                {/foreach}
+                                                </select>
+                                            </td>
+
+                                        </tr>
+
+                                         <tr>
+                                            <th width="15%" style="background-color:#F5F5F6">
+                                                <span style="color:#000;">&nbsp;&nbsp;&nbsp;&nbsp;身份证:</span>
+                                            </th>
+                                            <td width="35%">
+                                                <input type="text" class="form-control input-sm" placeholder="身份证号码" name="paiche_linkerNum">
+                                            </td>
+                                            <th width="15%" style="background-color:#F5F5F6">
+                                                <span style="color:#000;">&nbsp;&nbsp;&nbsp;&nbsp;开始时间:</span>
+                                            </th>
+                                            
+                                            <td width="35%">
+                                                <input name="paiche_startDate" placeholder="请输入日期" value="" class="laydate-icon form-control input-sm" onclick="laydate({ldelim}istime: true, format: 'YYYY-MM-DD'{rdelim})" unselectable="on" readonly>
+                                            </td>
+                                            
+                                            
+                                        </tr>
+                                        <tr>
+                                            <th width="15%" style="background-color:#F5F5F6">
+                                                <span style="color:#000;">&nbsp;&nbsp;&nbsp;&nbsp;身份验证方式:</span>
+                                            </th>
+                                            <td width="35%">
+                                              <select class="form-control input-sm" name="paiche_stype">
+                                                    <option value="0">请选择</option>
+                                                    <option value="1">手动输入</option>
+                                                    <option value="2">刷身份证验证</option>
+                                                    <option value="3">老客户短信验证</option>
+                                                    <option value="4">新客户人脸验证</option>
+                                                </select>
+                                            </td>
+                                            <th width="15%" style="background-color:#F5F5F6">
+                                                <span style="color:#000">&nbsp;&nbsp;&nbsp;&nbsp;结束时间:</span>
+                                            </th>
+                                            <td width="35%">
+                                                <input name="paiche_endDate" placeholder="请输入日期" value="" class="laydate-icon form-control input-sm" onclick="laydate({ldelim}istime: true, format: 'YYYY-MM-DD'{rdelim})" unselectable="on" readonly>
+                                            </td>
+                                        </tr>
+                                        
+                                        <tr>
+                                            {if $zijia_shenghe==1&&$search_status=='yj'}
+                                            <th width="15%" style="background-color:#F5F5F6">
+                                            
+                                                <span style="color:#000;">&nbsp;&nbsp;&nbsp;&nbsp;订单审核状态:</span>
+                                            
+
+                                            </th>
+
+                                            <td width="35%">
+                                                 
+                                                    <select class="form-control input-sm" name="zijia_shenhe">
+                                                        <option value="0">全部</option>
+                                                        <option value="1">未审核</option>
+                                                        <option value="2">已审核</option>
+
+                                                    </select>
+                                               
+                                            </td>
+                                            {else}
+                                             <th width="15%" style="background-color:#F5F5F6">
+                                            
+                                                <span style="color:#000;">&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                                            
+
+                                            </th>
+
+                                            <td width="35%">
+                                               
+                                            </td>
+                                            {/if}
+                                            <th width="15%" style="background-color:#F5F5F6;" class="paiche_pintainum">
+                                                <span style="color:#000;">&nbsp;&nbsp;&nbsp;&nbsp;平台单号:</span>
+
+                                            </th>
+
+                                            <td width="35%" class="paiche_pintainum">
+                                                 
+                                                    <input type="text" class="form-control input-sm" placeholder="平台单号" name="paiche_pintainum">
+                                               
+                                            </td>
+
+                                            
+                                        </tr>
+                                        
+
+                                        </table>
+
+
+                                         <button type="submit" class="btn btn-outline btn-default" style="margin-left:45%;width: 10%">
+                                <i class="glyphicon glyphicon-search" aria-hidden="true"></i>
+                                                        搜索
+                                </button>
+                                    </div>
+                                </div>
+                                <!-- End Example Events -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- End Panel Other -->
+            </div>
+        </form>
+
+        <div class="ibox-content">
+            <div class="row row-lg">
+                <div class="col-sm-12">
+                    <!-- Example Events -->
+                    <div class="example-wrap">
+                        <div class="example">
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <div class="pull-left" style="margin-top:15px">
+                                        <p>
+                                            显示 {($p-1)*10+1} 到 {$p*10} 项，共 {$total} 项
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="pull-right">
+                                        <ul class="pagination">
+                                               {$PAGINATION}
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <table class="table table-bordered table-hover" data-height="400" style="margin-bottom:0px" data-mobile-responsive="true">
+                            <thead>
+                            <tr>
+                               
+                                <th style="text-align: center;width: 4%">
+                                    状态
+                                </th>
+                                <th style="text-align: center;width: 9%">
+                                    合同编号
+                                </th>
+                                <th style="text-align: center;width: 10%">
+                                    联系人信息
+                                </th>
+                                <th style="text-align: center;width: 8%">
+                                    业务员
+                                </th>
+                                <th style="text-align: center;width: 11%">
+                                    用车时间
+                                </th>
+                                <th style="text-align: center;width: 8%">
+                                    调度人
+                                </th>
+                                <th style="text-align: center;width: 4%">
+                                    车辆
+                                </th>
+                                <th style="text-align: center;width: 22%">
+                                    金额明细
+                                </th>
+                                
+
+
+                                <th style="width: 14%">
+                                    <div align="center">
+                                        操作
+                                    </div>
+                                </th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                                {$index=1}
+                                        {foreach from=$busiList key=i item=row}
+                            <tr>
+            
+                                <td style="text-align: center;color: {if $row.zhuangtai=='预约单'}#4b5fe6{else if $row.zhuangtai=='违约单'}#141415{else if $row.zhuangtai=='取消单'}#8c948e{else if $row.zhuangtai=='超时4小时以内未还'}#fb6800{else if $row.zhuangtai=='超时4小时以上未还'}red{else if $row.zhuangtai=='调车未还'}#0bea3b{else if $row.zhuangtai=='已还车未结账'}#ff00f7
+                                {else if $row.zhuangtai=='已结账'}
+
+                                    #17c8e4
+
+                                {/if};">
+                                    {$row.zhuangtai}
+
+                                    {if $row.paiche_jie==3}
+                                        {if $row.paiche_checkTimes>0}
+                                            <br><span style="color: #2d2f2f">（已审核）</span>
+                                        {else}
+                                            <br><span style="color: red">（未审核）</span>
+                                        {/if}
+                                    {/if}
+                                </td>
+                                
+                                <td style="text-align: center;">
+                                    <span  style="border-bottom:1px solid #b19d9d;line-height: 23px">
+                                                {$row.paiche_contractNum}
+                                    </span>
+                                    <br/>
+            
+                                    {if $row.paiche_kehu==1}
+                                    临时散客
+                                    {else if $row.paiche_kehu==2}
+                                            {$row.paiche_pintainame}<br/>单号：{$row.paiche_pintainum}
+                                    {else if $row.paiche_kehu==3}
+                                    凹凸代步车<br/>单号：{$row.paiche_pintainum}
+                                    {else if $row.paiche_kehu==4}
+                                    违章冻结
+                                    {else if $row.paiche_kehu==5}
+                                    境外客户
+                                    {/if}
+                                            
+                                </td>
+                                <td style="text-align: center;">
+                                     <span {if $row.paiche_linkerNum!=""} style="border-bottom:1px solid #b19d9d;line-height: 23px"{/if}>{$row.paiche_linker}{if $row.paiche_linkerPhone}({$row.paiche_linkerPhone}){/if}</br>{$row.paiche_linkerNum}</br>{if $row.paiche_stype==0}<span style="color:red">手动输入</span>{else if $row.paiche_stype==1}刷身份证验证{else if $row.paiche_stype==2}老客户短信验证{else if $row.paiche_stype==3}新客户人脸验证
+                                 {else if $row.paiche_stype==4}系统默认{/if}</span>
+                                </td>
+                                <td style="text-align: center;">
+                                    <span style="border-bottom:1px solid #b19d9d;line-height: 23px">{$row.ywshopname}
+                                    </span><br/>{$row.yewuyuan}
+                                </td>
+                                <td style="text-align: center;">
+                                    <span style="border-bottom:1px solid #b19d9d;line-height: 23px">{$row.paiche_startDate}
+                                    </span><br/>{$row.paiche_endDate}
+                                </td>
+                                <td style="text-align: center;">
+                                    <span style="border-bottom:1px solid #b19d9d;line-height: 23px">{$row.shop_name}
+                                    </span><br/>{$row.jiedaiyuan}
+                                </td>
+                                <td style="text-align: center;">
+                                    
+                                     {if $row.paiche_shunt==1}
+                                        {$row.paiche_shuntline.bro_name}
+                                    {else}
+                                        {if $row.paiche_status==0}
+                                            {$row.car_num2}
+                                        {else}
+                                            {$row.car_num}
+                                            {if $row.paiche_changelist}
+                                                {foreach from=$row.paiche_changelist item=row10 name=foo}
+                                                            <br/><font style="TEXT-DECORATION: line-through;">{$row10.carA}</font>{/foreach}
+                                            {/if}
+
+                                         {/if}
+                                    {/if}
+                                </td>
+                                <td style="text-align:left;">
+                                    {$z_yingshou=0}
+                                    {$z_yingshou_a=0}
+            {$yinshou=0}{$yishou=0}
+        {foreach from=$row.paiche_chargelist item=row2 name=foo}
+
+        {if $row2.charge_name=='押金'}
+            <span style="border-bottom:1px solid #b19d9d;line-height: 23px">
+                {$row2.charge_name}:{$row2.conv_money}元-已收:{$row2.have_in_money}元-已冻结:{$row2.have_freeze_money}元{if $row2.back_money!=0}-已退:{$row2.have_back_money}元{/if}<br/><br/>
+            </span>
+        {else}
+            {$yinshou=$yinshou+$row2.conv_money}{$yishou=$yishou+$row2.have_in_money}
+
+            <span style="border-bottom:1px solid #b19d9d;line-height: 23px">
+                
+                {$row2.charge_name}:{$row2.conv_money}元 &nbsp;&nbsp;已收:{$row2.have_in_money}元<br/>
+                
+            </span>
+        {/if}
+        {/foreach}
+
+        {if $row.paiche_unlimitTime!="Y" && $row.settle_overTimeMoney!=0}
+            <span style="border-bottom:1px solid #b19d9d;line-height: 23px">
+                超时费:{$row.settle_overTimeMoney}元 &nbsp;&nbsp;已收:{$row.settle_overTimeMoney_have}元<br/>
+            </span>
+        {/if}
+
+        {if $row.paiche_unlimitKm!="Y" && $row.settle_overKmMoney!=0}
+            <span style="border-bottom:1px solid #b19d9d;line-height: 23px">
+                超公里费:{$row.settle_overKmMoney}元 &nbsp;&nbsp;已收:{$row.settle_overKmMoney_have}元<br/>
+            </span>
+        {/if}
+        {if $row.paiche_status==-1}
+              <span style="border-bottom:1px solid #b19d9d;line-height: 23px">
+                违约金:{$row.settle_vio}元 &nbsp;&nbsp;已收:{$row.settle_vio}元<br/>
+            </span>
+        {/if}
+
+
+        <br/>
+        {$yinyouhui=0}{$yiyouhui=0}
+        {if $row.paiche_youhuilist}
+        {foreach from=$row.paiche_youhuilist item=row2 name=foo}
+            <span style="border-bottom:1px solid #b19d9d;line-height: 23px;color: red">
+                {$row2.youhui_name}:{$row2.youhui_mone}元 &nbsp;&nbsp;已优惠:{$row2.youhui_omone}元<br/>
+            </span>
+        {$yinyouhui=$yinyouhui+$row2.youhui_mone}{$yiyouhui=$yiyouhui+$row2.youhui_omone}
+        {/foreach}
+        {/if}
+
+        {if $row.settle_favor!=0}
+             <span style="border-bottom:1px solid #b19d9d;line-height: 23px;color: red">
+            优惠：{$row.settle_favor}元&nbsp;&nbsp;已优惠:{$row.settle_favor}元<br/>
+            </span>
+        {/if}
+
+        <br/><br/>
+        
+                                </td>
+                              
+                                <td align="center">
+                                    <div>
+                                    {if $zijia_shenghe==1&&$row.paiche_checkTimes==0&&$row.paiche_jie==3}
+                                    &nbsp;&nbsp;
+                                       <a href="javascript:;" onclick="zijia_shenghe({$row.paiche_id});return false" title=" 订单审核" style="color:#CC6600" target="_blank">
+                                        <i style="font-size: 22px;color: red" class="fa fa-flask"></i>
+                                   
+                                    </a>
+
+                                    {/if}
+
+                                    {if $zijia_create==1}
+                                   
+                                         {if ($nowshopid==$row.paiche_shopid || $nowshopid==$row.paicheCounterShop||$bufen_quanbu==1) && ($row.paiche_jie==-1)}
+                                          &nbsp;&nbsp;
+                                        <a href="zijia_create.php?p_id={$row.paiche_id}&paidan_type_a=update" title="修改">
+                                        <i class="iconfont icon-xiugai" aria-hidden="true"></i>
+                                        </a>
+                                        {/if}
+                                    {/if}
+                                    {if $zijia_create==1}
+                                        {if $row.paiche_jie==-1}
+                                                    &nbsp;&nbsp;
+                                        <a href="zijia_create.php?p_id={$row.paiche_id}&paidan_type_a=diaoche" title="调度" style="color:#CC6600">
+                                        <i class="iconfont icon-ziyuan" aria-hidden="true"></i>
+                                        </a>
+                                        {/if}
+                                    {/if}
+
+
+                                        {if $zijia_changecar==1}
+                                        {if $row.paiche_jie==1}
+                                        {if $row.paiche_kehu==1||$row.paiche_kehu==2}
+                <a href="javascript:;" onclick="yanzheng_shenfen({$row.paiche_id});return false" title="换车" style="color:#CC6600" target="_blank">
+                    <i class="iconfont icon-qiehuancheliang" aria-hidden="true"></i>
+                                            </a>
+                                            {else}
+                                            <a href="javascript:;" onclick="zijia_changecar({$row.paiche_id});return false" title="换车" style="color:#CC6600" target="_blank">
+                    <i class="iconfont icon-qiehuancheliang" aria-hidden="true"></i>
+                                            </a>
+                                            {/if}
+                                        {/if}
+                                        {/if}
+
+                    {if $print==1}
+                                        {if ($nowshopid==$row.paiche_shopid || $nowshopid==$row.paicheCounterShop||$bufen_quanbu==1) && ($row.paiche_jie==1)}
+                                          &nbsp;&nbsp;
+                    <a href="print.php?uid={$row.paiche_id}&className=pact&bid={$busitype}" title="打印" style="color:#CC6600" target="_blank">
+                                         <i class="iconfont icon-dayin" aria-hidden="true"></i>
+                                                      
+                                                                    </a>
+                                    {/if}
+                    {/if}
+                    {if $zijia_continuecar==1}
+                                    {if ($nowshopid==$row.paiche_shopid || $nowshopid==$row.paicheCounterShop||$bufen_quanbu==1) && ($row.paiche_jie==1)}                       
+                                            &nbsp;&nbsp;
+                                            <a href="javascript:;" onclick="zijia_continuecar({$row.paiche_id});return false"   title="续租" style="color:#CC6600" target="_blank">
+                                    <i class="iconfont icon-woyaoxuzu" aria-hidden="true"></i>
+                                            </a>
+                                        {/if}
+                    {/if}
+
+                    {if $zijia_detail==1}
+                                        <hr/>
+
+                                        {if ($nowshopid==$row.paiche_shopid || $nowshopid==$row.paicheCounterShop) || $bufen_xiangxi==1}
+                                        &nbsp;&nbsp;
+                                            <a href="zijia_detail.php?uid={$row.paiche_id}" title="明细" style="color:#CC6600" target="_blank">
+                                          <i class="iconfont icon-mingxi1" aria-hidden="true"></i>
+                                                                    </a>
+                
+           
+                                        {/if}
+                    {/if}
+
+                                        
+ {if $quxiao==1}
+{if $row.paiche_jie==-1&& ($nowshopid==$row.paiche_shopid||$bufen_quxiao==1)}
+                                            &nbsp;&nbsp;
+                                            <a href="javascript:;" onclick="quxiao({$row.paiche_id});return false"   title="取消" style="color:#CC6600" target="_blank">
+               <i class="iconfont icon-shanchu" aria-hidden="true"></i>
+                                                                    </a>
+                                        {/if}
+
+ {/if}                                 
+
+{if $zijia_returncar==1}
+    {if $row.paiche_jie==1}
+                                        
+                                            &nbsp;&nbsp;
+<a href="javascript:;" onclick="zijia_returncar({$row.paiche_id});return false"   title="还车" style="color:#CC6600" target="_blank">
+
+        <i class="iconfont icon-yihuanche" aria-hidden="true"></i>
+                                                                    </a>
+      {/if}                                  
+
+{/if}
+
+{if $zijia_qita==1}
+                                        {if $row.paiche_jie<3&&$row.paiche_jie>-1 && ($nowshopid==$row.paiche_shopid || $nowshopid==$row.paicheCounterShop||$bufen_quanbu==1)}
+                                             &nbsp;&nbsp;
+                                            <a href="javascript:;" onclick="zijia_qita({$row.paiche_id});return false"  title="增加其他费用" style="color:#CC6600" target="_blank">
+
+                             <i class="iconfont icon-qitafeiyong" aria-hidden="true"></i>
+                                                                    </a>
+                                        {/if}
+
+ {/if} 
+
+ {if $zijia_youhui==1}                                     
+                                        {if $row.paiche_jie<3&&$row.paiche_jie>-1 && ($nowshopid==$row.paiche_shopid || $nowshopid==$row.paicheCounterShop||$bufen_quanbu==1)}
+                                             &nbsp;&nbsp;
+                                            <a href="javascript:;" onclick="zijia_youhui({$row.paiche_id});return false"  title="优惠" style="color:#CC6600" target="_blank">
+                             <i class="iconfont icon-youhui" aria-hidden="true"></i>
+                                                                    </a>
+                                        {/if}                                  
+{/if}
+
+
+
+ {if $xiaofei==1}
+ {if $row.paiche_jie==3}
+                                         &nbsp;&nbsp;
+<a href="zijia_qita.php?task=xiaofei&pid={$row.paiche_id}" title="打印其他费用" style="color:#CC6600" target="_blank">
+     <i class="iconfont icon-xiangxixinxi" aria-hidden="true"></i>
+</a>
+     {/if}
+     {/if}
+
+
+                                        <!--
+                                                    &nbsp;&nbsp;
+                                        <a href="contact_record.html" title="交往记录" style="color:#33cc00">
+                                        <i class="glyphicon glyphicon-list-alt" aria-hidden="true"></i>
+                                        </a>
+                                                    &nbsp;&nbsp;
+                                        <a href="order_info.html" title="历史订单" style="color:#ff3300">
+                                        <i class="glyphicon glyphicon-time" aria-hidden="true"></i>
+                                        </a>
+                                                    &nbsp;&nbsp;
+                                        <a onclick="isDel();" title="删除" style="color:#CC0000">
+                                        <i class="glyphicon glyphicon-remove" aria-hidden="true"></i>
+                                        </a>
+                                    -->
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="9" style="border-bottom: 2px #c7c3c4 solid;">
+                                    <p>
+                                         {if $row.paiche_jie==3&&$row.paiche_checkTimes>0}
+                                            <span style="color: #f7a30a;">
+                                                订单审核意见：
+                                                {if $row.paiche_checkNote!=""}
+                                                    {$row.paiche_checkNote}
+                                                {else}
+                                                    无
+                                                {/if}
+                                                &nbsp;&nbsp;&nbsp;
+                                            </span>
+                                         {/if}
+                                        
+                                    {$row.paiche_line}&nbsp;&nbsp;&nbsp;
+                                    备注：<span id="span_{$row.paiche_id}" dat="{$row.paiche_id}" class="spanremarks">
+                                    </span>
+
+                                     <input type="hidden"  value="{$row.paiche_id}" class="pid">
+                                    <input type="text" name="" style="display:none;width: 50%" value="{$row.paiche_specialRemarks}" class="ipt">
+<span class="beizhu" >
+ {if $row.paiche_specialRemarks!=''}
+  {$row.paiche_specialRemarks}
+{else}
+  无
+{/if}
+</span>
+</p>
+
+                                </td>
+                            </tr>
+                            {$index=$index+1}
+                                        {/foreach}
+
+                            </tbody>
+                            </table>
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <div class="pull-left" style="margin-top:15px">
+                                        <p>
+                                            显示 {($p-1)*10+1} 到 {$p*10} 项，共 {$total} 项
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="pull-right">
+                                        <ul class="pagination">
+                                               {$PAGINATION}
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- End Example Events -->
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End Panel Other -->
+</div>
+
+<script src="../../../crm/js/bootstrap.min.js?v=3.3.6"></script>
+<script src="../../../crm/js/content.min.js?v=2"></script>
+<script src="../../../crm/js/plugins/bootstrap-table/bootstrap-table.min.js"></script>
+<script src="../../../crm/js/plugins/bootstrap-table/bootstrap-table-mobile.min.js"></script>
+<script src="../../../crm/js/plugins/bootstrap-table/locale/bootstrap-table-zh-CN.min.js"></script>
+<script src="../../../crm/js/demo/bootstrap-table-demo.min.js"></script>
+
+<script>
+    $(function(){
+
+    });
+</script>
+<script type="text/javascript">
+    var body_W = $("body").width();
+    var v = document.getElementById("course");
+    function setBody_W(){
+        body_W = $("body").width();
+    }
+     function quxiao(pid){
+        setBody_W();
+        demo_iframe('zijia_list.php?task=quxiao&pid='+pid,'取消',body_W,500,'login_js');
+    }
+    function zijia_youhui(pid){
+        setBody_W();
+        demo_iframe('zijia_youhui.php?pid='+pid,'添加优惠',body_W,500,'login_js');
+        
+    }
+     function zijia_qita(pid){
+            setBody_W();
+            demo_iframe('zijia_qita.php?pid='+pid,'增加其他费用',body_W,500,'login_js');
+    }
+    function zijia_returncar(pid){
+        setBody_W();
+        demo_iframe('zijia_returncar.php?pid='+pid,'还车',body_W,500,'login_js');
+    }
+     function zijia_continuecar(pid){
+            setBody_W();
+            demo_iframe('zijia_continuecar.php?pid='+pid,'续租',body_W,500,'login_js');
+        
+    }
+    function yanzheng_shenfen(pid){
+        
+            setBody_W();
+            demo_iframe('zijia_changecar.php?task=yanzheng_shenfen&pid='+pid,'换车',body_W,500,'login_js');
+        
+    }
+    function zijia_changecar(pid){
+        
+            setBody_W();
+            demo_iframe('zijia_changecar.php?pid='+pid,'换车',body_W,500,'login_js');
+        
+    }
+    function zijia_shenghe(pid){
+            demo_iframe('zijia_list.php?task=zijia_shenghe&pid='+pid,'订单审核',body_W,500,'login_js');
+        
+    }
+    
+    
+    function play(){
+        $('#back').css('display',"block");
+        $("#back").css("background-color","rgba(0,0,0,0.9)");
+        $('body').css('overflow','hidden');
+        v.play();
+    }
+
+    function hidden(){
+        $('#back').css('display',"none");
+        $('body').css('overflow','visible');
+        v.pause();
+    }
+
+    function allScreen() {      
+    if (v.requestFullscreen) {
+        v.requestFullscreen();
+    } else if (v.mozRequestFullScreen) {
+        v.mozRequestFullScreen();
+    } else if (v.webkitRequestFullScreen) {
+        v.webkitRequestFullScreen();
+    }
+     }
+
+
+    $("#search_status").change(function(){
+       
+         window.location.href = "zijia_list.php?search_status="+$("#search_status").val();
+    })
+    
+    
+    
+    $("#up").click(function(){
+        var content=$("#content").css('display');
+        if(content=="none"){
+            
+            $("#content").css('display','block');
+        $('#up').removeClass("fa-chevron-down");
+        $('#up').addClass("fa-chevron-up");
+        }else{
+            $("#content").css('display','none');
+        $('#up').removeClass("fa-chevron-up");
+        $('#up').addClass("fa-chevron-down");
+        }
+    });
+    
+     $(".beizhu").click(function(){
+        
+        var index = $(".beizhu").index(this);
+        $(this).css("display","none");
+        $(".ipt").eq(index).css("display","inline");
+         var val = $(".ipt").eq(index).val();
+
+         
+        $(".ipt").eq(index).val("");
+         $(".ipt").eq(index).focus();
+         
+         $(".ipt").eq(index).val(val);
+     })
+$("#paiche_pintaiid").css("display","none");
+     $('#paiche_kehu').change(function(){
+        var type=$(this).val();
+        if(type==1){
+            $("#paiche_pintaiid").css("display","none");
+            $("#paiche_pintaiida").css("display","table-row");
+            $("#paiche_pintaiida").val("临时散客");
+            $("#paiche_pintaiid").val(0);
+           
+        }else if(type==2){
+            $("#paiche_pintaiid").css("display","table-row");
+            $("#paiche_pintaiida").css("display","none");
+            
+        }else if(type==3){
+            $("#paiche_pintaiid").css("display","none");
+            $("#paiche_pintaiida").css("display","table-row");
+            $("#paiche_pintaiida").val("凹凸代步车");
+            $("#paiche_pintaiid").val(0);
+            
+            
+        }else if(type==4){
+            $("#paiche_pintaiid").css("display","none");
+            $("#paiche_pintaiida").css("display","table-row");
+            $("#paiche_pintaiida").val("违章冻结");
+            $("#paiche_pintaiid").val(0);
+           
+        }else if(type==5){
+            $("#paiche_pintaiid").css("display","none");
+            $("#paiche_pintaiida").css("display","table-row");
+            $("#paiche_pintaiida").val("境外客户");
+            $("#paiche_pintaiid").val(0);
+        }
+    });
+
+
+$(".ipt").blur(function(){
+        var index = $(".ipt").index(this);
+        var pid=$('.pid').eq(index).val();
+        var content=$(this).val();
+
+        $.ajax({
+            type:'POST',
+            url:'get_emp_shop.php?task=setBeizhu',
+            data:{ldelim}"paiche_specialRemarks":content,"pid":pid{rdelim},
+            dataType:"json",
+            cache: false,
+            success:function(req){
+               
+                 $(".beizhu").eq(index).html(content);
+                 $(".beizhu").eq(index).css("display","inline");
+                 $(".ipt").eq(index).css("display","none");
+            }
+        })
+    })
+//if($("input['search_status']:checked").val()=="1"){
+        //paiche_needtax=1.1;
+    //} 
+</script>
+
+</body>
+<!-- Mirrored from www.zi-han.net/theme/hplus/table_bootstrap.html by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 20 Jan 2016 14:20:06 GMT -->
+</html>

@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>管理后台</title>
+	<meta name="keywords" content="H+后台主题,后台bootstrap框架,会员中心主题,后台HTML,响应式后台">
+	<meta name="description" content="H+是一个完全响应式，基于Bootstrap3最新版本开发的扁平化主题，她采用了主流的左右两栏式布局，使用了Html5+CSS3等现代技术">
+
+	<link rel="shortcut icon" href="favicon.ico">
+	<link href="../../../../crm1/css/bootstrap.min.css?v=3.3.6" rel="stylesheet">
+	<link href="../../../../crm1/css/font-awesome.css?v=4.4.0" rel="stylesheet">
+
+	<link href="../../../../crm1/css/animate.css" rel="stylesheet">
+	<link href="../../../../crm1/css/style.css?v=4.1.0" rel="stylesheet">
+	<script type="text/javascript" src="../../../../js/laydate/laydate.js"></script>
+	<script type="text/javascript" src="../../../js/jquery.js"></script>
+
+	<style>
+		.timeline input {
+			line-height: 10px !important;
+		}
+	</style>
+</head>
+
+<body class="gray-bg">
+
+	<div class="wrapper wrapper-content animated fadeInRight" style="z-index: 1;">
+		<div class="ibox float-e-margins">
+			<div class="ibox-title" style="padding-top: 5px">
+				<h5 style="padding-top: 10px">收支统计{if $flag=="2"}(一楼){/if}</h5>
+			</div>
+
+			<form id="form1" action="{$url}" method="get">
+				<div class="wrapper wrapper-content animated fadeInRight"
+					style="margin: 0; padding: 0;margin-top: 8px;">
+					<div class="ibox float-e-margins" style="margin:0">
+						<div class="ibox-title" style=" margin: 0; padding: 0;">
+
+							<h5 style="padding-top: 15px; padding-left: 10px;">搜索</h5>
+							<div class="ibox-tools" style="padding-top: 14px; padding-left: 10px;float: left;">
+								<a class="collapse-link">
+									<i class="fa fa-chevron-down" id="up"></i>
+								</a>
+							</div>
+						</div>
+						<div class="ibox-content" id="content" style=" margin: 0px; padding: 0px;display: none">
+							<div class="row row-lg">
+								<div class="col-sm-12">
+									<!-- Example Events -->
+									<div class="example-wrap">
+										<div class="example">
+											<table class="table table-bordered">
+												<tr>
+													<th width="15%" style="background-color:#F5F5F6">
+														<span style="color:#000;">&nbsp;&nbsp;&nbsp;&nbsp;开始时间:</span>
+													</th>
+													<td class="timeline" width="35%">
+														<input name="paiche_startDate" placeholder="请输入日期"
+															value="{$startdate}"
+															class="laydate-icon form-control input-sm"
+															onclick="laydate({ldelim}istime: true, format: 'YYYY-MM-DD 23:59:59'{rdelim})"
+															unselectable="on" readonly style="height: 20%;">
+													</td>
+													<th width="15%" style="background-color:#F5F5F6">
+														<span style="color:#000">&nbsp;&nbsp;&nbsp;&nbsp;结束时间:</span>
+													</th>
+													<td class="timeline" width="35%">
+														<input name="paiche_endDate" placeholder="请输入日期"
+															value="{$enddate}"
+															class="laydate-icon form-control input-sm"
+															onclick="laydate({ldelim}istime: true, format: 'YYYY-MM-DD 23:59:59'{rdelim})"
+															unselectable="on" readonly style="height: 20%;">
+													</td>
+
+												</tr>
+												<tr>
+													<th style="background-color:#F5F5F6">
+														<span style="color:#000;">&nbsp;&nbsp;&nbsp;&nbsp;店铺:</span>
+													</th>
+													<td colspan="3">
+														<select class="form-control input-sm" name="search_shop"
+															style="width: 30%;height: 20%;">
+															<option value="" {if empty($search_shop)}selected{/if}>全部
+																</option> {foreach from=$shoplist key=i item=rows}
+																<option value="{$rows.shop_id}" {if
+																$search_shop==$rows.shop_id}selected{/if}>{$rows.shop_name}
+																</option> {/foreach} </select> </td> </tr> <script>
+																laydate.render({
+																elem: '#test1',
+																});
+																</script>
+
+											</table>
+
+											<button type="submit" class="btn btn-outline btn-default"
+												style="margin-left:45%;width: 10%">
+												<i class="glyphicon glyphicon-search" aria-hidden="true"></i>
+												搜索
+											</button>
+										</div>
+									</div>
+									<!-- End Example Events -->
+								</div>
+							</div>
+						</div>
+					</div>
+					<!-- End Panel Other -->
+				</div>
+			</form>
+
+			<div class="ibox-content_a">
+				<div class="row row-lg">
+
+					<div class="col-sm-6">
+						<div class="ibox float-e-margins">
+							<div class="ibox-title">
+								<h5>收支明细</h5>
+							</div>
+
+							<div class="ibox-content">
+
+								<table class="table table-bordered table-hover" data-height="400"
+									style="margin-bottom:0px" data-mobile-responsive="true">
+
+									<thead>
+										<tr>
+											<th style="text-align: center;">项目</th>
+											<th style="text-align: center;">收入</th>
+											<th style="text-align: center;">支出</th>
+											<th style="text-align: center;">结余</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr style="text-align: center;">
+											<td>业务收入</td>
+											<td><a href="detail{$flag}.php?startdate={$startdate}&enddate={$enddate}&search_shop={$search_shop}"
+													target="_blank">{number_format($income.total_money1+$income.total_money2+$income.total_money22+$income.total_money21+$income.total_money3+$income.total_money4+$income.total_money5,2,".","")}</a>
+											</td>
+											<td>&nbsp;</td>
+											<td>&nbsp;</td>
+										</tr>
+										<tr style="text-align: center;">
+											<td>其他收入</td>
+											<td><a href="detail{$flag}.php?startdate={$startdate}&enddate={$enddate}&search_shop={$search_shop}&b_type=6"
+													target="_blank">{number_format($income.total_money6,2,".","")}</a>
+											</td>
+											<td>&nbsp;</td>
+											<td>&nbsp;</td>
+										</tr>
+										<tr style="text-align: center;">
+											<td>费用报销</td>
+											<td>&nbsp;</td>
+											<td><a href="../baoxiao/detail{$flag}.php?startdate={$startdate}&enddate={$enddate}&search_shop={$search_shop}"
+													target="_blank">{number_format($baoxiao.total_money7,2,".","")}</a>
+											</td>
+											<td>&nbsp;</td>
+										</tr>
+										<tr style="background-color:red;text-align: center;color: #ffffff;">
+											<td>合计</td>
+											<td>
+												{number_format($income.total_money1+$income.total_money2+$income.total_money22+$income.total_money21+$income.total_money3+$income.total_money4+$income.total_money5+$income.total_money6,2,".","")}
+											</td>
+											<td>
+												{number_format($baoxiao.total_money7,2,".","")}</td>
+											<td>
+												{number_format($income.total_money1+$income.total_money2+$income.total_money22+$income.total_money21+$income.total_money3+$income.total_money4+$income.total_money5+$income.total_money6-$baoxiao.total_money7,2,".","")}
+											</td>
+										</tr>
+										<tr style="text-align: center;">
+											<td>押金</td>
+											<td><a href="detail{$flag}.php?startdate={$startdate}&enddate={$enddate}&search_shop={$search_shop}&b_type=7"
+													target="_blank">{number_format($income.deposit_money,2,".","")}</a>
+											</td>
+											<td><a href="detail{$flag}.php?startdate={$startdate}&enddate={$enddate}&search_shop={$search_shop}&b_type=8"
+													target="_blank">{number_format($income.depositback_money,2,".","")}</a>
+											</td>
+											<td>
+												{number_format($income.deposit_money-$income.depositback_money,2,".","")}
+											</td>
+										</tr>
+										<tr style="text-align: center;">
+											<td>违章资金</td>
+											<td><a href="../../machine/breaklist.php?search_startDate={$startdate}&search_endDate={$enddate}&op=s&type=add"
+													target="_blank">{number_format($breaks.total1,2,".","")}</a></td>
+											<td><a href="../../machine/breaklist.php?search_startDate={$startdate}&search_endDate={$enddate}&op=s&type=reduce"
+													target="_blank">{number_format($breaks.total2,2,".","")}</a></td>
+											<td>&nbsp;</td>
+										</tr>
+										<tr style="text-align: center;">
+											<td>待处理违章资金</td>
+											<td colspan="3"><a href="../../machine/list.php?task=breakfirst&op=s"
+													target="_blank">{number_format($breaks.total,2,".","")}</a></td>
+										</tr>
+										<tr style="text-align: center;">
+											<td>打款蒋政</td>
+											<td>&nbsp;</td>
+											{foreach from=$baoxiao_2 item=row name=foo}
+											{if $row.typeid==10}
+											<td><a href="../baoxiao/detail{$flag}.php?startdate={$startdate}&enddate={$enddate}&search_shop={$search_shop}&b_type={$row.typeid}"
+													target="_blank">{number_format($row.total_money20,2,".","")}</a>
+											</td>
+											{/if}
+											{/foreach}
+											<td>&nbsp;</td>
+										</tr>
+										<tr style="text-align: center;">
+											<td>备用金总额</td>
+											<td style="text-align:center;" colspan="2"><a
+													href="detail{$flag}.php?startdate={$startdate}&enddate={$enddate}&search_shop={$search_shop}&b_type=9"
+													target="_blank">{number_format($beiyong.total_money,2,".","")}</a>
+											</td>
+											<td style="text-align:center;"><a
+													href="detail{$flag}.php?startdate={$startdate}&enddate={$enddate}&search_shop={$search_shop}&b_type=10"
+													target="_blank">{number_format($beiyong.now_money,2,".","")}</a>
+											</td>
+										</tr>
+									</tbody>
+
+								</table>
+							</div>
+						</div>
+					</div>
+
+					<div class="col-sm-6">
+						<div class="ibox float-e-margins">
+							<div class="ibox-title">
+								<h5>其他收入</h5>
+							</div>
+
+							<div class="ibox-content">
+
+								<table class="table table-bordered table-hover" data-height="400"
+									style="margin-bottom:0px" data-mobile-responsive="true">
+
+									<thead>
+										<tr>
+											<th style="text-align: center;" colspan="2">其他收入大项明细</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr style="text-align: center;">
+											<td style="width: 50%;">刷卡费</td>
+											<td {if $other_count.total_count61!=0}class="aaa" {/if}> <a
+												href="../other/detail{$flag}.php?startdate={$startdate}&enddate={$enddate}&search_shop={$search_shop}&b_type=61"
+												target="_blank">{$other.total_money61}</a></td>
+										</tr>
+										<tr style="text-align: center;">
+											<td>保险理赔及退保</td>
+											<td {if $other_count.total_count62!=0}class="aaa" {/if}> <a
+												href="../other/detail{$flag}.php?startdate={$startdate}&enddate={$enddate}&search_shop={$search_shop}&b_type=62"
+												target="_blank">{$other.total_money62}</a></td>
+										</tr>
+										<tr style="text-align: center;">
+											<td>税金</td>
+											<td {if $other_count.total_count63!=0}class="aaa" {/if}> <a
+												href="../other/detail{$flag}.php?startdate={$startdate}&enddate={$enddate}&search_shop={$search_shop}&b_type=63"
+												target="_blank">{$other.total_money63}</a></td>
+										</tr>
+										<tr style="text-align: center;">
+											<td>违章手续费</td>
+											<td {if $other_count.total_count67!=0}class="aaa" {/if}> <a
+												href="../other/detail{$flag}.php?startdate={$startdate}&enddate={$enddate}&search_shop={$search_shop}&b_type=67"
+												target="_blank">{$other.total_money67}</a></td>
+										</tr>
+										<tr style="text-align: center;">
+											<td>违章扣分费</td>
+											<td {if $other_count.total_count68!=0}class="aaa" {/if}> <a
+												href="../other/detail{$flag}.php?startdate={$startdate}&enddate={$enddate}&search_shop={$search_shop}&b_type=68"
+												target="_blank">{$other.total_money68}</a></td>
+										</tr>
+										<tr style="text-align: center;">
+											<td>卖车及报废收入</td>
+											<td {if $other_count.total_count65!=0}class="aaa" {/if}> <a
+												href="../other/detail{$flag}.php?startdate={$startdate}&enddate={$enddate}&search_shop={$search_shop}&b_type=65"
+												target="_blank">{$other.total_money65}</a></td>
+										</tr>
+										<tr style="text-align: center;">
+											<td>一嗨多收费用</td>
+											<td {if $other_count.total_count69!=0}class="aaa" {/if}> <a
+												href="../other/detail{$flag}.php?startdate={$startdate}&enddate={$enddate}&search_shop={$search_shop}&b_type=69"
+												target="_blank">{$other.total_money69}</a></td>
+										</tr>
+										<tr style="text-align: center;">
+											<td>备用金归还</td>
+											<td {if $other_count.total_count66!=0}class="aaa" {/if}> <a
+												href="../other/detail{$flag}.php?startdate={$startdate}&enddate={$enddate}&search_shop={$search_shop}&b_type=66"
+												target="_blank">{$other.total_money66}</a></td>
+										</tr>
+										<tr style="text-align: center;">
+											<td>其他</td>
+											<td {if $other_count.total_count64!=0}class="aaa" {/if}> <a
+												href="../other/detail{$flag}.php?startdate={$startdate}&enddate={$enddate}&search_shop={$search_shop}&b_type=64"
+												target="_blank">{$other.total_money64}</a></td>
+										</tr>
+									</tbody>
+
+								</table>
+							</div>
+						</div>
+					</div>
+
+					<div class="col-sm-6">
+						<div class="ibox float-e-margins">
+							<div class="ibox-title">
+								<h5>费用报销</h5>
+							</div>
+
+							<div class="ibox-content">
+
+								<table class="table table-bordered table-hover" data-height="400"
+									style="margin-bottom:0px" data-mobile-responsive="true">
+
+									<thead>
+										<tr>
+											<th style="text-align: center;" colspan="3">费用报销大项明细</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr style="text-align: center;">
+											<td rowspan="5">司机出车报销</td>
+											<td style="width: 33%;">过路费</td>
+											<td style="width: 33%;"><a
+													href="../baoxiao/detail{$flag}.php?startdate={$startdate}&enddate={$enddate}&search_shop={$search_shop}&b_type=0"
+													target="_blank">{number_format($baoxiao_1.total_money11,2,".","")}</a>
+											</td>
+										</tr>
+										<tr style="text-align: center;">
+											<td>停车费</td>
+											<td><a href="../baoxiao/detail{$flag}.php?startdate={$startdate}&enddate={$enddate}&search_shop={$search_shop}&b_type=0"
+													target="_blank">{number_format($baoxiao_1.total_money15,2,".","")}</a>
+											</td>
+										</tr>
+										<tr style="text-align: center;">
+											<td>加油费</td>
+											<td><a href="../baoxiao/detail{$flag}.php?startdate={$startdate}&enddate={$enddate}&search_shop={$search_shop}&b_type=0"
+													target="_blank">{number_format($baoxiao_1.total_money12,2,".","")}</a>
+											</td>
+										</tr>
+										<tr style="text-align: center;">
+											<td>住宿费</td>
+											<td><a href="../baoxiao/detail{$flag}.php?startdate={$startdate}&enddate={$enddate}&search_shop={$search_shop}&b_type=0"
+													target="_blank">{number_format($baoxiao_1.total_money13,2,".","")}</a>
+											</td>
+										</tr>
+										<tr style="text-align: center;">
+											<td>就餐费</td>
+											<td><a href="../baoxiao/detail{$flag}.php?startdate={$startdate}&enddate={$enddate}&search_shop={$search_shop}&b_type=0"
+													target="_blank">{number_format($baoxiao_1.total_money14,2,".","")}</a>
+											</td>
+										</tr>
+										{foreach from=$baoxiao_2 item=row name=foo}
+										{if $row.typeclass==1}
+										<tr style="text-align: center;">
+											{if $row.typeid==17}
+											<td rowspan="7">机务报销</td>
+											{/if}
+											<td>{$row.typename}</td>
+											<td><a href="../baoxiao/detail{$flag}.php?startdate={$startdate}&enddate={$enddate}&search_shop={$search_shop}&b_type={$row.typeid}"
+													target="_blank">{number_format($row.total_money20,2,".","")}</a>
+											</td>
+										</tr>
+										{else}
+										{if $row.typeid!=10}
+										<tr style="text-align: center;">
+											{if $smarty.foreach.foo.index==0}
+											<td rowspan="15">公司运营报销</td>
+											{/if}
+											<td>{$row.typename}</td>
+											<td><a href="../baoxiao/detail{$flag}.php?startdate={$startdate}&enddate={$enddate}&search_shop={$search_shop}&b_type={$row.typeid}"
+													target="_blank">{number_format($row.total_money20,2,".","")}</a>
+											</td>
+										</tr>
+										{/if}
+										{/if}
+										{/foreach}
+									</tbody>
+
+								</table>
+							</div>
+						</div>
+					</div>
+
+					<div class="col-sm-6">
+						<div class="ibox float-e-margins">
+							<div class="ibox-title">
+								<h5>业务收入</h5>
+							</div>
+
+							<div class="ibox-content">
+
+								<table class="table table-bordered table-hover" data-height="400"
+									style="margin-bottom:0px" data-mobile-responsive="true">
+
+									<thead>
+										<tr>
+											<th style="text-align: center;" colspan="2">业务收入大项明细</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr style="text-align: center;">
+											<td style="width: 50%;">临时自驾业务收入</td>
+											<td {if $income.total_count1!=0}class="aaa" {/if}> <a
+												href="detail{$flag}.php?startdate={$startdate}&enddate={$enddate}&search_shop={$search_shop}&b_type=1"
+												target="_blank">{$income.total_money1}</a></td>
+										</tr>
+										<tr style="text-align: center;">
+											<td>临时带驾现结收入</td>
+											<td {if $income.total_count2!=0}class="aaa" {/if}> <a
+												href="detail{$flag}.php?startdate={$startdate}&enddate={$enddate}&search_shop={$search_shop}&b_type=2"
+												target="_blank">{$income.total_money2}</a></td>
+										</tr>
+										<tr style="text-align: center;">
+											<td>临时用车批结收入</td>
+											<td {if $income.total_count22!=0}class="aaa" {/if}> <a
+												href="detail{$flag}.php?startdate={$startdate}&enddate={$enddate}&search_shop={$search_shop}&b_type=22"
+												target="_blank">{$income.total_money22}</a></td>
+										</tr>
+										<tr style="text-align: center;">
+											<td>调车结算收入</td>
+											<td {if $income.total_count21!=0}class="aaa" {/if}> <a
+												href="detail{$flag}.php?startdate={$startdate}&enddate={$enddate}&search_shop={$search_shop}&b_type=21"
+												target="_blank">{$income.total_money21}</a></td>
+										</tr>
+										<tr style="text-align: center;">
+											<td>长期自驾业务收入</td>
+											<td {if $income.total_count3!=0}class="aaa" {/if}> <a
+												href="detail{$flag}.php?startdate={$startdate}&enddate={$enddate}&search_shop={$search_shop}&b_type=3"
+												target="_blank">{$income.total_money3}</a></td>
+										</tr>
+										<tr style="text-align: center;">
+											<td>长期带驾业务收入</td>
+											<td {if $income.total_count4!=0}class="aaa" {/if}> <a
+												href="detail{$flag}.php?startdate={$startdate}&enddate={$enddate}&search_shop={$search_shop}&b_type=4"
+												target="_blank">{$income.total_money4}</a></td>
+										</tr>
+										<tr style="text-align: center;">
+											<td>长期大客业务收入</td>
+											<td {if $income.total_count5!=0}class="aaa" {/if}> <a
+												href="detail{$flag}.php?startdate={$startdate}&enddate={$enddate}&search_shop={$search_shop}&b_type=5"
+												target="_blank">{$income.total_money5}</a></td>
+										</tr>
+									</tbody>
+
+								</table>
+							</div>
+						</div>
+					</div>
+
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- 全局js -->
+	<script src="../../../../crm1/js/jquery.min.js?v=2.1.4"></script>
+	<script src="../../../../crm1/js/bootstrap.min.js?v=3.3.6"></script>
+
+	<!-- ECharts -->
+	<script src="../../../../crm1/js/plugins/echarts/echarts-all.js"></script>
+
+	<!-- 自定义js -->
+	<script type="text/javascript">
+		$("#up").click(function () {
+			var content = $("#content").css('display');
+			if (content == "none") {
+
+				$("#content").css('display', 'block');
+				$('#up').removeClass("fa-chevron-down");
+				$('#up').addClass("fa-chevron-up");
+			} else {
+				$("#content").css('display', 'none');
+				$('#up').removeClass("fa-chevron-up");
+				$('#up').addClass("fa-chevron-down");
+			}
+		});
+	</script>
+
+</body>
+
+</html>

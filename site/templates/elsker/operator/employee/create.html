@@ -1,0 +1,300 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>管理后台</title>
+<link href="../../../css/style.css" rel="stylesheet" type="text/css">
+<link href="../../../css/box.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="../../../js/jquery.js"></script>
+<script type="text/javascript" src="../../../js/common.js"></script>
+<script type="text/javascript" src="../../../js/box.js"></script>
+<script type="text/javascript" src="../../../js/date_select.js"></script>
+<script type="text/javascript" src="../../../js/calendar.js"></script>
+<style>
+/*{literal}*/
+	.navi_name{font-size:14px;font-weight:bold;}
+	.indent{padding-left:40px;}
+/*{/literal}*/
+</style>
+</head>
+<body>
+<div class="so_main">
+  <div class="page_tit">编辑</div>
+  <form method="post" action="insert.php" onsubmit="return check(this);" name="form1" enctype="multipart/form-data">
+  <div class="form2">
+  <dl class="lineD">
+    <dt><span class="redstar">*</span>姓名：</dt>
+    <dd><input type="text" name="emp_name" id="emp_name" size="16" value="{$employee.emp_name}" /></dd>
+  </dl>
+  <dl class="lineD">
+    <dt><span class="redstar">*</span>性别：</dt>
+    <dd>
+	{if $task=="update"}
+	<input type="radio" name="emp_sex" id="emp_sex" {if $employee.emp_sex eq '男'}checked{else}{/if} value="男" /> 男　<input type="radio" name="emp_sex" id="emp_sex" {if $employee.emp_sex eq '女'}checked{else}{/if} value="女" /> 女
+    {else}
+    <input type="radio" name="emp_sex" id="emp_sex" value="男" checked /> 男　<input type="radio" name="emp_sex" id="emp_sex" value="女" /> 女
+	{/if}
+    </dd>
+  </dl>
+  <dl class="lineD">
+    <dt><span class="redstar">*</span>身份证号：</dt>
+    <dd><input type="text" name="emp_num" id="emp_num" size="26"  value="{$employee.emp_num}"/></dd>
+  </dl>
+  <dl class="lineD">
+    <dt><span class="redstar">*</span>手机号：</dt>
+    <dd><input type="text" name="emp_phone" id="emp_phone" size="16"  value="{$employee.emp_phone}"/></dd>
+  </dl>
+  <dl class="lineD">
+    <dt>家庭电话：</dt>
+    <dd><input type="text" name="emp_homeTel" id="emp_homeTel" size="16"  value="{$employee.emp_homeTel}"/></dd>
+  </dl>
+  <dl class="lineD">
+    <dt>家庭地址：</dt>
+    <dd><input type="text" name="emp_homeAdd" id="emp_homeAdd" size="26" value="{$employee.emp_homeAdd}" /></dd>
+  </dl>
+  <dl class="lineD">
+    <dt><span class="redstar">*</span>职位：</dt>
+    <dd><select name="emp_post" id="emp_post">
+        <option value="" >请选择职位</option>
+        {foreach from=$levelList key=i item=rows}
+                  <option value="{$rows.id}" {if $employee.emp_post==$rows.id}selected{/if}>{$rows.title}</option>
+                  {/foreach}
+        </select></dd>
+  </dl>
+  <dl class="lineD">
+    <dt>部门：</dt>
+    <dd><select name="emp_shopid" id="emp_shopid">
+        <option value="0" >请选择部门</option>
+        {foreach from=$shopList key=i item=rows}
+        	<option value="{$rows.shop_id}" {if $employee.emp_shopid==$rows.shop_id}selected{/if}>{$rows.shop_name}</option>
+        {/foreach}
+        </select></dd>
+  </dl>
+  <dl class="lineD">
+    <dt>驾照类型：</dt>
+    <dd><input type="text" name="emp_driverlicense" id="emp_driverlicense" size="10"  value="{$employee.emp_driverlicense}"/><span class="redstar" style="margin-left: 5px;font-size: 9px;">注：只针对司机职位有效</span></dd>
+  </dl>
+  <dl class="lineD">
+    <dt>介绍：</dt>
+    <dd><textarea name="emp_introduce" id="emp_introduce" cols="70" rows="3">{$employee.emp_introduce}</textarea></dd>
+  </dl>
+  <dl class="lineD">
+    <dt><span class="redstar">*</span>底薪：</dt>
+    <dd><input type="text" name="emp_basicSalary" id="emp_basicSalary" size="16" value="{$employee.emp_basicSalary}" /></dd>
+  </dl>
+  <dl class="lineD">
+    <dt>社保补贴：</dt>
+    <dd><input type="text" name="emp_subsidy" id="emp_subsidy" size="6" value="{$employee.emp_subsidy}" /> /月</dd>
+  </dl>
+  <dl class="lineD" style="display:none;" id="show1_1">
+    <dt>公里补贴(临时)：</dt>
+    <dd><input type="text" name="emp_kiloLs" id="emp_kiloLs" size="6" value="{$employee.emp_kiloLs}" /> 元/公里</dd>
+  </dl>
+  <dl class="lineD" style="display:none;" id="show1_2">
+    <dt>超公里补贴(临时)：</dt>
+    <dd><input type="text" name="emp_overKmLs" id="emp_overKmLs" size="6" value="{$employee.emp_overKmLs}" /> 元/公里</dd>
+  </dl>
+  <dl class="lineD" style="display:none;" id="show2_1">
+    <dt>公里补贴(长期)：</dt>
+    <dd><input type="text" name="emp_kiloCq" id="emp_kiloCq" size="6" value="{$employee.emp_kiloCq}" /> 元/公里</dd>
+  </dl>
+  <dl class="lineD" style="display:none;" id="show2_2">
+    <dt>超公里补贴(长期)：</dt>
+    <dd><input type="text" name="emp_overKmCq" id="emp_overKmCq" size="6" value="{$employee.emp_overKmCq}" /> 元/公里</dd>
+  </dl>
+  <dl class="lineD" style="display:none;" id="show7_1">
+    <dt>趟数补贴(大客)：</dt>
+    <dd><input type="text" name="emp_tripKc" id="emp_tripKc" size="6" value="{$employee.emp_tripKc}" /> 元/趟</dd>
+  </dl>
+  <dl class="lineD">
+    <dt><span class="redstar">*</span>入职日期：</dt>
+    <dd><input type="text" name="emp_EntryDate" id="emp_EntryDate" size="16" value='{if $task=="update"}{$employee.emp_EntryDate}{/if}' onClick="calendar.show(this);" readonly="readonly" /></dd>
+  </dl>
+  <dl class="lineD">
+    <dt><span class="redstar">*</span>合同开始日期：</dt>
+    <dd><input type="text" name="emp_pactStartDate" id="emp_pactStartDate" size="16" value="{if $task=='update'}{$employee.emp_pactStartDate}{/if}" onClick="calendar.show(this);" readonly="readonly" /></dd>
+  </dl>
+  <dl class="lineD">
+    <dt><span class="redstar">*</span>合同到期日期：</dt>
+    <dd><input type="text" name="emp_pactEndDate" id="emp_pactEndDate" size="16" value="{if $task=='update'}{$employee.emp_pactEndDate}{/if}" onClick="calendar.show(this);" readonly="readonly" /></dd>
+  </dl>
+  <dl class="lineD">
+    <dt>状态：</dt>
+    <dd><select name="emp_stutas" id="emp_stutas" >
+    <option value="0" {if $employee.emp_stutas=="0"}selected{/if} >试用期</option>
+    <option value="1" {if $employee.emp_stutas=="1"}selected{/if}>在值</option>
+    <option value="3" {if $employee.emp_stutas=="3"}selected{/if}>休假</option>
+    <option value="-1" {if $employee.emp_stutas=="-1"}selected{/if}>离职</option>
+    </select></dd>
+  </dl>
+  <dl class="lineD">    
+    <dt>离职日期：</dt>
+    <dd><input type="text" name="emp_quitTime" id="emp_quitTime" size="16" value="{if $task=='update'}{$employee.emp_quitTime}{/if}" onclick="new Calendar().show(this);" readonly="readonly" /></dd>
+  </dl>
+  <dl class="lineD">
+      <dt>首图照片：</dt>
+      <dd><input type="file" name="images" value=""/><span class="redstar">注：图片像素120*160，大小控制在50k以内</span>
+        {if $employee.emp_image}<br /><img src="../../../thumb/{$employee.emp_image}" width="120" height="160" />{/if}
+        <input type="hidden" name="oldimages" value="{$employee.emp_image}"/>
+      </dd>
+  </dl>
+  <dl class="lineD">
+      <dt>详细照片：</dt>
+      <dd>照片一<input type="file" name="images1" value=""/><br />照片二<input type="file" name="images2" value=""/><br />
+        	照片三<input type="file" name="images3" value=""/><br />照片四<input type="file" name="images4" value=""/>
+        {if $task=='update' && $employee.emp_imglist}
+        <br />
+        {foreach from=$employee.emp_imglist key=i item=rows}
+         <a href="../../../thumb/{$rows.images}" title="点击查看原图" target="_blank"><img src="../../../thumb/{$rows.images}" width="100" height="100" /></a>
+        <input type="checkbox" name="delimg[]" value="{$rows.id}" />删除图片
+        {/foreach}
+        {/if} 
+      </dd>
+    </dl>
+  <dl class="lineD">
+    <dt>&nbsp;</dt>
+    <dd><input type="submit" id="submit" value="提 交" class="btn_b"/>　<b>注：<span class="red">*</span>为必填项</b></dd>
+  </dl>
+</div>
+
+  <input type="hidden" name="aid" value="{$employee.emp_id}" />
+  <input type="hidden" name="task" value="{$task}" />
+  
+</form>
+</div>
+
+<script type="text/javascript">
+	function selectAll(){
+		$("input[type='checkbox']").attr("checked",true);
+	}
+	function unselectAll(){
+		$("input[type='checkbox']").attr("checked",false);
+	}
+	$(document).ready(function(){
+		$(".subnavi").click(function(){
+			var checked = false;
+			$(this).parent().parent().find(".subnavi").each(function(){
+				if($(this).attr("checked")){
+					checked = true;
+				}
+			});
+			var navi = $(this).parent().parent().parent().find(".navi");
+			if(checked){
+				navi.attr("checked",true);
+			}else{
+				navi.attr("checked",false);
+			}
+		});
+		$(".navi").click(function(){
+			$(this).parent().find(".subnavi").attr("checked",$(this).attr("checked"));
+		});
+		$('#emp_post').change(function(){
+		    var nn=$(this).children('option:selected').val();
+		    if (nn==1){
+				$('#show1_1').css('display','block');
+			    $('#show1_2').css('display','block');
+			    $('#show2_1').css('display','none');
+			    $('#show2_2').css('display','none');
+			    $('#show7_1').css('display','none');
+		    }else if (nn==2){
+			    $('#show1_1').css('display','none');
+			    $('#show1_2').css('display','none');
+			    $('#show7_1').css('display','none');
+			    $('#show2_1').css('display','block');
+			    $('#show2_2').css('display','block');
+		    }else if (nn==7){
+			    $('#show1_1').css('display','none');
+			    $('#show1_2').css('display','none');
+			    $('#show2_1').css('display','none');
+			    $('#show2_2').css('display','none');
+			    $('#show7_1').css('display','block');
+		    }
+		    else{
+				$('#show1_1').css('display','none');
+			    $('#show1_2').css('display','none');
+			    $('#show2_1').css('display','none');
+			    $('#show2_2').css('display','none');
+			    $('#show7_1').css('display','none');
+		    }
+		});
+
+	});
+	function init(){
+	    if ($("#emp_post").val()!=""){
+		    if ($("#emp_post").val()==1){
+				$('#show1_1').css('display','block');
+			    $('#show1_2').css('display','block');
+			    $('#show2_1').css('display','none');
+			    $('#show2_2').css('display','none');
+			    $('#show7_1').css('display','none');
+		    }
+			if ($("#emp_post").val()==2){
+			    $('#show1_1').css('display','none');
+			    $('#show1_2').css('display','none');
+			    $('#show7_1').css('display','none');
+			    $('#show2_1').css('display','block');
+			    $('#show2_2').css('display','block');
+		    }
+			if ($("#emp_post").val()==7){
+			    $('#show1_1').css('display','none');
+			    $('#show1_2').css('display','none');
+			    $('#show2_1').css('display','none');
+			    $('#show2_2').css('display','none');
+			    $('#show7_1').css('display','block');
+		    }
+		}
+	}
+	function check(_form){
+		if(textTrim(_form.emp_name.value)==""){
+			alert("姓名不能为空，请必须填写");
+			_form.emp_name.focus();
+			return false;
+		}
+		if(textTrim(_form.emp_num.value)==""){
+			alert("身份证号不能为空，请必须填写");
+			_form.emp_num.focus();
+			return false;
+		}
+		if(textTrim(_form.emp_phone.value)==""){
+			alert("手机号不能为空，请必须填写");
+			_form.emp_phone.focus();
+			return false;
+		}
+		if(textTrim(_form.emp_post.value)==""){
+			alert("职位必须选择！");
+			_form.emp_post.focus();
+			return false;
+		}
+		if(textTrim(_form.emp_basicSalary.value)==""){
+			alert("底薪不能为空，请必须填写");
+			_form.emp_basicSalary.focus();
+			return false;
+		}
+		
+		if(textTrim(_form.emp_EntryDate.value)==""){
+			alert("入职日期不能为空，请必须填写");
+			_form.emp_EntryDate.focus();
+			return false;
+		}
+		if(textTrim(_form.emp_pactStartDate.value)==""){
+			alert("合同开始日期不能为空，请必须填写");
+			_form.emp_pactStartDate.focus();
+			return false;
+		}
+		if(textTrim(_form.emp_pactEndDate.value)==""){
+			alert("合同到期日期不能为空，请必须填写");
+			_form.emp_pactEndDate.focus();
+			return false;
+		}
+		if(textTrim(_form.emp_pactEndDate.value)<textTrim(_form.emp_pactStartDate.value)){
+			alert("合同到期日期不能在开始日期之前，请重新填写");
+			_form.emp_pactEndDate.focus();
+			return false;
+		}
+		return true;
+	}
+	init();
+</script>
+</body>
+</html>

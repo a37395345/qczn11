@@ -1,0 +1,164 @@
+<?php
+/**
+ * User tool
+ *
+ * @package		Imag.Framework
+ * @subpackage	tool
+ * @author 		gary wang (wangbaogang123@hotmail.com)
+ */
+class UserHelper
+{
+	/**
+	 * Username check 4-16 char
+	 */
+	public static function checkUserName($username){
+		return preg_match("/^[a-zA-Z0-9_]{4,16}$/",$username);
+	}
+	
+	public static function checkPassword($password){
+		return preg_match("/^[a-zA-Z0-9]{6,16}$/",$password);
+	}
+	
+	public static function checkRealname($password){
+		return preg_match("/^[\u0391-\uFFE5]$/",$password);
+	}
+
+	/**
+	 * Email check
+	 */
+	public static function checkEmail($email){
+		return preg_match('/^[a-z0-9&\'\.\-_\+]+@[a-z0-9\-]+\.([a-z0-9\-]+\.)*?[a-z]+$/is', $email);
+	}
+
+	/**
+	 * Idcard check
+	 */
+	public static function checkIdcard($IDCard){
+
+		//if(!eregi("^[1-9]([0-9a-zA-Z]{17}|[0-9a-zA-Z]{14})$",$IDCard)){
+		if(!ereg("^[0-9a-zA-Z]*$",$IDCard)){
+			$flag=0;
+		}else{
+			if(strlen($IDCard)==18){
+				$tyear=intval(substr($IDCard,6,4));
+				$tmonth=intval(substr($IDCard,10,2));
+				$tday=intval(substr($IDCard,12,2));
+				if($tyear>date("Y")||$tyear<(date("Y")-100)){
+					$flag=0;
+				}elseif($tmonth<0||$tmonth>12){
+					$flag=0;
+				}elseif($tday<0||$tday>31){
+					$flag=0;
+				}else{
+					$tdate=array($tyear,$tmonth,$tday);
+					$flag=1;
+				}
+			}elseif(strlen($IDCard)==15){
+				$tyear=intval("19".substr($IDCard,6,2));
+				$tmonth=intval(substr($IDCard,8,2));
+				$tday=intval(substr($IDCard,10,2));
+				if($tyear>date("Y")||$tyear<(date("Y")-100)){
+					$flag=0;
+				}elseif($tmonth<0||$tmonth>12){
+					$flag=0;
+				}elseif($tday<0||$tday>31){
+					$flag=0;
+				}else{
+					$tdate=array($tyear,$tmonth,$tday);
+					$flag=1;
+				}
+			 }
+		}
+		return array($flag,$tdate);
+	}
+	
+	/**
+	 * Idcard check 2
+	 */
+	public static function getIDCardInfo($IDCard){
+		if(!eregi("^[1-9]([0-9a-zA-Z]{17}|[0-9a-zA-Z]{14})$",$IDCard)){
+			$flag=0;
+		}else{
+			if(strlen($IDCard)==18){
+	
+				$tyear=intval(substr($IDCard,6,4));
+				$tmonth=intval(substr($IDCard,10,2));
+				$tday=intval(substr($IDCard,12,2));
+	
+				if($tyear>date("Y")||$tyear<(date("Y")-100)){
+					$flag=0;
+				}elseif($tmonth<0||$tmonth>12){
+					$flag=0;
+				}elseif($tday<0||$tday>31){
+					$flag=0;
+				}else{
+					$tdate=$tyear."-".$tmonth."-".$tday." 00:00:00";
+					if((time()-mktime(0,0,0,$tmonth,$tday,$tyear))>18*365*24*60*60){
+						$flag=0;
+					}else{
+						$flag=1;
+					}
+				}
+	
+			}elseif(strlen($IDCard)==15){
+				$tyear=intval("19".substr($IDCard,6,2));
+				$tmonth=intval(substr($IDCard,8,2));
+				$tday=intval(substr($IDCard,10,2));
+				if($tyear>date("Y")||$tyear<(date("Y")-100)){
+					$flag=0;
+				}elseif($tmonth<0||$tmonth>12){
+					$flag=0;
+				}elseif($tday<0||$tday>31){
+					$flag=0;
+				}else{
+					$tdate=$tyear."-".$tmonth."-".$tday." 00:00:00";
+					if((time()-mktime(0,0,0,$tmonth,$tday,$tyear))>18*365*24*60*60){
+						$flag=0;
+					}else{
+						$flag=1;
+					}
+				}
+			}
+		}
+		$result = array();
+		$result[] = $flag;
+		$result[] = $tdate;
+		return $result;
+	
+	}
+	
+	/**
+	 * animal sign check
+	 */
+	public static function getAnimalSign($year){
+		$sign = $year%12;
+		if($sign==0){
+			return 9;
+		}elseif($sign==1){
+			return 10;
+		}elseif($sign==2){
+			return 11;
+		}elseif($sign==3){
+			return 12;
+		}elseif($sign==4){
+			return 1;
+		}elseif($sign==5){
+			return 2;
+		}elseif($sign==6){
+			return 3;
+		}elseif($sign==7){
+			return 4;
+		}elseif($sign==8){
+			return 5;
+		}elseif($sign==9){
+			return 6;
+		}elseif($sign==10){
+			return 7;
+		}elseif($sign==11){
+			return 8;
+		}
+	}
+	
+	
+}
+?>

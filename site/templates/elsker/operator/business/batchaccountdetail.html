@@ -1,0 +1,132 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>管理后台</title>
+<link href="../../../css/style.css" rel="stylesheet" type="text/css">
+
+</head>
+<body>
+<div class="so_main">
+  <div class="page_tit">{$title}</div>
+
+  <!-------- 用户列表 -------->
+  <div class="Toolbar_inbox">
+  	<div class="page right">共{$total}条记录</div>&nbsp;
+  </div>
+  <div class="list">
+  <table width="100%" border="0" cellspacing="0" cellpadding="0">
+  <tr>
+	<th>租赁类型</th>
+	<th>合同号/公司名</th>
+	<th>联系人信息</th>
+	<th>业务员</th>
+	<th>用车时间</th>
+	<th width="115">合同约定</th>
+	<th>司机</th>
+	<th>车辆</th>
+	<th>金额明细</th>
+	{if $op=="shuntlist"}
+	<th>结算金额</th>
+	<th>结算时间</th>
+	{/if}
+	<th class="line_l">操作</th>
+  </tr>
+  {foreach from=$busiList key=i item=row}
+  <tr overstyle='on' id="badge_{$row.paiche_id}">
+	  	<td>{$row.item_name}</td>
+	  	<td><a href="detail.php?uid={$row.paiche_id}" target="newblank">{$row.paiche_contractNum}</a><hr />{$row.client_name}</td>
+		<td>{$row.paiche_linker}({$row.paiche_linkerPhone})<hr />{$row.paiche_linkerNum}{if $row.paiche_brother>0}调车公司：{$row.bro_name}{/if}</td>
+		<td>{$row.yewuyuan}</td>
+		<td>{$row.paiche_startDate}<hr />{$row.paiche_endDate}</td>
+	    <td style="text-align:left;">
+	    {foreach from=$row.paiche_itemlist item=row1 name=foo}
+	    {$row1.item_name}:{$row1.conv_result}{if $row1.item_calcu==1 && $row1.item_caltype==1}/{$row1.item_unit}{/if}
+	    {if $row1.conv_money!=0}{$row1.item_costname}:{$row1.conv_money}-已收:{$row1.have_in_money}{/if}
+	    {if $smarty.foreach.foo.last}{else}<hr />{/if}
+	    {/foreach}</td>
+        <td>{if $row.paiche_shunt==1}调车{else}{$row.siji}{/if}</td>
+	    <td>{if $row.paiche_shunt==1}{$row.paiche_shuntline.bro_name}{else}
+	    {$row.car_num}{if $row.paiche_changelist}{foreach from=$row.paiche_changelist item=row10 name=foo}<hr /><font style="TEXT-DECORATION: line-through;">{$row10.carA}</font>{/foreach}{/if}
+	    {/if}
+	    </td>
+        <td style="text-align:left;">
+        {foreach from=$row.paiche_chargelist item=row2 name=foo}
+        {if $row2.charge_name!="押金"}{$summoney=$summoney+$row2.conv_money}{/if}
+        {$row2.charge_name}:{$row2.conv_money}元-已结算:{$row2.have_in_money}元{if $row2.back_money!=0}-已退:{$row2.have_back_money}元{/if}{if $smarty.foreach.foo.last}{else}<hr />{/if}
+        {/foreach}
+        
+        {if $row.settle_overKmMoney!=0}{$summoney=$summoney+$row.settle_overKmMoney}<hr />超公里费:{$row.settle_overKmMoney}-已结算:{$row.settle_overKmMoney_have}{/if}
+        {if $row.settle_overTimeMoney!=0}{$summoney=$summoney+$row.settle_overTimeMoney}<hr />超时费:{$row.settle_overTimeMoney}-已结算:{$row.settle_overTimeMoney_have}{/if}
+        {if $row.settle_waitTimeMoney!=0}{$summoney=$summoney+$row.settle_waitTimeMoney}<hr />等待费:{$row.settle_waitTimeMoney}-已结算:{$row.settle_waitTimeMoney_have}{/if}
+        {if $row.settle_favor>0}{$summoney=$summoney-$row.settle_favor}
+        <hr />优惠：{$row.settle_favor}元
+        {/if}
+        {if ($row.paiche_shunt==1)}
+        <hr />调车公司收现：{$row.shunt_rented}元
+        <hr />调车公司报价：{$row.shunt_rent}元{if $row.shunt_money>0}-已付:{$row.shunt_money}{/if}
+        <hr />调车结算：{$row.shunt_rented-$row.shunt_rent}元
+        {/if}
+        {if ($row.paiche_brother>0)}
+        <hr />我公司收现：{-1*$row.shunt_rented}元
+        <hr />我公司报价：{-1*$row.shunt_rent}元 {if $row.shunt_money<>0}-已收:{-1*$row.shunt_money}{/if}
+        <hr />差额：{$row.shunt_rented-$row.shunt_rent-$row.shunt_other}元
+        {/if}
+        </td>
+		{if $op=="shuntlist"}
+		<td>{$row.shunt_money}</td>
+		<td>{$row.shunt_endtimes}</td>
+		{/if}
+	    <td><a href="detail.php?uid={$row.paiche_id}" target="newblank">明细</a></td>
+ </tr>
+ <tr><td colspan="20" style="text-align:left;">{$row.paiche_line}{if $row.paiche_routelist}&nbsp;&nbsp;&nbsp;{foreach from=$row.paiche_routelist item=row10 name=foo}<font style="TEXT-DECORATION: line-through;">原路线：{$row10.changeroute_lineA}&nbsp;&nbsp;&nbsp;原租金：{$row10.changeroute_rentA}</font>{/foreach}{/if}</td></tr>
+ {/foreach}
+ {if $id_card !=""}
+ <tr bgcolor="#fffeab">
+ 	<td>合计</td>
+ 	<td colspan="7"></td>
+ 	<td>{$summoney}元</td>
+ 	<td></td>
+ </tr>
+ {/if}
+ {if $note !=""}
+ <tr bgcolor="#fffeab">
+ 	<td>备注</td>
+ 	<td colspan="9" style="text-align:left;">{$note}</td>
+ </tr>
+ {/if}
+ {if $favorreason !=""}
+ <tr bgcolor="#fffeab">
+ 	<td>优惠原因</td>
+ 	<td colspan="9" style="text-align:left;">{$favorreason}</td>
+ </tr>
+ {/if}
+ </table>
+ </div>
+</div>
+<!-{literal}->
+<script>
+	//鼠标移动表格效果
+	$(document).ready(function(){
+	    $("#tmpcontractNum").focus();
+        $("a.zoomIn").fancybox({
+            'overlayShow'   : false,
+            'transitionIn'  : 'elastic',
+            'transitionOut' : 'elastic'
+        });         
+        
+		$("tr[overstyle='on']").hover(
+		  function () {
+		    $(this).addClass("bg_hover");
+		  },
+		  function () {
+		    $(this).removeClass("bg_hover");
+		  }
+		);
+	});
+</script>
+<!-{/literal}->
+
+</body>
+</html>

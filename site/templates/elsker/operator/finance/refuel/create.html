@@ -1,0 +1,121 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>管理后台</title>
+<link href="../../../../css/style.css" rel="stylesheet" type="text/css">
+<link href="../../../../js/jbox/jBox/Skins/GreyBlue/jbox.css" rel="stylesheet"  />
+<script type="text/javascript" src="../../../../js/jquery.js"></script>
+<script type="text/javascript" src="../../../../js/common.js"></script>
+<script type="text/javascript" src="../../../../js/calendar.js"></script>
+<script type="text/javascript" src="../../../../js/check_form.js"></script>
+<script type="text/javascript" src="../../../../js/jbox/jBox/jquery.jBox-2.3.min.js"></script>
+<script type="text/javascript" src="../../../../js/jbox/jBox/i18n/jquery.jBox-zh-CN.js"></script>
+<style>
+/*{literal}*/
+	.navi_name{font-size:14px;font-weight:bold;}
+	.indent{padding-left:40px;}
+/*{/literal}*/
+</style>
+</head>
+<body>
+<div class="so_main">
+  <div class="page_tit">{if $task=="insert"}添加{elseif $task=="update"}编辑{/if}</div>  
+  <form method="post" action="insert.php" onsubmit="return refuel_check(this)" name="form1">
+  <div class="form2">
+	  	<dl class="lineD">
+	    <dt><span class="redstar">*</span>选择加油车辆：</dt>
+	    <dd><input type="text" name="paicheCar" id="paicheCar" size="38" onFocus="this.blur()" value="{$list.car_num}" /> 
+	         <input type="button" value="清 空" onClick="clearValue('paicheCar','paicheCar2')" />&nbsp;
+	         关键字：<input type="text" name="paicheCarKey" id="paicheCarKey" size="10" />
+	    <input type="hidden" name="paicheCar2" id="paicheCar2" value="{$list.car_id}" /><input type="hidden" name="shunt" id="shunt" value="" />
+	    <a href="javascript:select_car();"><img src="../../../../css/car2.gif" height="15" class="peoplePic" /></a></dd>
+	    </dl>
+	    <dl class="lineD">
+	    <dt><span class="redstar">*</span>加油日期：</dt>
+	    <dd><input type="text" name="refuel_date" id="refuel_date" size="16" value="{$list.refuel_date}" onclick="calendar.show(this);" /></dd>
+	    </dl>
+	    <dl class="lineD">
+		  <dt><span class="redstar">*</span>加油数量：</dt>
+		  <dd><input type="text" name="refuel_number" id="refuel_number" size="6" value="{$list.refuel_number}" />升</dd>
+		</dl>
+		<dl class="lineD">
+		  <dt><span class="redstar">*</span>加油金额：</dt>
+		  <dd><input type="text" name="refuel_money" id="refuel_money" size="8" value="{$list.refuel_money}" />元</dd>
+		</dl>
+	  	<dl class="lineD">
+		  <dt><span class="redstar">*</span>加油人：</dt>
+		  <dd><select id="selDriver"></select>
+		  
+		  <input type="text" name="paicheDriver" id="paicheDriver" size="18" onFocus="this.blur()" value="{$list.refuel_man}" />
+			         关键字：<input type="text" name="paicheDriverKey" id="paicheDriverKey" size="10" />
+			    <input type="hidden" name="paicheDriver2" id="paicheDriver2" value="" />
+			    <a href="javascript:select_driver();"><img src="../../../../css/driver.gif" height="15" class="peoplePic" /></a>
+		  </dd>
+		</dl>
+		<dl class="lineD">
+		  <dt>GPS里程：</dt>
+		  <dd><input type="text" name="refuel_km" size="8" value="{$list.refuel_km}" />公里</dd>
+		</dl>
+		<dl class="lineD">
+		  <dt>备注：</dt>
+		  <dd><textarea name="refuel_remarks" cols="60" rows="3">{$list.refuel_remarks}</textarea></dd>
+		</dl>
+    <div class="page_btm">
+      <input type="submit" class="btn_b" value="确定" /><b> 注：<span class="red">*</span>为必填项</b>
+    </div>
+  </div>
+  <input type="hidden" name="uid" value="{$list.refuel_id}" />
+  <input type="hidden" name="uids" value="{$uids}" />
+  <input type="hidden" name="task" value="{$task}" />
+  </form>
+</div>
+<!-{literal}->
+<script>
+$(document).ready(function(){
+    $('#refuel_number').bind('input propertychange', function(){
+		if ($("#refuel_date").val() !="" && $("#paicheCar2").val() !=""){
+		    $.get("list.php?task=getDriverList",{"carid":$("#paicheCar2").val(),"ddate":$("#refuel_date").val()}, function(jsonmsg){
+				if (jsonmsg.status==0){
+					var nRe=jsonmsg.totalRecords;
+					if (nRe>0){
+					    jQuery("#selDriver").empty();
+					    jQuery("#selDriver").append("<option value='0'>选择驾驶员</option>");
+						var dataObj = jsonmsg.data;
+						for (var i=0;i<nRe;i++){
+						    jQuery("#selDriver").append("<option value='"+dataObj[i].paicheDriver+"'>"+dataObj[i].emp_name+"</option>");
+						}
+					}
+				}
+			},"json");
+		}
+    });
+    $('#selDriver').live('change',function(){
+	    var p1=$(this).children('option:selected').val();
+	    if (p1==0){
+	    }else{
+			$("#paicheDriver2").val(p1);
+			$("#paicheDriver").val($(this).children('option:selected').text());
+	    }
+	});
+    
+});
+
+function select_car(){
+	var key=$("#paicheCarKey").val();
+	demo_iframe('../../business/selectemp.php?sel_type=c&key='+key,'选择车辆',650,380,'login_js');
+}
+function select_driver(){
+	var key=$("#paicheDriverKey").val();
+	
+	demo_iframe('../../business/selectemp.php?sel_type=d&item=2'+'&key='+key,'选择员工',650,380,'login_js');
+}
+function getDriver(){
+    
+}
+
+</script>
+<!-{/literal}->
+</body>
+</html>

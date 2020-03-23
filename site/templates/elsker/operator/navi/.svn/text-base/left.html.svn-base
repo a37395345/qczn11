@@ -1,0 +1,59 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>
+</title>
+<style type="text/css">
+{literal}
+body {
+	background-color:#C6C6C6;
+	margin:10px 10px 10px 10px;
+	color:#FFFFFF;
+	font-size:13px
+}
+#main{
+	background-color:#F2F4F3;
+	width:190px;
+	height:600px;
+	border:3px solid #323432;
+}
+.top{
+    margin:3px 3px 2px 3px;
+	background-image:url("images/left-top.gif");
+	background-repeat:repeat-x;
+	padding-top:6px;
+	height:20px;
+	text-align:center;
+}
+.item{
+	margin:2px 3px 2px 3px;
+	background-color:#BFBFBF;
+	border-bottom:1px solid #979797;
+	padding-top:6px;
+	height:19px;
+	font-size:13px;
+	padding-left:8px;
+}
+.list{
+	margin:2px 3px 2px 3px;
+	background-color:#DEDEDE;
+	border-bottom:1px solid #BFBFBF;
+	padding-top:6px;
+	height:19px;
+	padding-left:16px;
+	font-size:12px;
+}
+a:link,a:active,a:visited {
+	color:black;
+	text-decoration:none;
+}
+{/literal}
+</style>
+</head>
+<body>
+<div id="main">
+</div>
+</body>
+{$SCRIPT}
+</html>

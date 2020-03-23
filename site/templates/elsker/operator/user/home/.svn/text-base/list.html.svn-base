@@ -1,0 +1,148 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>管理后台</title>
+<link href="/admincp/css/style.css" rel="stylesheet" type="text/css">
+<link href="/admincp/css/box.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="/admincp/js/jquery.js"></script>
+<script type="text/javascript" src="/admincp/js/common.js"></script>
+<script type="text/javascript" src="/admincp/js/box.js"></script>
+</head>
+<body>
+<div class="so_main">
+  <div class="page_tit">信息列表</div>
+
+  <!-------- 用户列表 -------->
+  <div class="Toolbar_inbox">
+  	<div class="page right">共{$total}条记录&nbsp;&nbsp;&nbsp;{$PAGINATION}</div>
+	<a href="create.php" class="btn_a"><span>添加信息</span></a>
+	<a href="javascript:void(0);" class="btn_a" onclick="deleteBadge();"><span>删除信息</span></a>
+
+  </div>
+  <div class="list">
+  <table width="100%" border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <th style="width:30px;">
+		<input type="checkbox" id="checkbox_handle" onclick="checkAll(this)" value="0">
+    	<label for="checkbox"></label>
+	</th>
+    <th class="line_l">ID</th>
+    <th class="line_l">名称</th>
+    <th class="line_l">描述</th>
+    <th class="line_l">大图</th>
+    <th class="line_l">小图</th>
+	<th class="line_l">类别</th>
+	<th class="line_l">程序路径</th>
+	<th class="line_l">状态</th>
+	<th class="line_l">排序</th>
+	<th class="line_l">操作</th>
+  </tr>
+  {foreach from=$badgeList key=i item=row}
+  <tr overstyle='on' id="badge_{$row.badge_id}">
+    	<td><input type="checkbox" name="checkbox" id="checkbox{$row.badge_id}" value="{$row.badge_id}"></td>
+	  	<td>{$row.badge_id}</td>
+		<td>{$row.title}</td>
+		<td>{$row.description}</td>
+		<td><img src="http://localhost/admincp/upload/{$row.big_image}" WIDTH="50" HEIGHT="50" BORDER="0"></td>
+	    <td><img src="http://localhost/admincp/upload/{$row.small_image}" WIDTH="25" HEIGHT="25" BORDER="0"></td>
+	    <td>{$row.category}</td>
+		<td>{$row.program_path}</td>
+		<td>{if $row.status == 1}激活{else}关闭{/if}</td>
+		<td>
+		{if $row.preOrder== 'top'}&nbsp;&nbsp;&nbsp;&nbsp;{else}<img src="http://localhost/admincp/site/operator/images/up.gif" style="cursor:pointer;" onclick="location.href='list.php?task=changeOrder&badge_id={$row.badge_id}&target=up&fid={$row.preOrder}&forward={$forward}'" value="向上"/>{/if}&nbsp;&nbsp;
+		{if $row.nextOrder == 'end'}&nbsp;&nbsp;{else}<img src="http://localhost/admincp/site/operator/images/down.gif" style="cursor:pointer;" onclick="location.href='list.php?task=changeOrder&badge_id={$row.badge_id}&fid={$row.nextOrder}&target=down&forward={$forward}'" value="向下"/>{/if}
+		</td>
+	    <td>
+			<a href="modify.php?uid={$row.badge_id}">编辑</a>
+			<a href="{literal}javascript:if(confirm('是否确定删除？')){window.location.href='delete.php?uid={/literal}{$row.badge_id}';{literal}}{/literal}">删除</a>
+		</td>
+ </tr>
+ {/foreach}
+ </table>
+ </div>
+
+  <div class="Toolbar_inbox">
+	<div class="page right">共{$total}条记录&nbsp;&nbsp;&nbsp;{$PAGINATION}</div>
+	<a href="create.php" class="btn_a"><span>添加信息</span></a>
+	<a href="javascript:void(0);" class="btn_a" onclick="deleteBadge();"><span>删除信息</span></a>
+	
+  </div> 
+</div>
+<!-{literal}->
+<script>
+	//鼠标移动表格效果
+	$(document).ready(function(){
+		$("tr[overstyle='on']").hover(
+		  function () {
+		    $(this).addClass("bg_hover");
+		  },
+		  function () {
+		    $(this).removeClass("bg_hover");
+		  }
+		);
+	});
+	
+	function checkon(o){
+		if( o.checked == true ){
+			$(o).parents('tr').addClass('bg_on') ;
+		}else{
+			$(o).parents('tr').removeClass('bg_on') ;
+		}
+	}
+	
+	function checkAll(o){
+		if( o.checked == true ){
+			$('input[name="checkbox"]').attr('checked','true');
+			$('tr[overstyle="on"]').addClass("bg_on");
+		}else{
+			$('input[name="checkbox"]').removeAttr('checked');
+			$('tr[overstyle="on"]').removeClass("bg_on");
+		}
+	}
+
+	//获取已选择用户的ID数组
+	function getChecked() {
+		var uids = new Array();
+		$.each($('table input:checked'), function(i, n){
+			uids.push( $(n).val() );
+		});
+		return uids;
+	}
+	
+	//删除用户
+	function deleteBadge(uid) {
+		uid = uid ? uid : getChecked();
+		uid = uid.toString();
+		if(uid == '' || !confirm('删除成功后将无法恢复，确认继续？')) return false;
+		
+		$.post("delete.php?multi=1", {uid:uid}, function(res){
+			if(res == '1') {
+				uid = uid.split(',');
+				for(i = 0; i < uid.length; i++) {
+					$('#badge_'+uid[i]).remove();
+				}
+				ui.success('操作成功');
+			}else {
+				ui.error('操作失败');
+			}
+		});
+	}
+
+	
+	function folder(type, _this) {
+		$('#search_'+type).slideToggle('fast');
+		if ($(_this).html() == '展开') {
+			$(_this).html('收起');
+		}else {
+			$(_this).html('展开');
+		}
+		
+	}
+
+</script>
+<!-{/literal}->
+
+</body>
+</html>

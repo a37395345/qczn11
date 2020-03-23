@@ -1,0 +1,10 @@
+@charset "utf-8";
+/* CSS Document */
+/*全局样式
+---------------------------------------------*/
+.float108{position:absolute;z-index:999;right:0;bottom:0px;display:none;}
+.float108 .short-list{overflow:hidden;float:left;cursor:pointer;}
+.float108 .short-list span{}
+
+.pop_close{ display:block; position:absolute; width:12px; height:12px; background:url(../images/popimg-b.png) no-repeat 0 -81px; text-indent:-9999px; overflow:hidden; right:5px; top:8px;}
+.pop_close:hover{ background:url(../images/popimg-b.png) no-repeat -66px -81px;}

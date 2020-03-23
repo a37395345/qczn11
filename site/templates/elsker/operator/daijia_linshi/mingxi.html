@@ -1,0 +1,784 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>订单详情</title>
+    <meta name="keywords" content="H+后台主题,后台bootstrap框架,会员中心主题,后台HTML,响应式后台">
+    <meta name="description" content="H+是一个完全响应式，基于Bootstrap3最新版本开发的扁平化主题，她采用了主流的左右两栏式布局，使用了Html5+CSS3等现代技术">
+
+    <link rel="shortcut icon" href="favicon.ico"> <link href="../../../crm1/css/bootstrap.min.css?v=3.3.6" rel="stylesheet">
+    <link href="../../../crm1/css/font-awesome.css?v=4.4.0" rel="stylesheet">
+
+    <link href="../../../crm1/css/animate.css" rel="stylesheet">
+    <link href="../../../crm1/css/style.css?v=4.1.0" rel="stylesheet">
+    <link href="../../../crm1/css/idangerous.swiper.css" rel="stylesheet">
+    <link href="../../../crm1/css/idangerous.swiper.scrollbar.css" rel="stylesheet">
+    <link href="../../../css/conmone.css" rel="stylesheet">
+    <script type="text/javascript" src="../../../js/jquery.js"></script>
+     <link href="../../../js/jbox/jBox/Skins/GreyBlue/jbox.css?a=2" rel="stylesheet">
+    <script type="text/javascript" src="../../../js/jbox/jBox/jquery.jBox-2.3.min.js?a=6"></script>
+    <script type="text/javascript" src="../../../js/jbox/jBox/i18n/jquery.jBox-zh-CN1.js?a=101"></script>
+    <style>
+        .dl-horizontal dd{
+                height: 26px;
+            }
+        @media(max-width: 768px){
+            .zijia_title h2{
+                font-size:16px;
+                color: #615555;
+            }
+            .dl-horizontal dt{
+                display: inline-block;
+                float:left;
+            }
+            .dl-horizontal dd{
+                height: 26px;
+            }
+            .tab-pane{
+                width:1000px;
+                overflow-x: hidden;
+            }
+            .tab-pane tr th{
+                width: 3%!important;
+            }
+        }
+    </style>
+</head>
+
+<body class="gray-bg">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="wrapper wrapper-content animated fadeInUp">
+                <div class="ibox">
+                    <div class="ibox-content">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="m-b-md zijia_title">
+                                    <h2>运河租车临时代驾 &nbsp;&nbsp;&nbsp;{$list.paiche_contractNum}</h2>
+                                </div>
+                                <dl class="dl-horizontal">
+                                    <dt>状态：</dt>
+                                    <dd><span class="label label-primary">
+                                    {if $list.paiche_jie==-3}取消
+                                    {else if $list.paiche_jie==-2}违约
+                                    {else if $list.paiche_jie==-1}预约
+                                    {else if $list.paiche_jie==1}调车未还
+                                    {else if $list.paiche_jie==2}还车未结账
+                                    {else if $list.paiche_jie==3}已结账
+                                    {/if}
+
+                                </span>
+                                    </dd>
+                                </dl>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-5">
+                                <dl class="dl-horizontal">
+
+                                    <dt>业务归属门店：</dt>
+                                    <dd>{$list.ywshopname}</dd>
+                                    <dt>业务员：</dt>
+                                    <dd>{$list.yewuyuan}</dd>
+                                    {if $list.paiche_jie>=0}
+                                    <dt>调度人：</dt>
+                                    <dd>{$list.shop_name}</dd>
+                                    {/if}
+                                </dl>
+                            </div>
+                            <div class="col-sm-7" id="cluster_info">
+                                <dl class="dl-horizontal">
+                                    <dt>用车开始时间：</dt>
+                                    <dd>{$list.paiche_startDate}</dd>
+                                    {if $list.paiche_jie<=1}
+                                    <dt>用车结束时间：</dt>
+                                    <dd>{$list.paiche_endDate}</dd>
+                                    {/if}
+                                    {if $list.paiche_jie>=0}
+                                    <dt>调度时间：</dt>
+                                    <dd>{$list.paiche_dispatchTimes}</dd>
+                                    {/if}
+                                    
+                                    {if $list.paiche_jie>1}
+                                    
+                                    <dt>实际还车时间：</dt>
+                                    <dd>{$list.settle_endDate}</dd>
+                                    {/if}
+                                    <dt>用车备注：</dt>
+                                    <dd>{$list.paiche_specialRemarks}</dd>
+                               
+                                </dl>
+                            </div>
+                        </div>
+                        
+                        <div class="row m-t-sm" style="overflow: hidden;overflow-x: auto;">
+                            <div class="col-sm-12">
+                                <div class="panel blank-panel">
+                                    <div class="panel-heading">
+                                        <div class="panel-options">
+                                            <ul class="nav nav-tabs">
+                                                <li><a href="javascript:;" data-toggle="tab">客户信息</a>
+                                                </li>
+
+                                                <li class=""><a href="javascript:;" data-toggle="tab">租赁费用列表</a>
+                                                </li>
+
+                                                <li class=""><a href="javascript:;" data-toggle="tab">收款/支出记录</a>
+                                                </li>
+                                            {if $list.paiche_pintaiid!=2}
+                                                <li class=""><a href="javascript:;" data-toggle="tab">出车记录</a>
+                                                </li>
+
+                                                <li class=""><a href="javascript:;" data-toggle="tab">违章记录</a>
+                                                </li>
+                                            {/if}
+                                                <li class=""><a href="javascript:;" data-toggle="tab">开票记录</a>
+                                                </li>
+                                                <li class=""><a href="javascript:;" data-toggle="tab">其他约定条款</a>
+                                                </li>
+
+
+                                                 {if $list.paiche_jie==3}
+                                                <li class=""><a href="javascript:;" data-toggle="tab">订单审核状态</a>
+                                                </li>
+                                                {/if}
+                                                
+                                            </ul>
+                                        </div>
+                                    </div>
+
+                                    <div class="panel-body1">
+
+                                        <div class="tab-content">
+                                            <div class="tab-pane active">
+                                                <div class="feed-activity-list">
+                                                    <div class="feed-element">
+                                                        <div class="media-body ">
+                                                           <br/><br/>
+                                                           {if $list.paiche_kehu==1}
+                                                              
+                                                               联系人姓名：{$list.paiche_linker}
+                                                               <br/><br/>
+                                                               联系人联系电话：{$list.paiche_linkerPhone}
+                                                            {else if $list.paiche_kehu==2}
+                                                                所属公司：{$list.client_name}
+                                                               <br/><br/>
+                                                               联系人姓名：{$list.zemp_name}
+                                                               <br/><br/>
+                                                               联系人联系电话：{$list.phone}
+                                                               <br/><br/>
+                                                               公司地址：{$list.paiche_linkerAdd}
+                                                            {else}
+                                                                所属公司：{$list.bro_name}
+                                                               <br/><br/>
+                                                               联系人姓名：{$list.bro_linker}
+                                                               <br/><br/>
+                                                               联系人联系电话：{$list.bro_phone}
+                                                               
+                                                            {/if}
+                                                           <br/><br/>
+                                                        </div>
+                                                        
+                                                    </div>
+                                                </div>
+
+                                            </div>
+
+
+                          
+
+                                            <div class="tab-pane">
+                                                    <table class="table table-striped">
+                                                        <thead>
+                                                            <tr>
+                                                                    <th width="16%">收费项目</th>
+                                                                    <th width="16%">收费金额</th>
+                                                                    <th width="16%">已收金额</th>
+                                                    
+                                                                    <th width="16%">操作时间</th>
+                                                                    <th width="16%">操作人</th>
+                                                                    <th width="20%">备注</th> 
+                                                     
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            {foreach from=$chargelist key=i item=row}
+                                                          <tr >
+                                                                <td>{$row.charge_name}</td>
+                                                                <td >{$row.conv_money}</td>
+                                                                <td >{$row.have_in_money}</td>
+                                                                
+                                                                <td>{$row.addtime}</td>
+                                                                <td>
+                                                                {$row.emp_name}</td>
+                                                                <td>
+                                                                    {if $row.charge_name=="其他费用"}
+                                                                        {$row.charge_remarks}
+                                                                    {else}
+                                                                    
+                                                                {if $row.continuerent_start&&$row.continuerent_end}
+                                                                {$row.continuerent_start}~{$row.continuerent_end}
+                                                                {/if}
+    
+                                                                {/if}
+                                                            </td>      
+                                                         </tr>
+                                                         {/foreach}
+
+
+                                                                                                                   
+    
+    
+                                                       
+                    
+                                                        </tbody>
+                                                    </table>
+                                                    {if $youhui_list}
+                                                    <table class="table table-striped">
+                                                        <thead>
+                                                            <tr>
+                                                                    <th width="16%">优惠项目</th>
+                                                                    <th width="16%">优惠金额</th>
+                                                                    <th width="16%">已优惠金额</th>
+                                                                     
+                                                                    <th width="16%">优惠时间</th>
+                                                        
+                                                                    
+                                                                    <th width="16%">操作人</th>
+                                                                     <th width="20%">优惠原因</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                             {foreach from=$youhui_list key=i item=row}
+                                                          <tr >
+                                                                <td>{$row.youhui_name}</td>
+                                                                <td>{$row.youhui_mone}</td>
+                                                                <td>{$row.youhui_omone}</td>
+                    
+                                                                <td>
+                                                                    {$row.youhui_addtime}
+                                                                </td>
+                                                                <td>{$row.emp_name}</td>
+                                                                <td>{$row.youhui_liyou}</td>
+                                                                 
+                                                                
+                                                         </tr>
+                                                         {/foreach}
+                                                        </tbody>
+                                                    </table>
+                                                    {/if}
+
+
+                                                    {if $list.paiche_pintaiid==2&&$chargelist}
+                                                    <table class="table table-striped">
+                                                        <thead>
+                                                            <tr>
+                                                                    <th  width="16%">收费项目</th>
+                                                                    <th  width="16%">调车公司报价</th>
+                                                                    <th  width="16%">已收</th>
+                                                                    <th  width="16%">操作时间</th>
+                                                                    <th  width="16%">操作人</th>
+                                                                    <th  width="20%">备注</th> 
+                                                     
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            {foreach from=$chargelist key=i item=row}
+                                                          <tr >
+                                                                <td>{$row.charge_name}</td>
+                                                                <td >{$row.have_freeze_money}</td>
+                                                                <td >{$row.have_back_money}</td>
+                                                                   
+                                                                <td>{$row.addtime}</td>
+                                                                <td>
+                                                                {$row.emp_name}</td>
+                                                                <td>
+                                                                     {if $row.charge_name=="其他费用"}
+                                                                        {$row.charge_remarks}
+                                                                    {else}
+                                                                    
+                                                                {if $row.continuerent_start&&$row.continuerent_end}
+                                                                {$row.continuerent_start}~{$row.continuerent_end}
+                                                                {/if}
+    
+                                                                {/if}
+                                                            </td>      
+                                                         </tr>
+                                                         {/foreach}
+
+
+                                                                                                                   
+    
+    
+                                                       
+                    
+                                                        </tbody>
+                                                    </table>
+                                                    {/if}
+                                                    {if $youhui_list&&$list.paiche_pintaiid==2}
+                                                    <table class="table table-striped">
+                                                        <thead>
+                                                            <tr>
+                                                                    <th  width="16%">优惠项目</th>
+                                                                    <th  width="16%">调车公司报价优惠</th>
+                                                                    <th  width="16%">调车公司报价已优惠</th>
+                                                                    <th  width="16%">优惠时间</th>
+                                                                   
+                                                                    
+                                                                    <th  width="16%">操作人</th>
+                                                                     <th  width="20%">优惠原因</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                             {foreach from=$youhui_list key=i item=row}
+                                                          <tr >
+                                                                <td>{$row.youhui_name}</td>
+                                                                
+                                                                
+                                                                    <td >{$row.youhui_smoney}</td>
+                                                                    <td >{$row.youhui_emoney}</td>
+                                                                   
+                                                                <td>
+                                                                    {$row.youhui_addtime}
+                                                                </td>
+                                                                
+                                                                 
+                                                                <td>{$row.emp_name}</td>
+                                                                <td>{$row.youhui_liyou}</td>
+                                                         </tr>
+                                                         {/foreach}
+                                                        </tbody>
+                                                    </table>
+                                                    {/if}
+                                                </div>
+                                                
+
+
+
+                                            <div class="tab-pane">
+                                                <table class="table table-striped">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>序号</th>
+                                                            <th>时间</th>
+                                                            <th>收入</th>
+                                                            <th>支出</th>
+                                                            <th>方式</th>
+                                                            <th>账户</th>
+                                                            <th>摘要</th>  
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        {$i=1}
+                                                        {$f_money=0}{$z_money=0}
+                                                        {foreach from=$account_list item=row name=foo}
+                                                        <tr>
+                                                            <td>
+                                                                {$i}
+                                                            </td>
+                                                            <td>
+                                                                {$row.add_time}
+                                                            </td>
+                                                           {if $row.money>0}
+                                                            <td>{$row.money}</td>
+                                                            <td>&nbsp;</td>
+                                                                {$z_money=$z_money+$row.money}
+                                                            {else}
+                                                            <td>&nbsp;</td>
+                                                            <td>{-1*$row.money}</td>
+                                                                {$f_money=$f_money+(-1*$row.money)}
+                                                            {/if}
+                                                            <td>
+                                                                {$row.payment_name}
+                                                            </td>
+                                                            <td>
+                                                                {$row.bank_name}
+                                                            </td>
+                                                            <td>
+                                                               {$row.name}&nbsp;&nbsp;{$row.remark}
+                                                            </td>
+
+                                                        </tr>
+                                                        {$i=$i+1}
+                                                        {/foreach}
+
+                                                        <tr>
+                                                            <td colspan="7">
+
+                                                                合计收入:<span style="color: red">{$z_money}</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                                                合计支出:<span style="color: green">{$f_money}</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                                                总计：<span style="color: {if ($z_money-$f_money)>=0}red{else}green{/if}">{$z_money-$f_money}</span>
+                                                        
+                                                        </td>
+                                                    </tr>
+                                                        
+                                                    </tbody>
+                                                </table>
+
+                                            </div>
+                                            
+                                    {if $list.paiche_pintaiid!=2}
+                                            <div class="tab-pane">
+                                                <table class="table table-striped">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>序号</th>
+                                                            <th>用车开始时间</th>
+                                                            <th>用车结束时间</th>
+                                                            <th>换前车辆</th>
+                                                            <th>换后车辆</th>
+                                                            <th>车辆起始的公里数</th>
+                                                            <th>车辆结束的公里数</th>
+                                                            <th>车辆行驶公里数</th>
+                                                            <th>换车备注</th>
+                                                            <th>调度人</th>
+                                                            
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                       {foreach from=$changelist item=row name=foo}
+                      <tr >
+                            <td>{$smarty.foreach.foo.index+1} </td>
+
+                            <td>{if $smarty.foreach.foo.index+1==1}
+                                    {$list.paiche_startDate}
+                               
+                                {else}
+                                     {$changelist[$smarty.foreach.foo.index-1]['changecar_times_all']}
+                                {/if}
+                            </td>
+                            <td>
+                                {$row.changecar_times_all}
+                            </td>
+                            <td>苏D{$row.carA}</td>
+                            <td>苏D{$row.carB}</td>
+                            
+                            <td>{$row.changecar_carAStartKilo}</td>
+                            <td>{$row.changecar_carAEndKilo}</td>
+                            
+                            <td>{$row.changecar_carAEndKilo-$row.changecar_carAStartKilo}</td>
+                           
+                            <td>{$row.changecar_rentRemarks}</td>
+                            <td>{$row.changecarMan}</td>
+
+                            
+                     </tr>
+                     {/foreach}
+                     <tr>
+                         <td>{count($changelist)+1}</td>
+                         {if count($changelist)>0}
+                            <td>{$changelist[count($changelist)-1]['changecar_times_all']}</td>
+                         {else}
+                        <td> {$list.paiche_startDate}</td>
+                             
+                         {/if}
+                        
+                         <td>{$list.settle_endDate}</td>
+                          {if $list.paiche_pintaiid==2}
+                            <td>调车公司车辆</td>
+                          {else}
+                         <td>苏D{$list.car_num}</td>
+                         {/if}
+                         <td></td>
+                         <td>{$list.settle_startKm}</td>
+
+                         <td>{$list.settle_endKm}</td>
+                         <td>{$list.settle_endKm-$list.settle_startKm}</td>
+                       
+                         <td></td>
+                         <td>{$list.jiedaiyuan}</td>
+                         
+                     </tr>
+                     {if $list.settle_totalcalKm>0}
+                     <tr>
+                        <td rowspan="5">共计行驶：</td>
+                         <td rowspan="5">{$list.settle_totalcalKm}&nbsp;&nbsp;公里</td>
+                     </tr>
+                     {/if}
+                                                                          
+                                                    </tbody>
+                                                </table>
+                                            </div>
+
+                                            <div class="tab-pane">
+                                                <table class="table table-striped">
+                                                    <thead>
+                                                        <tr>
+                                                                <th>序号</th>
+                                                                <th>车辆</th>
+                                                                <th>违章时间</th>
+                                                                <th>违章项目</th>
+                                                                <th>违章款</th>
+                                                                <th>手续费</th>
+                                                                <th>扣分</th>
+                                                                <th>金额抵扣分</th>
+                                                                <th>总金额</th>
+                                                                <th>备注</th>
+                                                                <th>冻结押金时间</th>
+                                                                <th>处理时间</th>
+                                                                <th>状态</th> 
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        {$sum_breakrules_money1=0}
+                                                        
+                                                        {$sum_breakrules_money2=0}
+                                                        
+                                                        {$sum_breakrules_money3=0}
+                                                        
+                                                        {$sum_breakrules_money4=0}
+                                                        
+                                                        {$sum_breakrules_money=0}
+                                                       {foreach from=$breakrules item=row name=foo}
+                                                      <tr >
+                                                            <td>{$smarty.foreach.foo.index+1} </td>
+                                                            <td>苏D{$row.car_num}</td>
+                                                            <td>{$row.breakrules_date}</td>
+                                                            <td>{$row.breakrules_item}</td>
+                                                            <td>{$row.breakrules_money1}</td>
+                                                            <td>{$row.breakrules_money2}</td>
+                                                            <td>{$row.breakrules_money3}</td>
+                                                            <td>{$row.breakrules_money4}</td>
+                                                            <td>{$row.breakrules_money}</td>
+                                                            <td>{$row.breakrules_remarks}</td>
+                                                            <td>{$row.breakrules_times}</td>
+                                                            <td>{$row.breakrules_endtimes}</td>
+                                                            <td><a href="../machine/modify.php?task=breakdetail&amp;uid={$row.breakrules_id}" target="_blank">{if $row.breakrules_end==0}未处理{else}已处理{/if}</a></td>
+                                                     </tr>
+                                                    {$sum_breakrules_money=$sum_breakrules_money+$row.breakrules_money}
+                                                    {$sum_breakrules_money1=$sum_breakrules_money1+$row.breakrules_money1}
+                                                    {$sum_breakrules_money2=$sum_breakrules_money2+$row.breakrules_money2}
+                                                    {$sum_breakrules_money3=$sum_breakrules_money3+$row.breakrules_money3}
+                                                    {$sum_breakrules_money4=$sum_breakrules_money4+$row.breakrules_money4}
+                                                     {/foreach}
+                     <tr>
+                        <td>共计：</td>
+                         <td></td>
+                         <td></td>
+                         <td></td>
+                         <td >{$sum_breakrules_money1}</td>
+                         <td >{$sum_breakrules_money2}</td>
+                         <td >{$sum_breakrules_money3}</td>
+                         <td >{$sum_breakrules_money4}</td>
+                         <td >
+                            {$sum_breakrules_money} 
+
+                         </td>
+                         <td></td>
+                         <td></td>
+                         <td></td>
+                         <td></td>
+                     </tr>
+                                                       
+                                                        
+                                                    </tbody>
+                                                </table>
+
+                                            </div>
+
+
+
+
+
+
+
+
+                                               
+                                           
+
+{/if}
+                                                <div class="tab-pane">
+                                                <table class="table table-striped">
+                                                    <thead>
+                                                        <tr>
+                                                                <th width="15%">序号</th>
+                                                                <th width="15%">开票金额</th>
+                                                                <th width="15%">发票号码</th>
+                                                                <th width="15%">备注</th>
+                                                                <th width="15%">操作人</th>
+                                                                <th width="20%">操作时间</th>
+                                                            
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        {$zkaipiao=0}
+                                                       {foreach from=$kaipiao_list key=i item=row}
+                                                      <tr>
+                                                        <td>{$i+1}</td>
+                                                          <td>{$row.money}</td>
+                                                          <td>{$row.xuhao}</td>
+                                                          <td>{$row.liyou}</td>
+                                                          <td>{$row.emp_name}</td>
+                                                          <td>{$row.addtime}</td>
+                                                      </tr>
+                                                      {$zkaipiao=$zkaipiao+$row.money}
+                                                      {/foreach}
+                                                      <tr><td>总计：{$zkaipiao}</td></tr>
+                                                    </tbody>
+
+
+                                                </table>
+                                               
+                                            </div>
+
+
+                                            <div class="tab-pane">
+                                                <table class="table table-striped">
+                                                    <thead>
+                                                        <tr>
+                                                                <th width="20%">条款名称</th>
+                                                                <th width="50%">详细</th>
+                                                                
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    {if $list.paiche_kehu==4}
+                                                        <tr>
+                                                          <td>
+                                                            光宝约定
+                                                        </td>
+                                                          <td>地点：{$client_price.price_area}&nbsp;&nbsp;车型：{$client_price.price_carmodel}&nbsp;&nbsp;行程：{$client_price.price_line}&nbsp;&nbsp;
+                                            价格：{$client_price.price}&nbsp;&nbsp;
+                                            等车费：{$client_price.price_wait1}&nbsp;&nbsp;
+                                            过夜等车费：{$client_price.price_wait2}</td>
+                                                      </tr>
+                                                    {else}
+                                                        {if $list.paiche_unlimitTime=='Y'}
+                                                      <tr>
+                                                          <td>
+                                                            超时
+                                                        </td>
+                                                          <td>超时每小时收取{$list.paiche_overTime}元</td>
+                                                      </tr>
+                                                      {/if}
+                                                      {if $list.paiche_unlimitKm=='Y'}
+                                                      <tr>
+                                                          <td>
+                                                            超公里
+                                                        </td>
+                                                          <td>限行驶{$list.paiche_limitKm}公里，超出按每公里{$list.paiche_overKm}元收费</td>
+                                                      </tr>
+                                                      {/if}
+                                                    {/if}
+                                                    </tbody>
+
+
+                                                </table>
+                                               
+                                            </div>
+
+
+
+                                            {if $list.paiche_jie==3}
+                                                <div class="tab-pane">
+                                                <table class="table table-striped">
+                                                    <thead>
+                                                        <tr>
+                                                                <th width="15%">审核状态</th>
+                                                                <th width="15%">审核人</th>
+                                                                <th width="15%">审核时间</th>
+                                                                <th width="25%">审核意见</th>
+                                                                
+                                                                
+                                                         
+
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                       
+                                                      <tr>
+                                                          <td>
+                                                            {if $list.paiche_checkTimes!=0}
+                                                                已审核
+                                                            {else}
+                                                          未审核
+                                                            {/if}
+                                                        </td>
+                                                          <td>{$list.shenhe_empname}</td>
+                                                          <td>{$list.paiche_checkTimes}</td>
+                                                          <td>{$list.paiche_checkNote}</td>
+                                                      </tr>
+                                                    </tbody>
+
+
+                                                </table>
+                                               
+                                            </div>
+                                            {/if}
+
+                                            
+
+
+
+
+
+
+
+
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+    <input type="hidden" name="pid" value="$pid">
+    
+    <script src="../../../crm1/js/bootstrap.min.js?v=3.3.6"></script>
+
+    <script>
+        var body_W = $("body").width();
+        function setBody_W(){
+            body_W = $("body").width();
+        }
+        function hetong(pid){
+            setBody_W();
+            demo_iframe('index.php?task=hetong&pid='+pid,'合同管理',body_W,500,'login_js');
+        }
+
+        $(".nav-tabs li").click(function(){
+            let xdd = $(this).index();
+            $(".tab-pane").eq(xdd).show().siblings(".tab-pane").hide();
+        });
+        $(document).ready(function(){
+
+            $('#loading-example-btn').click(function () {
+                btn = $(this);
+                simpleLoad(btn, true)
+
+                // Ajax example
+                //                $.ajax().always(function () {
+                //                    simpleLoad($(this), false)
+                //                });
+
+                simpleLoad(btn, false)
+            });
+        });
+
+        function simpleLoad(btn, state) {
+            if (state) {
+                btn.children().addClass('fa-spin');
+                btn.contents().last().replaceWith(" Loading");
+            } else {
+                setTimeout(function () {
+                    btn.children().removeClass('fa-spin');
+                    btn.contents().last().replaceWith(" Refresh");
+                }, 2000);
+            }
+        }
+    </script>
+
+    <script type="text/javascript" src="http://tajs.qq.com/stats?sId=9051096" charset="UTF-8"></script>
+    <!--统计代码，可删除-->
+
+</body>
+
+</html>

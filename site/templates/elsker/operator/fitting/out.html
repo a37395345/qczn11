@@ -1,0 +1,62 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Insert title here</title>
+<link href="../../../css/style.css" rel="stylesheet" type="text/css">
+<script type="text/javascript" src="../../../js/jquery.js"></script>
+<script type="text/javascript" src="../../../js/common.js"></script>
+</head>
+<body>
+<form method="post" action="list.php" name="form1" id="form1" onsubmit="return ok()">
+<input type="hidden" name="task" value="out_accept" />
+<input type="hidden" name="fid" value="{$fid}" />
+<div class="so_main">
+  	<div class="page_tit_1">配件领用</div>
+	<div class="list">
+	<table width="100%" border="0" cellspacing="0" cellpadding="0">
+	  <tr>
+	    <th style="width:30px;">序号	</th>
+		<th>配件名称</th>
+		<th>品牌</th>
+		<th>型号规格</th>
+		<th>库存数量</th>
+		<th>单位</th>
+		<th>单价</th>
+		<th>金额</th>
+		<th>本次领用</th>
+		<th>用途</th>
+	  </tr>
+	  {foreach from=$list item=row name=foo}
+	  <tr overstyle='on' id="badge_{$row.fitting_id}">
+	    	<td><input type="hidden" name="fitting_id[]" value="{$row.fitting_id}">{$smarty.foreach.foo.index+1} </td>
+		  	<td>{$row.fitting_name}</td>
+			<td>{$row.fitting_brand}</td>
+			<td>{$row.fitting_model}</td>
+			<td>{$row.fitting_innum-$row.fitting_outnum} <input type="hidden" name="fitting_num[]" value="{$row.fitting_innum-$row.fitting_outnum}"></td>
+			<td>{$row.fitting_unit}</td>
+			<td>{$row.fitting_price}</td>
+			<td>{$row.fitting_innum*$row.fitting_price}</td>
+			<td><input type="text" name="out_num[]" id="out_num_{$row.fitting_id}" value="{$row.fitting_innum-$row.fitting_outnum}" size="2"/></td>
+			<td><input type='text' name='out_remark[]' value="" size='64' /></td>
+	  </tr>
+	  {/foreach}
+	 </table>
+	</div>
+	<div class="Toolbar_inbox">
+    	<input class="btn_b" type="submit" value="确定">
+  	</div> 
+</div>
+</form>
+<!-{literal}->
+<script>
+function ok(){
+	if(!confirm('请仔细核对领用数量，一旦提交就无法修改了，确定提交吗？')){
+		return false;
+	}
+	
+}
+</script>
+<!-{/literal}->
+</body>
+</html>

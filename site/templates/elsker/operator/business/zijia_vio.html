@@ -1,0 +1,97 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Insert title here</title>
+<link href="../../../css/style.css" rel="stylesheet" type="text/css">
+<link href="../../../js/jbox/jBox/Skins/GreyBlue/jbox.css" rel="stylesheet"  />
+<script type="text/javascript" src="../../../js/jquery.js"></script>
+<script type="text/javascript" src="../../../js/common.js"></script>
+<script type="text/javascript" src="../../../js/date_select.js"></script>
+<script type="text/javascript" src="../../../js/calendar.js"></script>
+<script type="text/javascript" src="../../../js/fancybox/jquery.mousewheel-3.0.4.pack.js"></script>
+<script type="text/javascript" src="../../../js/fancybox/jquery.fancybox-1.3.4.pack.js"></script>
+<script type="text/javascript" src="../../../js/jbox/jBox/jquery.jBox-2.3.min.js"></script>
+<script type="text/javascript" src="../../../js/jbox/jBox/i18n/jquery.jBox-zh-CN.js"></script>
+<script language="javascript" type="text/javascript" src="../../../js/My97DatePicker/WdatePicker.js"></script>
+</head>
+<body>
+<form method="post" action="zijiaVio_accept.php" name="form1" id="form1">
+<input type="hidden" name="pid" value="{$pid}" />
+<div class="so_main">
+  <div class="page_tit_1">订单违约</div>
+ 
+<div class="page_tit_3">&nbsp;</div>
+
+<div class="form2">
+<div class="list">
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+  {if $chargelist}
+  <tr>
+    <th style="width:30px;">序号	</th>
+	<th>收费项目</th>
+	<th>约定金额</th>
+	<th>已收金额</th>
+	<th>已退金额</th>
+	<th>退款金额</th>
+  </tr>
+  {foreach from=$chargelist item=row name=foo}
+  <tr overstyle='on' id="badge_{$row.id}">
+    	<td><input type="hidden" name="charge_id[]" value="{$row.id}">{$smarty.foreach.foo.index+1} </td>
+
+	  	<td>{$row.charge_name}</td>
+
+		<td>{$row.conv_money}</td>
+
+		<td><input type="hidden" class="charge_havemoney" name="charge_havemoney[]" id="charge_havemoney_{$row.id}" value="{$row.have_in_money}"/>{$row.have_in_money}</td>
+
+		<td>{$row.have_back_money}</td>
+
+		<td><input type="hidden" name="back_money[]" id="back_money_{$row.id}" value="{$row.have_in_money-$row.have_back_money}"/>{$row.have_in_money-$row.have_back_money}</td>
+  </tr>
+  {/foreach}
+  {/if}
+ </table>
+ <table width="100%" border="0" cellspacing="0" cellpadding="0">
+ <tr>
+    <th style="text-align:left;line-height: 30px;">
+    	本次收取违约金：<input type="text" name="settle_vio" id="settle_vio" size="5" value="{$paiche_rented}"/>	合计金额:<input type="text" name="total" id="total" value="" size="5" readonly/>
+    	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;车辆归还时间：<input type="text" name="return_endDate" id="return_endDate" size="16" value="{$nowtime}" onClick="{literal}WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'}){/literal}" />
+    	<br />请备注违约原因：<input type="text" name="settle_vioreason" id="settle_vioreason" value="" style="width:410px;"/>
+    	<input type="hidden" name="infact" id="infact" value=""/>
+    </th>
+  </tr>
+ </table>
+</div>
+
+
+
+
+
+   
+
+
+  <div class="Toolbar_inbox">
+    <a href="javascript:void(0);" class="btn_a" name="btn_save" id="btn_save" onclick="ok();"><span>确定</span></a>
+    <a href="javascript:void(0);" class="btn_a" onclick="closebox();"><span>关闭</span></a>   	
+  </div> 
+</div>
+</form>
+<script type="text/javascript" src="../../../js/account.js"></script>
+<!-{literal}->
+<script>
+$(document).ready(function(){
+   length=$(".charge_havemoney").length;
+   var mouth=0;
+   for(var i=0;i<length;i++){
+   		mouth=mouth+parseInt($('.charge_havemoney').eq(i).val());
+   }
+  $('#total').val(parseInt($('#settle_vio').val())-mouth);
+    
+    
+    
+});
+</script>
+<!-{/literal}->
+</body>
+</html>

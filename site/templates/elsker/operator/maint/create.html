@@ -1,0 +1,229 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>管理后台</title>
+<link href="../../../css/style.css" rel="stylesheet" type="text/css">
+<link href="../../../js/jbox/jBox/Skins/GreyBlue/jbox.css" rel="stylesheet"  />
+<script type="text/javascript" src="../../../js/jquery.js"></script>
+<script type="text/javascript" src="../../../js/common.js"></script>
+<script type="text/javascript" src="../../../js/calendar.js"></script>
+<script type="text/javascript" src="../../../js/check_form.js"></script>
+<script type="text/javascript" src="../../../js/jbox/jBox/jquery.jBox-2.3.min.js"></script>
+<script type="text/javascript" src="../../../js/jbox/jBox/i18n/jquery.jBox-zh-CN.js"></script>
+<style>
+/*{literal}*/
+	.navi_name{font-size:14px;font-weight:bold;}
+	.indent{padding-left:40px;}
+/*{/literal}*/
+</style>
+</head>
+<body>
+<div class="so_main">
+  <div class="page_tit">{if $task=="insert"}添加{elseif $task=="update"}编辑{else}报销{/if}</div>  
+  <form method="post" action="insert.php" onsubmit="return maint_check(this)" name="form1">
+  <div class="form2">
+	  {if $task=="bao_accept"}
+	  <dl class="lineD">
+	    <dt>维修车辆：</dt>
+	    <dd>苏D{$list.car_num}</dd>
+	  </dl>
+	  <dl class="lineD">
+	    <dt>日期：</dt>
+	    <dd>{$list.maintenance_date}</dd>
+	  </dl>
+	  <dl class="lineD">
+	    <dt>维修费：</dt>
+	    <dd>{$list.maintenance_money}元</dd>
+	  </dl>
+	  <dl class="lineD">
+	    <dt><span class="redstar">*</span>报销金额：</dt>
+	    <dd><input type="text" name="baoxiao_money" id="baoxiao_money" size="3" value="{$list.maintenance_money}"/>元</dd>
+	  </dl>
+	  <dl class="lineD">
+			<dt><span class="redstar">*</span>付款方式：</dt>
+			<dd><select name="payments" id="payments">
+		                  <option value="">请选择</option>
+		                  {foreach from=$paymentslist key=i item=rows}
+		                  <option value="{$rows.payment_id}" rel="{$rows.payment_fee}">{$rows.payment_name}</option>
+		                  {/foreach}
+		              </select>
+			</dd>
+		</dl>
+		<dl class="lineD">
+			<dt><span class="redstar">*</span>付款 账户：</dt>
+			<dd><select name="bank" id="bank">
+		                  <option value="">请选择</option>
+		                  {foreach from=$banklist key=i item=rows}
+		                  <option value="{$rows.bank_id}" >{$rows.bank_name}</option>
+		                  {/foreach}
+		              </select>
+			</dd>
+		</dl>
+	  {else}
+	  <dl class="lineD">
+	    <dt><span class="redstar">*</span>选择维修车辆：</dt>
+	    <dd><input type="text" name="paicheCar" id="paicheCar" size="38" onFocus="this.blur()" value="{$list.car_num}" /> 
+	         <input type="button" value="清 空" onClick="clearValue('paicheCar','paicheCar2')" />&nbsp;
+	         关键字：<input type="text" name="paicheCarKey" id="paicheCarKey" size="10" />
+	    <input type="hidden" name="paicheCar2" id="paicheCar2" value="{$list.car_id}" /><input type="hidden" name="shunt" id="shunt" value="" />
+	    <a href="javascript:select_car();"><img src="../../../css/car2.gif" height="15" class="peoplePic" /></a></dd>
+	  </dl>
+	  <dl class="lineD">
+	    <dt>类型：</dt>
+	    <dd><input type="radio" name="maintenance_type" value="保养" {if $list.maintenance_type == "保养"}checked{/if} />保养&nbsp;&nbsp;<input type="radio" name="maintenance_type" value="维修" {if $list.maintenance_type == "维修"}checked{/if} />维修</dd>
+	  </dl>
+	  <dl class="lineD">
+	    <dt><span class="redstar">*</span>日期：</dt>
+	    <dd><input type="text" name="maintenance_date" id="maintenance_date" size="16" value="{$list.maintenance_date}" onclick="calendar.show(this);" readonly="readonly" /></dd>
+	  </dl>
+	  <dl class="lineD">
+	    <dt><span class="redstar">*</span>本次公里数：</dt>
+	    <dd><input type="text" name="maintenance_km" id="maintenance_km" size="10" value="{$list.maintenance_km}"  /></dd>
+	  </dl>
+	<dl class="lineD" id="divnextdate" {if $list.maintenance_type != "保养"}style="display:none;"{/if}>
+		<dt>下次保养日期和公里数：</dt>
+	    <dd><input type="text" name="maintenance_nextdate" id="maintenance_nextdate" size="16" value="{$list.maintenance_nextdate}" onclick="calendar.show(this);" readonly="readonly" />/<input type="text" name="maintenance_nextkilo" id="maintenance_nextkilo" size="3" value="{$list.maintenance_nextkilo}"/>公里</dd>
+	  </dl>
+	  <dl class="lineD">
+	    <dt>保养/维修内容：</dt>
+	    <dd><textarea name="maintenance_remark" cols="90" rows="4">{$list.maintenance_remark}</textarea></dd>
+	  </dl>
+	  <dl class="lineD" >
+	    <dt>具体内容</dt>
+	    <dd>
+	    <table width="100%" border="0" cellspacing="10" cellpadding="1">
+	    <tr>
+	    <td>本次保养项目</td>
+	    <td>下次保养日期或公里数</td>
+	    <td>备注说明</td>
+	    </tr>
+	    {foreach from=$itemlist item=row name=foo}
+	    <tr>
+	    <td><input type="hidden" name="item[]" value="{$row.option_id}" /> <input type="checkbox" value="1" name="maintenance_check_{$row.option_id}" {if !empty($row.item_id)}checked{/if}/>{$row.option_name}</td>
+	    <td><input type="text" name="maintenance_nextdate_{$row.option_id}" id="maintenance_nextdate_{$row.option_id}" size="8" value="{$row.next_date}" onclick="calendar.show(this);" />/<input type="text" name="maintenance_nextkilo_{$row.option_id}" id="maintenance_nextkilo_{$row.option_id}" size="3" value="{$row.next_kilo}"/>公里</td>
+	    <td><textarea name="maintenance_remark_{$row.option_id}" cols="50" rows="2">{$row.remark}</textarea></td>
+	    </tr>
+	    {/foreach}
+	    </table>
+	    </dd>
+	  </dl>
+	  
+	  <dl class="lineD">
+	    <dt><span class="redstar">*</span>维修费：</dt>
+	    <dd>工时费<input type="text" name="maintenance_workhourmoney" id="maintenance_workhourmoney" size="3" value="{$list.maintenance_workhourmoney}"/>+配件材料费<input type="text" name="maintenance_fittingsmoney" id="maintenance_fittingsmoney" size="3" value="{$list.maintenance_fittingsmoney}"/>=合计费用<input type="text" name="maintenance_money" id="maintenance_money" size="3" value="{$list.maintenance_money}"/>元</dd>
+	  </dl>
+	  <dl class="lineD">
+	    <dt>配件材料：</dt>
+	    <dd>
+	    <table width="70%" border="0" cellspacing="0" cellpadding="0" align="left">
+			<tr>
+			<th>名称</th>
+			<th>品牌</th>
+			<th>型号/规格</th>
+			<th>数量</th>
+			<th>计量单位</th>
+			<th>单价</th>
+			<th>金额</th>
+			</tr>
+		{if $task=="update"}
+		{foreach from=$list.fitting_list item=row name=foo}
+		{$total_sum=$total_sum+$row.fitting_sum}
+		{$total_num=$total_num+$row.fitting_num}
+			<tr>
+			  <td><input type="hidden" name="fitting_id[]" value="{$row.fitting_id}">
+			  <input type='text' name='fitting_name[]' value="{$row.fitting_name}" size='12' class="noborder" /></td>
+			  <td><input type='text' name='fitting_brand[]' value="{$row.fitting_brand}" size='12' /></td>
+			  <td><input type='text' name='fitting_model[]' value="{$row.fitting_model}" size='12' /></td>
+			  <td><input type='text' name='fitting_num[]' value="{$row.fitting_num}" size='2' /></td>
+			  <td><input type='text' name='fitting_unit[]' value="{$row.fitting_unit}" size='2' /></td>
+			  <td><input type='text' name='fitting_price[]' value="{$row.fitting_price}" size='3' /></td>
+			  <td><input type='text' name='fitting_sum[]' value="{$row.fitting_sum}" size='4' /></td>
+			</tr>
+		{/foreach}
+		{/if}
+		
+		{section name=total loop=8}
+			<tr>
+			  <td><input type='text' name='fitting_name[]' value="" size='12' class="noborder" /></td>
+			  <td><input type='text' name='fitting_brand[]' value="" size='12' /></td>
+			  <td><input type='text' name='fitting_model[]' value="" size='12' /></td>
+			  <td><input type='text' name='fitting_num[]' value="" size='2' /></td>
+			  <td><input type='text' name='fitting_unit[]' value="" size='2' /></td>
+			  <td><input type='text' name='fitting_price[]' value="" size='3' /></td>
+			  <td><input type='text' name='fitting_sum[]' value="" size='4' /></td>
+			</tr>
+		{/section}
+		<tr>
+		  <th>合计</th>
+		  <td colspan="2">&nbsp;</td>
+		  <td><input type='text' name='total_num' id='total_num' value="{$total_num}" size='2' /></td>
+		  <td colspan="2">&nbsp;</td>
+		  <td><input type='text' name='total_sum' id='total_sum' value="{$total_sum}" size='2' /></td>
+		</tr>
+		</table>
+	    </dd>
+	  </dl>
+	  
+    {/if}
+    <div class="page_btm">
+      <input type="submit" class="btn_b" value="确定" /><b> 注：<span class="red">*</span>为必填项</b>
+    </div>
+  </div>
+  <input type="hidden" name="uid" value="{$list.maintenance_id}" />
+  <input type="hidden" name="task" value="{$task}" />
+  </form>
+</div>
+<!-{literal}->
+<script>
+$(document).ready(function(){
+	$("input[name=fitting_num[]]").live('input propertychange',function(){
+		calTotal();
+	});
+	$("input[name=fitting_price[]]").live('input propertychange',function(){
+		calTotal();
+	});
+	$("input[name=maintenance_type]").live('click',function(){
+		if ($(this).val()=="保养"){
+			$("#divnextdate").removeAttr("style");
+			$("#divdetail").removeAttr("style");
+		}else{
+			$("#divnextdate").css("display","none");
+			$("#divdetail").css("display","none");
+		}
+	});
+	
+});
+function calTotal(){
+	var tmpSum=0;
+	var Total_Num=0;
+	var Total_Sum=0; 
+	$.each($('input[name=fitting_num[]]'), function(i, n){
+		if ($('input[name=fitting_price[]]').eq(i).val()!="" && $(n).val()!=""){
+			tmpSum=parseFloat($('input[name=fitting_price[]]').eq(i).val())*parseFloat($(n).val());
+			Total_Num+= parseFloat($(n).val());
+			Total_Sum+=tmpSum;
+			$('input[name=fitting_sum[]]').eq(i).val(tmpSum);
+		}
+	});
+	$("#total_num").val(Total_Num);
+	$("#total_sum").val(Total_Sum);
+	if ($("#maintenance_fittingsmoney").val()=="" || $("#maintenance_fittingsmoney").val()==0){
+		$("#maintenance_fittingsmoney").val(Total_Sum);
+	}
+	
+	$("#maintenance_money").val(Total_Sum+($("#maintenance_workhourmoney").val()==""? 0 : parseFloat($("#maintenance_workhourmoney").val())));
+}
+function select_car(){
+	var key=$("#paicheCarKey").val();
+	demo_iframe('../machine/selectcar.php?sel_type=c&key='+key,'选择车辆',650,380,'login_js');
+}
+function clearValue(dom1,dom2){
+	$("#"+dom1).val("");
+	$("#"+dom2).val("");
+}
+</script>
+<!-{/literal}->
+</body>
+</html>

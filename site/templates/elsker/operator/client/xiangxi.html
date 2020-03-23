@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html>
+
+
+<head>
+    <meta charset="utf-8">
+    <title>新长期客户资料</title>
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <link href="../../../../crm/fonts1/iconfont.css" rel="stylesheet">
+    <link rel="shortcut icon" href="favicon.ico"> <link href="../../../crm1/css/bootstrap.min.css?v=3.3.6" rel="stylesheet">
+    <link href="../../../crm1/css/font-awesome.css?v=4.4.0" rel="stylesheet">
+    <link href="../../../crm1/css/animate.css" rel="stylesheet">
+    <link href="../../../crm1/css/style.css?v=4.1.0" rel="stylesheet">
+    <link href="../../../crm1/css/idangerous.swiper.css" rel="stylesheet">
+    <link href="../../../crm1/css/idangerous.swiper.scrollbar.css" rel="stylesheet">
+    <link href="../../../css/conmone.css" rel="stylesheet">
+    <script type="text/javascript" src="../../../js/jquery.js">
+    </script>
+    <link href="../../../js/jbox/jBox/Skins/GreyBlue/jbox.css?a=2" rel="stylesheet">
+    <script type="text/javascript" src="../../../js/jbox/jBox/jquery.jBox-2.3.min.js?a=6"></script>
+    <script type="text/javascript" src="../../../js/jbox/jBox/i18n/jquery.jBox-zh-CN1.js?a=101"></script>
+    <style>
+        .panel-body1{
+            padding: 20px;
+        }
+        .dl-horizontal dd{
+                height: 26px;
+            }
+        @media(max-width: 768px){
+            .zijia_title h2{
+                font-size:16px;
+                color: #615555;
+            }
+            .dl-horizontal dt{
+                display: inline-block;
+                float: left;
+            }
+            .dl-horizontal dd{
+                height: 26px;
+            }
+            .tab-pane{
+                width:1000px;
+                overflow-x: hidden;
+            }
+            .tab-pane tr th{
+                width: 3%!important;
+            }
+        }
+    </style>
+</head>
+
+<body class="gray-bg">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="wrapper wrapper-content animated fadeInUp">
+                <div class="ibox">
+                    <div class="ibox-content">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="m-b-md zijia_title">
+
+
+
+
+                                    <h2>客户资料 &nbsp;&nbsp;&nbsp;<span style="font-size: 22px;">{$client.client_name}</span></h2>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-5">
+                                <dl class="dl-horizontal">
+                                    <dt>公司地址：</dt>
+                                    <dd>{$client.client_add}</dd>
+                                    <dt>公司电话：</dt>
+                                    <dd>{$client.client_tel}</dd>
+                                </dl>
+                            </div>
+                            <div class="col-sm-7" id="cluster_info">
+                                <dl class="dl-horizontal">
+                                    <dt>业务门店：</dt>
+                                    <dd>{$client.shop_name}</dd>
+                                    <dt>业务员：</dt>
+                                    <dd>{$client.emp_name}</dd>
+                                </dl>
+                            </div>
+                        </div>
+                        
+                        <div class="row m-t-sm" style="overflow: hidden;overflow-x: auto;">
+                            <div class="col-sm-12">
+                                <div class="panel blank-panel">
+                                    <div class="panel-heading">
+                                        <div class="panel-options">
+                                            <ul class="nav nav-tabs">
+                                                <li><a href="javascript:;" data-toggle="tab">客户详细信息</a>
+                                                </li>
+
+                                                <li class=""><a href="javascript:;" data-toggle="tab">详细联系人</a>
+                                                </li>
+
+                                                <li class=""><a href="javascript:;" data-toggle="tab">长期自驾订单</a>
+                                                </li>
+                                                <li class=""><a href="javascript:;" data-toggle="tab">长期代驾合同</a>
+                                                </li>
+                                                <li class=""><a href="javascript:;" data-toggle="tab">违章记录</a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+
+                                    <div class="panel-body1">
+                                        <div class="tab-content">
+                                            <div class="tab-pane active" >
+                                                <div class="feed-activity-list">
+                                                    <div class="feed-element">
+                                                        <div class="media-body ">
+                                                           营业执照：{$client.client_license}<br/><br/>
+                                                           开户银行：{$client.client_bank}<br/><br/>
+                                                           账号：{$client.client_account}<br/><br/>
+                                                           传真：{$client.client_fax}<br/><br/>
+                                                           邮箱：{$client.client_mail}<br/><br/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                            <div class="tab-pane">
+                                                <table class="table table-striped">
+                                                    <div class="ibox-tools" style="float: left;margin-bottom: 20px;">
+
+                    <a class="btn btn-outline btn-default" href="javascript:;" onclick="add_lianxi({$client.client_id});return false" >
+                        <i class="glyphicon glyphicon-plus" aria-hidden="true"></i>
+                        添加联系人
+                    </a>
+                </div>
+               
+                                                    <thead>
+                                                        <tr>
+                                                                <th width="12.5%">联系人姓名</th>
+                                                                <th width="12.5%">电话号码</th>
+                                                                <th width="12.5%">职位</th>
+                                                                <th width="12.5%">联系人地址</th>
+                                                                <th width="12.5%">联系人备用地址</th>
+                                                                 <th width="12.5%">备注</th>
+                                                                <th width="12.5%">是否是主联系人</th>
+                                                               
+                                                               <th width="12.5%">操作</th>
+                                                 
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        {foreach from=$lianxi_list item=row name=foo}
+                                                      <tr>
+                                                            <td>{$row.name}</td>
+                                                            <td>{$row.phone}</td>
+                                                            <td>{$row.zhiwei}</td>
+                                                            <td>{$row.dizhi_a}</td>
+                                                            <td>{$row.dizhi_b}</td> 
+                                                            <td>{$row.beizhu}</td> 
+                                                            <td style="padding-left: 2%">
+                                                                {if $row.zhu==1}
+                                                                <i class="fa fa-check" style="color:green"></i>
+                                                                {/if}
+                                                            </td>  
+                                                              
+                                                            <td>
+
+                                        
+                            
+                                                                <a href="javascript:;" onclick="edit_lianxi({$row.id});return false" title="修改" style="color:#CC6600" target="_blank"><i class="iconfont icon-xiugai"></i>
+                                                                </a>
+
+
+
+                                                                &nbsp;&nbsp;&nbsp;&nbsp;
+
+
+
+                                                                <a title="删除"  href="javascript:;" onclick="delete_lianxi({$row.id});return false" ><i class="iconfont icon-shanchu"></i></a>
+                                                            </td>
+                                                     </tr>
+                                                     {/foreach}
+                                                    </tbody>
+                                                </table>
+                                            </div>
+
+
+
+                                            <div class="tab-pane" >
+                                                <table class="table table-striped">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>合同单号</th>
+                                                            <th>使用车辆</th>
+                                                            <th>开始时间</th>
+                                                            <th>结束时间</th>
+                                                            <th>订单状态</th>
+                                                            <th>详细</th> 
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                         {foreach from=$paiche_list item=row name=foo}
+                                                        <tr>
+                                                            <td>{$row.paiche_contractNum}</td>
+                                                            <td>苏D{$row.car_num}</td>
+                                                            <td>{$row.paiche_startDate}</td>
+                                                            <td>{$row.paiche_endDate}</td>
+                                                            <td>
+                                                            {if $row.paiche_jie==-1}
+                                                                预约
+                                                            {elseif $row.paiche_jie==1}
+                                                            调车未还
+                                                            {elseif $row.paiche_jie==2}
+                                                            已还未结
+                                                            {elseif $row.paiche_jie==3}
+                                                            已结
+                                                            {/if}
+                                                            </td>
+                                                            <td><a title="明细" href="/site/operator/changqi_zijia/index.php?task=mingxi&pid={$row.paiche_id}" target="_blank"><i class="iconfont icon-mingxi1" ></i></a></td>
+                                                        </tr>
+                                                        {/foreach}
+                                                        
+                                                    </tbody>
+                                                </table>
+
+                                            </div>
+                                            
+                                            <!-- 长期代驾合同板块 -->
+                                            <div class="tab-pane">
+                                                <table class="table table-striped">
+                                                    <thead>
+                                                        <tr>
+                                                            <th></th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                       <tr>
+                                                           <td></td>
+                                                       </tr>                
+                                                    </tbody>
+                                                </table>
+                                            </div>
+
+                                               
+                                            <div class="tab-pane">
+                                                <table class="table table-striped">
+                                                    <thead>
+                                                        <tr>
+                                                                <th>序号</th>
+                                                                <th>车辆</th>
+                                                                <th>违章时间</th>
+                                                                <th>违章项目</th>
+                                                                <th>违章款</th>
+                                                                <th>手续费</th>
+                                                                <th>扣分</th>
+                                                                <th>金额抵扣分</th>
+                                                                <th>总金额</th>
+                                                                <th>备注</th>
+                                                                <th>冻结押金时间</th>
+                                                                <th>处理时间</th>
+                                                                <th>状态</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                         {$sum_breakrules_money1=0}
+                                                        
+                                                        {$sum_breakrules_money2=0}
+                                                        
+                                                        {$sum_breakrules_money3=0}
+                                                        
+                                                        {$sum_breakrules_money4=0}
+                                                        
+                                                        {$sum_breakrules_money=0}
+                                                        {foreach from=$weizhang_list item=row name=foo}
+                                                      <tr>
+                                                           <td>{$smarty.foreach.foo.index+1} </td>
+                                                            <td>苏D{$row.car_num}</td>
+                                                            <td>{$row.breakrules_date}</td>
+                                                            <td>{$row.breakrules_item}</td>
+                                                            <td>{$row.breakrules_money1}</td>
+                                                            <td>{$row.breakrules_money2}</td>
+                                                            <td>{$row.breakrules_money3}</td>
+                                                            <td>{$row.breakrules_money4}</td>
+                                                            <td>{$row.breakrules_money}</td>
+                                                            <td>{$row.breakrules_remarks}</td>
+                                                            <td>{$row.breakrules_times}</td>
+                                                            <td>{$row.breakrules_endtimes}</td>
+                                                            <td><a href="../machine/modify.php?task=breakdetail&amp;uid={$row.breakrules_id}" target="_blank">{if $row.breakrules_end==0}未处理{else}已处理{/if}</a></td>
+
+                                                     </tr>
+                                                      {$sum_breakrules_money=$sum_breakrules_money+$row.breakrules_money}
+                                                    {$sum_breakrules_money1=$sum_breakrules_money1+$row.breakrules_money1}
+                                                    {$sum_breakrules_money2=$sum_breakrules_money2+$row.breakrules_money2}
+                                                    {$sum_breakrules_money3=$sum_breakrules_money3+$row.breakrules_money3}
+                                                    {$sum_breakrules_money4=$sum_breakrules_money4+$row.breakrules_money4}
+                                                     {/foreach}
+                                                      <tr>
+                        <td>共计：</td>
+                         <td></td>
+                         <td></td>
+                         <td></td>
+                         <td >{$sum_breakrules_money1}</td>
+                         <td >{$sum_breakrules_money2}</td>
+                         <td >{$sum_breakrules_money3}</td>
+                         <td >{$sum_breakrules_money4}</td>
+                         <td >
+                            {$sum_breakrules_money} 
+
+                         </td>
+                         <td></td>
+                         <td></td>
+                         <td></td>
+                         <td></td>
+                     </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+
+    <!-- 全局js -->
+    <!-- <script src="../../../crm1/js/jquery.min.js?v=2.1.4"></script> -->
+    <script src="../../../crm1/js/bootstrap.min.js?v=3.3.6"></script>
+
+    <script>
+        $(".nav-tabs li").click(function(){
+            let xdd = $(this).index();
+            $(".tab-pane").eq(xdd).show().siblings(".tab-pane").hide();
+        })
+    </script>
+    
+    <script>
+    var body_W = $("body").width();
+    function setBody_W(){
+        body_W = $("body").width();
+    }
+
+    function add_lianxi(id){
+        setBody_W();
+        demo_iframe('index.php?task=add_lianxi&client_id='+id,'增加其他联系人',body_W,500,'login_js');
+    }
+
+    function edit_lianxi(id){
+        setBody_W();
+        demo_iframe('index.php?task=edit_lianxi&id='+id,'管理其他联系人',body_W,500,'login_js');
+    }
+
+    function delete_lianxi(id){
+        setBody_W();
+        demo_iframe('index.php?task=delete_lianxi&id='+id,'删除联系人',body_W,500,'login_js');
+    }
+    
+      var mySwiper = new Swiper('.swiper-container',{
+        slidesPerView: 3,
+        //Enable Scrollbar
+        scrollbar: {
+          container: '.swiper-scrollbar',
+          hide: false,
+          draggable: true,
+          snapOnRelease: true
+        }
+      })
+    </script>
+    
+
+
+    <script>
+        $(document).ready(function () {
+
+            $('#loading-example-btn').click(function () {
+                btn = $(this);
+                simpleLoad(btn, true)
+
+                // Ajax example
+                //                $.ajax().always(function () {
+                //                    simpleLoad($(this), false)
+                //                });
+
+                simpleLoad(btn, false)
+            });
+        });
+
+        function simpleLoad(btn, state) {
+            if (state) {
+                btn.children().addClass('fa-spin');
+                btn.contents().last().replaceWith(" Loading");
+            } else {
+                setTimeout(function () {
+                    btn.children().removeClass('fa-spin');
+                    btn.contents().last().replaceWith(" Refresh");
+                }, 2000);
+            }
+        }
+    </script>
+
+    <script type="text/javascript" src="http://tajs.qq.com/stats?sId=9051096" charset="UTF-8"></script>
+    <!--统计代码，可删除-->
+
+</body>
+
+</html>

@@ -1,0 +1,687 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>管理后台</title>
+
+<link href="../../../css/style.css" rel="stylesheet" type="text/css">
+<link href="../../../css/box.css" rel="stylesheet" type="text/css" />
+<link href="../../../js/jbox/jBox/Skins/GreyBlue/jbox.css" rel="stylesheet"  />
+<script type="text/javascript" src="../../../js/jquery.js"></script>
+<script type="text/javascript" src="../../../js/common.js"></script>
+<script type="text/javascript" src="../../../js/date_select.js"></script>
+<script type="text/javascript" src="../../../js/calendar.js"></script>
+<script type="text/javascript" src="../../../js/fancybox/jquery.mousewheel-3.0.4.pack.js"></script>
+<script type="text/javascript" src="../../../js/fancybox/jquery.fancybox-1.3.4.pack.js"></script>
+<script type="text/javascript" src="../../../js/jbox/jBox/jquery.jBox-2.3.min.js"></script>
+<script type="text/javascript" src="../../../js/jbox/jBox/i18n/jquery.jBox-zh-CN.js"></script>
+</head>
+<body>
+<div class="so_main">
+  <div class="page_tit">{$PAGETITLE}</div>
+  <div id="searchTopic_div" style="display:none;">
+    <div class="page_tit">
+    搜索 [<a onclick="searchNews();" href="javascript:void(0);">隐藏</a>]
+    </div>
+    <div class="form2">
+        <form id="form1" action="list.php?task=list" method="get">
+            <input type="hidden" name="op" id="op" value="{$op}" />
+            <input type="hidden" name="clientid" id="clientid" value="{$clientid}" />
+            <input type="hidden" name="accountend" value="{$op_flag}" />
+            <input type="hidden" name="brotherid" id="brotherid" value="{$brotherid}" />
+            <input type="hidden" name="search_status" id="search_status" value="{$search_status}" />
+            <input type="hidden" name="search_overtime" id="search_overtime" value="{$search_overtime}" />
+            <dl class="lineD">
+            <dt>合同号：</dt>
+            <dd>
+            <input type="text" name="paiche_contractNum" size="16"  />
+            </dd>
+            </dl>
+            {if $op=="account" || $op=="diaodu" || $op=="search"}
+            <dl class="lineD">
+              <dt>租赁类型：</dt>
+              <dd>
+                  <select name="b_id" >
+                      <option value="0">请选择</option>
+                      {foreach from=$category key=i item=rows}
+                      <option value="{$rows.item_paicheType}" {if $busitype==$rows.item_paicheType}selected{/if}>{$rows.item_name}</option>
+                      {/foreach}
+                  </select>
+              </dd>
+            </dl>
+            {else}
+            <input type="hidden" name="b_id" id="b_id" value="{$busitype}" />
+            {/if}
+            {if $op=="diaodu"}
+            <dl class="lineD">
+            <dt>调度状态：</dt>
+            <dd>
+            <input type="radio" name="diaodu_status" value="0" {if $diaodu_status==0}checked{/if}/>未调度
+            <input type="radio" name="diaodu_status" value="1" {if $diaodu_status==1}checked{/if}/>已调度
+            </dd>
+            </dl>
+            {/if}
+            
+            <dl class="lineD">
+              <dt>用车单位：</dt>
+              <dd>
+                  <select name="company" id="company">
+                      <option value="0" {if $companyid==0}selected{/if}>请选择</option>
+                      {foreach from=$companylist key=i item=rows}
+                      <option value="{$rows.client_id}" {if $companyid==$rows.client_id}selected{/if}>{$rows.client_name}</option>
+                      {/foreach}
+                  </select><input type="text" id="search_key" size="4" placeholder="快速检索" />
+              </dd>
+            </dl>
+            {if $op=="" && ($busitype=="1" || $busitype=="2")}
+            <dl class="lineD">
+              <dt>调车公司：</dt>
+              <dd><select name="brother" id="brother" >
+                              <option value="0">请选择</option>
+                              {foreach from=$brotherlist key=i item=rows}
+                              <option value="{$rows.bro_id}" {if $list.paiche_brother==$rows.bro_id}selected{/if} at="{$rows.bro_linker}#{$rows.bro_phone}">{$rows.bro_name}</option>
+                              {/foreach}
+                          </select>
+                          <input type="text" id="search_key2" size="4" placeholder="快速检索" />
+              </dd>
+            </dl>
+            {/if}
+            {if $op=="shuntaccount" || $op=="shuntlist"}
+            <dl class="lineD">
+              <dt>调车公司：</dt>
+              <dd>
+                  <select name="brother" >
+                      <option value="0" {if $brotherid==0}selected{/if}>请选择</option>
+                      {foreach from=$brotherlist key=i item=rows}
+                      <option value="{$rows.bro_id}" {if $brotherid==$rows.bro_id}selected{/if}>{$rows.bro_name}</option>
+                      {/foreach}
+                  </select>
+              </dd>
+            </dl>
+            {/if}
+            <dl class="lineD">
+            <dt>开始时间：</dt>
+            <dd>
+            <input id="search_startDate" type="text" value="{$search_startDate}" name="search_startDate" onClick="calendar.show(this);">
+            </dd>
+            </dl>            
+            <dl class="lineD">
+            <dt>结束时间：</dt>
+            <dd>
+            <input id="search_endDate" type="text" value="" name="search_endDate" onClick="calendar.show(this);">
+            </dd>
+            </dl>
+            <dl class="lineD">
+            <dt>联系人/单位：</dt>
+            <dd>
+            <input type="text" name="paiche_linker" size="16"  />
+            </dd>
+            </dl>
+            <dl class="lineD">
+            <dt>联系电话：</dt>
+            <dd>
+            <input type="text" name="paiche_linkerPhone" size="16"  />
+            </dd>
+            </dl>
+            <dl class="lineD">
+            <dt>车牌号：</dt>
+            <dd>
+                苏D<input type="text" name="paiche_car" size="12"  />
+            </dd>
+            </dl>
+            <dl class="lineD">
+            <dt>店铺：</dt>
+            <dd>
+            <input type="radio" name="search_shop" value="" {if empty($search_shop)}checked{/if} />全部 
+            {foreach from=$shoplist key=i item=rows}
+            <input type="radio" name="search_shop" value="{$rows.shop_id}" {if $search_shop==$rows.shop_id}checked{/if}/>{$rows.shop_name}负责
+            {/foreach}
+            </dd>
+            </dl>
+            
+            
+            <div class="page_btm">
+                <input class="btn_b" type="submit" value="确定">
+            </div>
+        </form>
+    </div>
+</div>
+
+  <!-------- 用户列表 -------->
+  <div class="Toolbar_inbox">
+    {if $op!=""}<div class="page right">共{$total}条记录&nbsp;&nbsp;&nbsp;{$PAGINATION}</div>{/if}
+    {if $op==""}<a href="create.php?b_id={$busitype}&clientid={$clientid}" class="btn_a"><span>添加</span></a>{/if}
+    <a href="javascript:void(0);" class="btn_a" onclick="searchNews();" id="searchTopic_action"><span>搜索</span></a>
+    
+    {if $op=="" && ($busitype=="1" || $busitype=="2")}
+    <input type="radio" name="showshop" value="" {if empty($search_shop)}checked{/if} />全部 
+    {foreach from=$shoplist key=i item=rows}
+    <input type="radio" name="showshop" value="{$rows.shop_id}" {if $search_shop==$rows.shop_id}checked{/if}/>{$rows.shop_name}负责
+    {/foreach}</br>
+    <input type="radio" name="showtype" value="d" {if $search_status=="d"}checked{/if}>已调度未还车<input type="radio" name="showtype" value="y" {if $search_status=="y"}checked{/if}>预约
+    {if $busitype=="2"}<input type="radio" name="showtype" value="r1" {if $search_status=="r1"}checked{/if}>已还车(现结)<input type="radio" name="showtype" value="r2" {if $search_status=="r2"}checked{/if}>已还车(批结)
+    {else}<input type="radio" name="showtype" value="r" {if $search_status=="r"}checked{/if}>已还车{/if}
+    <input type="radio" name="showtype" value="a" {if $search_status=="a"}checked{/if}>全部
+    &nbsp;&nbsp;<input type="checkbox" id="chkOvertime" value="1" {if $search_overtime==1}checked{/if}>超期未还车&nbsp;&nbsp;<span id="spnOvertime" style="color:#F00;font-size:14px;"></span>
+    {/if}
+    {if $op=="check"}&nbsp;&nbsp;<a href="checkfirst.php" class="btn_a"><span>返回</span></a>&nbsp;&nbsp; <input type="radio" name="showtype" value="d" {if $search_status=="d"}checked{/if}>未审核<input type="radio" name="showtype" value="y" {if $search_status=="y"}checked{/if}>已审核<input type="radio" name="showtype" value="a" {if $search_status=="a"}checked{/if}>全部{/if}
+    {if $op=="" && ($busitype=="3" || $busitype=="4" || $busitype=="5")}<a href="javascript:javascript:history.back(-1);" class="btn_a"><span>返回</span></a>{/if}
+    {if $op=="batchaccount"}<a href="javascript:batchaccount();" class="btn_a"><span>批量结算</span></a>&nbsp;&nbsp;<a href="batchaccountlist.php" class="btn_a"><span>返回</span></a>{/if}
+    {if $op=="shuntaccount"}<a href="javascript:shuntaccount();" class="btn_a"><span>结算</span></a><a href="javascript:shuntexport();" class="btn_a"><span>导出</span></a>{/if}    
+    {if $op=="diaodu" || $op=="givecar"}<a href="list.php?op={$op}&b_id={$busitype}&clientid=12" class="btn_a"><span>光宝专用</span></a>{/if}
+    {if $op=="givecar" && $busitype=="2"}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;扫描条码还车：<input type="text" id="tmpcontractNum" size="25" />{/if}
+  </div>
+  {if $op==""}
+  <div class="Toolbar_inbox">
+    <div class="page right">共{$total}条记录&nbsp;&nbsp;&nbsp;{$PAGINATION}</div>
+    &nbsp;
+  </div>
+  {/if}
+  <div class="list">
+  <table width="100%" border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <th style="width:30px;">
+        <input type="checkbox" id="checkbox_handle" onclick="checkAll(this)" value="0">
+        <label for="checkbox"></label>
+    </th>
+    {if $op!="" && $busitype == '0'}
+    <th>租赁类型</th>
+    {/if}
+    <th>合同号/公司名</th>
+    <th>联系人信息</th>
+    <th width="40">业务员</th>
+    <th>用车时间</th>
+    <th width="40">调度人</th>
+    {if $busitype == '2' || $busitype == '0'}
+    <th width="40">司机</th>
+    {/if}
+    <th>车辆</th>
+    <th width="265">金额明细</th>
+    {if $op=="backmoney" || $op=="search"}
+    <th>违章情况</th>
+    {/if}
+    {if $op=="monthaccount"}
+    <th>最近一次月结</th>
+    <th>记录数</th>
+    {/if}
+    {if $op=="shuntlist"}
+    <th>结算金额</th>
+    <th>结算时间</th>
+    {/if}
+    {if $op=="dispatch"}
+    <th>出车记录最后日期</th>
+    <th>记录数</th>
+    {/if}
+    <th class="line_l" style="min-width:60px;">操作</th>
+  </tr>
+  {if ($op=="batchaccount" && $companyid==0) || ($op=="shuntaccount" && $brotherid==0)}
+
+
+  <tr overstyle='on' id="badge_0">
+    <td colspan="15" style="text-align:left;">{if $op=="batchaccount"}请先选择用车单位！{else}请先选择调车公司！{/if}</td>
+  </tr>
+  {/if}
+  {foreach from=$busiList key=i item=row}
+  {$canreturn=0}
+  <tr overstyle='on' id="badge_{$row.paiche_id}">
+        <td {if $op==""}bgcolor="{$row.paiche_status_color}" style="color:{$row.paiche_font_color};"{/if}><input type="checkbox" name="checkbox" id="checkbox{$row.paiche_id}" value="{$row.paiche_id}">{if $op=="" || $op=="check"}{$row.paiche_status_name}{/if}</td>
+        {if $op!="" && $busitype == '0'}
+        <td>{$row.item_name}</td>
+        {/if}
+        <td>{if ($nowshopid==$row.paiche_shopid || $nowshopid==$row.paicheCounterShop) || strstr($a_permissions,'searchorder')}<a href="detail.php?uid={$row.paiche_id}" target="blank">{$row.paiche_contractNum}</a>{else}{$row.paiche_contractNum}{/if}<hr />{$row.client_name}</td>
+        <td>{if $row.show_tip == 1 && $op=="" && ($busitype == '1' || $busitype == '2')}<div class="tixing">此单已超过合同时间，但是还未还车，请及时处理！</div>{/if}
+            {$row.paiche_linker_hid}({$row.paiche_linkerPhone_hid})<hr />{$row.paiche_linkerNum_hid}{if $row.paiche_brother>0}调车公司：{$row.bro_name}{/if}</td>
+        <td>{$row.ywshopname}<hr/>{$row.yewuyuan}</td>
+        <td>{$row.paiche_startDate}<hr />{$row.paiche_endDate}</td>
+        <td>{$row.shop_name}<hr/>{$row.jiedaiyuan}</td>
+        {if $busitype == '2' || $busitype == '5' || $busitype == '0'}
+        <td>{if $row.paiche_shunt==1}调车{else}{$row.siji}{/if}</td>
+        {/if}
+        <td>{if $row.paiche_shunt==1}{$row.paiche_shuntline.bro_name}{else}
+        {if $row.paiche_status==0}{$row.car_num2}{else}
+        {$row.car_num}{if $row.paiche_changelist}{foreach from=$row.paiche_changelist item=row10 name=foo}<hr /><font style="TEXT-DECORATION: line-through;">{$row10.carA}</font>{/foreach}{/if}
+        {/if}{/if}
+        </td>
+        <td style="text-align:left;">
+        {foreach from=$row.paiche_chargelist item=row2 name=foo}
+        {if !empty($row2.have_in_money)}{$canreturn=1}{/if}
+        {if $op=="backmoney"}
+        {if $row2.back_money!=0 && $row2.have_back_money!=$row2.back_money}
+        {$row2.charge_name}:{$row2.conv_money}元-已收:{$row2.have_in_money}元-已退:{$row2.have_back_money}元
+        {/if}
+        {else}
+        {if $row2.charge_name=='押金'}
+        {if $row.paiche_type == 1}{$row2.charge_name}:{$row2.conv_money}元-已收:{$row2.have_in_money}元-已冻结:{$row2.have_freeze_money}元{if $row2.back_money!=0}-已退:{$row2.have_back_money}元{/if}{if $smarty.foreach.foo.last}{else}<hr />{/if}{/if}
+        {else}
+        {$row2.charge_name}:{$row2.conv_money}元{if $row.paiche_type == '1' || $row.paiche_type == '2'}-已收:{$row2.have_in_money}元{/if}{if $smarty.foreach.foo.last}{else}<hr />{/if}
+        {/if}
+        {/if}
+        {/foreach}
+        
+        {if $op!="backmoney"}
+        {if $row.settle_overKmMoney!=0}<hr />超公里费:{$row.settle_overKmMoney}-已收:{$row.settle_overKmMoney_have}{/if}
+        {if $row.settle_overTimeMoney!=0}<hr />超时费:{$row.settle_overTimeMoney}-已收:{$row.settle_overTimeMoney_have}{/if}
+        {/if}
+        {if $row.settle_favor>0}
+        <hr />优惠：{$row.settle_favor}元
+        {/if}
+        {if $row.settle_waitTimeMoney!=0}
+        <hr />等待费:{$row.settle_waitTimeMoney}-已收:{$row.settle_waitTimeMoney_have}
+        {/if}
+        {if $row.paiche_shunt==1 && ($busitype == '2' || $busitype == '5' || $busitype == '0')}
+        <hr />调车公司收现：{$row.shunt_rented}元
+        <hr />调车公司报价：{$row.shunt_rent}元{if $row.shunt_money>0}-已付:{$row.shunt_money}{/if}
+        <hr />调车结算：{$row.shunt_rented-$row.shunt_rent}元
+        {/if}
+        {if $row.paiche_brother>0 && ($busitype == '2' || $busitype == '5' || $busitype == '0')}
+        <hr />我公司收现：{-1*$row.shunt_rented}元
+        <hr />我公司报价：{-1*$row.shunt_rent}元 {if $row.shunt_money<>0}-已收:{-1*$row.shunt_money}{/if}
+        <hr />差额：{$row.shunt_rented-$row.shunt_rent-$row.shunt_other}元
+        {/if}
+        
+        </td>
+        {if $op=="backmoney" || $op=="search"}
+        <td style="text-align:left;">
+        {foreach from=$row.paiche_breaklist item=row2 name=foo}
+        {$row2.breakrules_date}&nbsp;({$row2.breakrules_money}元){if $smarty.foreach.foo.last}{else}<hr />{/if}
+        {/foreach}
+        </td>
+        {/if}
+        {if $op=="monthaccount"}
+        <td>{$row.paiche_AccountendDate}</td>
+        <td>{$row.paiche_outcarnum}</td>
+        {/if}
+        {if $op=="shuntlist"}
+        <td>{$row.shunt_money}</td>
+        <td>{$row.shunt_endtimes}</td>
+        {/if}
+        {if $op=="dispatch"}
+        <td>{$row.paiche_AccountendDate}</td>
+        <td>{$row.paiche_outcarnum}</td>
+        {/if}
+        <td>
+        {if $op=="front"}
+        <a href="javascript:front({$row.paiche_id});">收定金</a>
+        {elseif $op=="account"}
+        {if $op_flag==0}<a href="javascript:account({$row.paiche_id},{$op_flag});">收款</a>{else}<a href="javascript:account({$row.paiche_id},{$op_flag});">结账</a>{/if}
+        {elseif $op=="batchaccount" or $op=="shuntaccount"}
+        {elseif $op=="monthaccount"}
+        {if $row.paiche_outcarnum>0}<a href="list.php?task=outcarlist&pid={$row.paiche_id}">月结</a>{/if}
+        {elseif $op=="diaodu"}
+        {if $row.paiche_status==0}<a href="javascript:diaodu({$row.paiche_id});">调度</a> 换车
+        {else}调度 <a href="javascript:changeCar({$row.paiche_id});">换车</a>&nbsp;&nbsp;{if $row.paiche_type == '2' || $row.paiche_type == '4' || $row.paiche_type == '5'}<a href="javascript:changeDriver({$row.paiche_id});">换司机</a>{/if}{/if}
+        {elseif $op=="dispatch"}
+        <a href="outcar.php?uid={$row.paiche_id}">出车单</a><hr/><a href="detail.php?uid={$row.paiche_id}" target="blank">明细</a>
+        {elseif $op=="returncar"}
+        {if $canreturn==1}<a href="javascript:returnCar({$row.paiche_id});">还车</a>{else}还车{/if}
+        {elseif $op=="givecar"}
+        <a href="javascript:giveCar({$row.paiche_id});">交车</a>
+        {elseif $op=="backmoney"}
+        <a href="javascript:backMoney({$row.paiche_id});">退款</a>
+        {elseif $op=="check"}
+        <a href="javascript:check({$row.paiche_id});">审核</a><hr/><a href="detail.php?uid={$row.paiche_id}" target="blank">明细</a>
+        {elseif $op=="search"}
+        <a href="detail.php?uid={$row.paiche_id}" target="blank">明细</a>
+        {elseif $op=="revisit"}
+        <a href="javascript:revisit({$row.paiche_id});">回访</a><hr/><a href="detail.php?uid={$row.paiche_id}" target="blank">明细</a>
+        {else}
+            {if $busitype == '3' || $busitype == '4' || $busitype == '5'}
+            {if $row.paiche_checkTimes>0}编辑 删除{else}<a href="modify.php?uid={$row.paiche_id}">编辑</a>&nbsp;
+            <a href="{literal}javascript:if(confirm('是否确定删除该派车单？')){window.location.href='cancel.php?uid={/literal}{$row.paiche_id}&b_id={$busitype}';{literal}}{/literal}">删除</a>{/if}
+            <hr /><a href="javascript:continuecar({$row.paiche_id});">续租</a>
+            {else}
+            {if ($row.paiche_status==0 && ($nowshopid==$row.paiche_shopid || $nowshopid==$row.paicheCounterShop)) || ($row.paiche_status!=0 && strstr($a_permissions,'modifyorder'))}<a href="modify.php?uid={$row.paiche_id}">编辑</a>{else}编辑{/if}&nbsp;
+            {if $row.paiche_accountstatus==0 && ($nowshopid==$row.paiche_shopid || $nowshopid==$row.paicheCounterShop) && ($row.paiche_status==0 || ($row.paiche_status!=0 && strstr($a_permissions,'modifyorder')))}
+            <a href="{literal}javascript:if(confirm('是否确定删除该派车单？')){window.location.href='cancel.php?uid={/literal}{$row.paiche_id}&b_id={$busitype}';{literal}}{/literal}">删除</a>{else}删除{/if}<hr />
+            {/if}
+            {if $row.settle_totalKm==0 && $row.paiche_status!=-1 && $row.paiche_accountstatus==1}<a href="javascript:vio({$row.paiche_id});">违约</a>{/if}
+            
+            {if ($nowshopid==$row.paiche_shopid || $nowshopid==$row.paicheCounterShop) && ($row.paiche_status==1 && $busitype == '1') || ($busitype == '2' && $row.paiche_status!=-1)}
+            <a href="print.php?uid={$row.paiche_id}&className=pact&bid={$busitype}" target="_blank">打印</a>
+            {/if}
+            {if $busitype == '1'}
+            {if $row.settle_totalKm==0 && $row.paiche_status!=0}<a href="javascript:continuecar({$row.paiche_id});">续租</a>{/if}
+            {/if}
+            {if $busitype == '2' && $row.paiche_status!=-1 && $row.paiche_shunt!=1 && ($row.paiche_accountstatus==1 || $row.paiche_status==1)}
+            {if $row.settle_totalKm==0 && $row.paiche_status!=0}
+            <hr /><a href="print.php?uid={$row.paiche_id}&className=outCar" target="_blank">打印出车单</a>
+            <hr /><a href="javascript:changeroute({$row.paiche_id});">改变行程</a>{/if}
+            {/if}
+            {if ($busitype == '1' || $busitype == '2') && $row.settle_totalKm!=0 && strstr($a_permissions,'modifyorder')} <a href="javascript:cancelreturncar({$row.paiche_id});">撤销还车</a>{/if}
+            {if ($nowshopid==$row.paiche_shopid || $nowshopid==$row.paicheCounterShop) || strstr($a_permissions,'searchorder')}<a href="detail.php?uid={$row.paiche_id}" target="_blank">明细</a>{else}明细{/if}
+        {/if}
+        </td>
+ </tr>
+ <tr>
+    <td colspan="20" style="text-align:left;">{$row.paiche_line}{if $row.paiche_requestCar!=''}&nbsp;&nbsp;&nbsp;客户要求车型：{$row.paiche_requestCar}{/if}{if $row.paiche_routelist}&nbsp;&nbsp;&nbsp;{foreach from=$row.paiche_routelist item=row10 name=foo}<font style="TEXT-DECORATION: line-through;">原路线：{$row10.changeroute_lineA}&nbsp;&nbsp;&nbsp;原租金：{$row10.changeroute_rentA}{if $row10.changeroute_limitKmA!=0}&nbsp;&nbsp;&nbsp;原限制公里数：{$row10.changeroute_limitKmA}{/if}</font>{/foreach}{/if}
+ &nbsp;&nbsp;&nbsp;{if $row.paiche_coupons!=''}优惠券：{$row.paiche_coupons}&nbsp;&nbsp;{/if}
+ 备注：<span id="span_{$row.paiche_id}" dat="{$row.paiche_id}" class="spanremarks">{if $row.paiche_specialRemarks!=''}{$row.paiche_specialRemarks}{else}无{/if}</span><input type="text" id="remarks_{$row.paiche_id}" value="" style="display:none;" size="78" class="textremarks" />
+ </td></tr>
+ {/foreach}
+ </table>
+ </div>
+
+  <div class="Toolbar_inbox">
+    <div class="page right">共{$total}条记录&nbsp;&nbsp;&nbsp;{$PAGINATION}</div>
+    {if $op==""}<a href="create.php?b_id={$busitype}" class="btn_a"><span>添加</span></a>{/if}
+    <a href="javascript:void(0);" class="btn_a" onclick="searchNews();" id="searchTopic_action"><span>搜索</span></a>
+    {if $op=="" && ($busitype=="3" || $busitype=="4" || $busitype=="5")}<a href="javascript:javascript:history.back(-1);" class="btn_a">返回</a>{/if}
+    {if $op=="batchaccount"}<a href="javascript:batchaccount();" class="btn_a">批量结算</a>{/if}
+    {if $op=="shuntaccount"}<a href="javascript:shuntaccount();" class="btn_a">结算</a>{/if}
+  </div> 
+</div>
+<!-{literal}->
+<script>
+var now_paiche_id=0;
+var now_remarks="";
+    //鼠标移动表格效果
+    $(document).ready(function(){
+        if ($("#op").val()==""){
+            $.ajax({
+                  type:'GET',
+                  url:'list.php',
+                  data:{"task":"getovertime_unreturn","b_id":$("#b_id").val(),"clientid":$("#clientid").val()},
+                  dataType:"json",
+                  cache: false,
+                  async: false,
+                  error: function(){
+                      return false;
+                  },
+                  success:function(jsonmsg){
+                      if (jsonmsg.result==1){
+                          $("#spnOvertime").html(jsonmsg.count+"个");
+                          setInterval(set_word_shanshuo,200);
+                      }else{
+                            
+                      }
+                  }
+            });
+        }
+        
+        $("#tmpcontractNum").focus();
+        $("#tmpcontractNum").keydown(function(event) {  
+                if (event.keyCode == 13 && $(this).val()!=""){
+                    $.ajax({
+                          type:'POST',
+                          url:'getpaicheid.php',
+                          data:{"contractNum":$(this).val()},
+                          dataType:"json",
+                          cache: false,
+                          async: false,
+                          error: function(){
+                            alert('dddeee');
+                              return false;
+                          },
+                          success:function(jsonmsg){
+                            $("#tmpcontractNum").val("");
+                              if (jsonmsg.result==0){
+                                    giveCar(jsonmsg.pid);
+                              }else if(jsonmsg.result==1){
+                                    alert('此派车单已还车！');
+                                    $("#tmpcontractNum").focus();
+                              }else if(jsonmsg.result==3){
+                                    alert('此派车单尚未调度！');
+                                    $("#tmpcontractNum").focus();
+                              }
+                              else{
+                                    alert('派车单不存在！');
+                                    $("#tmpcontractNum").focus();
+                              }
+                          }
+                    });
+                    
+                }
+        });
+        $("#search_key").live('input propertychange',function(){
+            var aa=$("#search_key").val();
+            if (aa!=""){
+                $("#company option").each(function (){  
+                    var txt = $(this).text();  
+                    if(txt.toLowerCase().indexOf(aa) >-1){  
+                        $(this).attr("selected",true);
+                        $("#company").change();
+                        return false;
+                    }
+                 });
+            }
+        });
+        $("#search_key2").live('input propertychange',function(){
+            var aa=$("#search_key2").val();
+            if (aa!=""){
+                $("#brother option").each(function (){  
+                    var txt = $(this).text();  
+                    if(txt.toLowerCase().indexOf(aa) >-1){  
+                        $(this).attr("selected",true);
+                        $("#paiche_brother").change();
+                        return false;
+                    }
+                 });
+            }
+        });
+        $("input[name='showtype']").change(function(){
+            var selectedvalue = $("input[name='showtype']:checked").val();
+            $("#search_status").val(selectedvalue);
+            $("#form1").submit();
+        });
+        $("input[name='showshop']").change(function(){
+            var selectedvalue = $("input[name='showshop']:checked").val();
+            $("input[name='search_shop'][value='"+selectedvalue+"']").attr("checked",true);
+            $("#form1").submit();
+        });
+        $("#chkOvertime").click(function(){
+            var selectedvalue = 0;
+            if ($(this).attr('checked') ==true){
+                selectedvalue = 1;
+            }
+            $("#search_overtime").val(selectedvalue);
+            $("#form1").submit();
+        });
+        $(".spanremarks").click(function(){
+            now_paiche_id=$(this).attr("dat");
+            $(this).css("display","none");
+            $("#remarks_"+now_paiche_id).css("display","inline-block");
+            if ($(this).html()!="无"){
+                $("#remarks_"+now_paiche_id).val($(this).html());
+            }
+            $("#remarks_"+now_paiche_id).focus();
+        });
+        //失去焦点
+        $(".textremarks").blur(function(){
+            now_remarks=$(this).val();
+            aaa=now_remarks==""?"无":now_remarks
+            $("#span_"+now_paiche_id).html(aaa);
+            $("#span_"+now_paiche_id).css("display","inline-block");
+            $(this).css("display","none");
+            $.get("list.php?task=uppaicheremark&paiche_id="+now_paiche_id+"&paiche_remarks="+now_remarks,{}, function(jsonmsg){
+                
+            },"json");
+            now_paiche_id=0;
+        });
+        //回车
+        $(".textremarks").keydown(function(event){
+        if (event.keyCode == 13){
+            now_remarks=$(this).val();
+            aaa=now_remarks==""?"无":now_remarks
+            $("#span_"+now_paiche_id).html(aaa);
+            $("#span_"+now_paiche_id).css("display","inline-block");
+            $(this).css("display","none");
+            $.get("list.php?task=uppaicheremark&paiche_id="+now_paiche_id+"&paiche_remarks="+now_remarks,{}, function(jsonmsg){
+                
+            },"json");
+            now_paiche_id=0;
+        }
+        });
+        $("a.zoomIn").fancybox({
+            'overlayShow'   : false,
+            'transitionIn'  : 'elastic',
+            'transitionOut' : 'elastic'
+        });         
+        
+        $("tr[overstyle='on']").hover(
+          function () {
+            $(this).addClass("bg_hover");
+          },
+          function () {
+            $(this).removeClass("bg_hover");
+          }
+        );
+    });
+    function set_word_shanshuo(){
+        var color = ['red','yellow','purple'];
+        $("#spnOvertime").css('color',color[parseInt( Math.random()*color.length)]);
+    }
+    function checkon(o){
+        if( o.checked == true ){
+            $(o).parents('tr').addClass('bg_on') ;
+        }else{
+            $(o).parents('tr').removeClass('bg_on') ;
+        }
+    }
+    
+    function checkAll(o){
+        if( o.checked == true ){
+            $('input[name="checkbox"]').attr('checked','true');
+            $('tr[overstyle="on"]').addClass("bg_on");
+        }else{
+            $('input[name="checkbox"]').removeAttr('checked');
+            $('tr[overstyle="on"]').removeClass("bg_on");
+        }
+    }
+    
+    //获取已选择记录的ID数组
+    function getChecked() {
+        var uids = new Array();
+        $.each($('table input:checked'), function(i, n){
+            uids.push( $(n).val() );
+        });
+        return uids;
+    }
+    
+    var isSearchHidden = 1;
+    function searchNews() {
+      if(isSearchHidden == 1) {
+        $("#searchTopic_div").slideDown("fast");
+        isSearchHidden = 0;
+      }else {
+        $("#searchTopic_div").slideUp("fast");
+        isSearchHidden = 1;
+      }
+    }
+    function folder(type, _this) {
+        $('#search_'+type).slideToggle('fast');
+        if ($(_this).html() == '展开') {
+            $(_this).html('收起');
+        }else {
+            $(_this).html('展开');
+        }
+        
+    }
+    
+    function continuecar(pid){
+        demo_iframe('continue.php?pid='+pid,'续租',750,540,'login_js');
+    }
+    
+    function changeroute(pid){
+        demo_iframe('changeroute.php?pid='+pid,'改变行程',750,520,'login_js');
+    }
+    
+    function front(pid){
+        demo_iframe('front.php?pid='+pid,'收定金',750,400,'login_js');
+    }
+    
+    function account(pid,op_flag){
+        demo_iframe('account.php?pid='+pid+'&op_flag='+op_flag,'订单款项处理',850,460,'login_js');
+    }
+    
+    function vio(pid){
+        demo_iframe('vio.php?pid='+pid,'订单违约',850,460,'login_js');
+    }
+    
+    function diaodu(pid){
+        demo_iframe('diaodu.php?pid='+pid,'订单车辆调度',750,460,'login_js');
+    }
+    
+    function changeCar(pid){
+        demo_iframe('changecar.php?pid='+pid,'中途换车',950,480,'login_js');
+    }
+    function changeDriver(pid){
+        demo_iframe('changedriver.php?pid='+pid,'中途换司机',650,460,'login_js');
+    }
+    
+    function returnCar(pid){
+        demo_iframe('returncar.php?pid='+pid,'自驾还车',750,460,'login_js');
+    }
+    
+    function giveCar(pid){
+        demo_iframe('givecar.php?pid='+pid,'代驾交车',750,460,'login_js');
+    }
+    
+    function backMoney(pid){
+        demo_iframe('backmoney.php?pid='+pid,'退违章保证金',750,460,'login_js');
+    }
+    
+    function check(pid){
+        demo_iframe('check.php?pid='+pid,'审核',550,380,'login_js');
+    }
+    
+    function revisit(pid){
+        demo_iframe('revisit.php?pid='+pid,'客户回访',550,460,'login_js');
+    }
+    
+    function batchaccount(){
+        pid = getChecked();
+        pid = pid.toString();
+        if(pid == ''){
+            alert("请先选择用车记录！");
+            return false;
+        }
+        demo_iframe('batchaccount.php?pids='+pid,'批量结账处理',950,500,'login_js');
+    }
+    
+    function shuntaccount(){
+        pid = getChecked();
+        pid = pid.toString();
+        if(pid == ''){
+            alert("请先选择用车记录！");
+            return false;
+        }
+        demo_iframe('shuntaccount.php?brotherid='+$("#brotherid").val()+'&pids='+pid,'调车结算处理',910,500,'login_js');
+    }
+    function shuntexport(){
+        pid = getChecked();
+        pid = pid.toString();
+        if(pid == ''){
+            alert("请先选择用车记录！");
+            return false;
+        }
+        location.href="shuntexport.php?pids="+pid;
+    }
+    function cancelreturncar(pid){
+        if(confirm('是否确定撤销还车？')){
+            $.ajax({
+                  type:'POST',
+                  url:'list.php',
+                  data:{"task":"returncar_cancel","pid":pid},
+                  dataType:"json",
+                  cache: false,
+                  async: false,
+                  error: function(){
+                      return false;
+                  },
+                  success:function(jsonmsg){
+                      if (jsonmsg.result==1){
+                          alert("撤销还车成功！");
+                            location.reload();
+                      }else{
+                            
+                      }
+                  }
+            });
+        }
+    }
+</script>
+<!-{/literal}->
+
+</body>
+</html>

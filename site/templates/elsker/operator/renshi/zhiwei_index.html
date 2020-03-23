@@ -1,0 +1,63 @@
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>管理后台</title>
+<link href="../../../../css/style.css" rel="stylesheet" type="text/css">
+<link href="../../../../js/jbox/jBox/Skins/GreyBlue/jbox.css" rel="stylesheet"  />
+<script type="text/javascript" src="../../../../js/jquery.js"></script>
+
+
+</head>
+<body>
+<div class="so_main">
+  <div class="page_tit">职位分类</div>
+  <!-------- 用户列表 -------->
+  <div class="Toolbar_inbox">
+  	<div class="page right"> </div>
+  		<button><a href="tianjia.php">添加职位</a></button>&nbsp;&nbsp;&nbsp;&nbsp;
+  </div>
+  </div>
+  <div class="list">
+  <table width="100%" border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <th class="line_l">排序</th>
+    <th class="line_l">职位名称</th>
+    <th class="line_l">试用期底薪</th>
+    <th class="line_l">正式期底薪</th>
+    <th class="line_l">试用期</th>
+    <th class="line_l">休息方式</th>
+	
+	<th class="line_l">操作</th>
+  </tr>
+
+  	{foreach from=$list key=i item=rows}
+  <tr style="background-color: {if $i%2==0}#e6dddd{else}#c3bebe{/if}"> 
+  	<td >{$i+1}</td>
+  	<td>{$rows.zhiwei_name}</td>
+  	<td>{$rows.zhiwei_shiyong_dixin}</td>
+  	<td>{$rows.zhiwei_zhengshi_dixin}</td>
+  	<td>{$rows.zhiwei_shiyongqi}月</td>
+  	<td>{if $rows.zhiwei_xiuxi==0}单休
+  	{elseif $rows.zhiwei_xiuxi==1}双休
+  	{elseif $rows.zhiwei_xiuxi==2}一月休4天
+  	{elseif $rows.zhiwei_xiuxi==3}不休
+  	{/if}
+  </td>
+  	<td>
+  		<a href="xiangxi.php?id={$rows.id}">详细</a> &nbsp;&nbsp;&nbsp;<a href="tianjia.php?id={$rows.id}&op=update">修改</a> &nbsp;&nbsp;&nbsp;<a href="delete.php?id={$rows.id}">删除</a>
+  	</td>
+  	
+ </tr>
+ 	{/foreach}
+
+ </table>
+ </div>
+
+
+
+
+</body>
+</html>

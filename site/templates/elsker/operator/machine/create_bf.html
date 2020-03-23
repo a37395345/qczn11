@@ -1,0 +1,158 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>管理后台</title>
+<link href="../../../css/style.css" rel="stylesheet" type="text/css">
+<script type="text/javascript" src="../../../js/jquery.js"></script>
+<script type="text/javascript" src="../../../js/common.js"></script>
+<script type="text/javascript" src="../../../js/calendar.js"></script>
+<script type="text/javascript" src="../../../js/check_form.js"></script>
+<style>
+/*{literal}*/
+	.navi_name{font-size:14px;font-weight:bold;}
+	.indent{padding-left:40px;}
+/*{/literal}*/
+</style>
+</head>
+<body>
+<div class="so_main">
+  <div class="page_tit">编辑</div>  
+  <form method="post" action="insert.php" onsubmit="return car_check(this)" name="form1" enctype="multipart/form-data">
+  <div class="form2">
+	  <dl class="lineD">
+	    <dt><span class="redstar">*</span>车牌号：</dt>
+	    <dd>苏D&nbsp;<input type="text" name="car_num" id="car_num" size="12" value="{$list.car_num}" /></dd>
+	  </dl>
+	  <dl class="lineD">
+	    <dt>车辆颜色：</dt>
+	    <dd><input type="text" name="car_color" size="16" value="{$list.car_color}" /></dd>
+	  </dl>
+	  <dl class="lineD">
+	    <dt>车辆品牌：</dt>
+	    <dd><input type="text" name="car_brand" size="16"  value="{$list.car_brand}"/></dd>
+	  </dl>
+	  <dl class="lineD">
+	    <dt>车辆种类：</dt>
+	    <dd><input type="text" name="car_type" size="16"  value="{$list.car_type}"/></dd>
+	  </dl>
+	  <dl class="lineD">
+	    <dt>车型：</dt>
+	    <dd><input type="text" name="car_model" size="26"  value="{$list.car_model}"/></dd>
+	  </dl>
+	  <dl class="lineD">
+	    <dt><span class="redstar">*</span>发动机号：</dt>
+	    <dd><input type="text" name="car_motor" id="car_motor" size="26"  value="{$list.car_motor}"/></dd>
+	  </dl>
+	  <dl class="lineD">
+	    <dt>车辆识别号：</dt>
+	    <dd><input type="text" name="car_frame" size="26" value="{$list.car_frame}" /></dd>
+	  </dl>
+	  
+	  <dl class="lineD">
+	    <dt>座位数：</dt>
+	    <dd><input type="text" name="car_seat" size="16" value="{$list.car_seat}" /></dd>
+	  </dl>
+
+	  <dl class="lineD">
+	    <dt><span class="redstar">*</span>入账日期：</dt>
+	    <dd><input type="text" name="car_saleDate" id="car_saleDate" size="16" value="{$list.car_saleDate}" onclick="calendar.show(this);" /></dd>
+	  </dl>
+	  <dl class="lineD">
+	    <dt>开票价格：</dt>
+	    <dd><input type="text" name="car_amount" size="16" value="{$list.car_amount}"/>元</dd>
+	  </dl>
+	  <dl class="lineD">
+	    <dt>购置税：</dt>
+	    <dd><input type="text" name="car_buytax" size="16" value="{$list.car_buytax}"/>元</dd>
+	  </dl>
+	  <dl class="lineD">
+	    <dt><span class="redstar">*</span>车辆注册日期：</dt>
+	    <dd><input type="text" name="car_cartDate" id="car_cartDate" size="16" value="{$list.car_cartDate}" onclick="calendar.show(this);" /></dd>
+	  </dl>
+	  <dl class="lineD">
+	    <dt><span class="redstar">*</span>保险备注：</dt>
+	    <dd><textarea name="car_remarks_a" cols="40" rows="5">{$list.car_remarks_a}</textarea></dd>
+	  </dl>
+	  <dl class="lineD">
+	    <dt>车辆备注：</dt>
+	    <dd><textarea name="car_remarks" cols="40" rows="5">{$list.car_remarks}</textarea></dd>
+	  </dl>
+	  <dl class="lineD">
+	    <dt>注意事项：</dt>
+	    <dd><textarea name="car_remarks_b" cols="40" rows="5">{$list.car_remarks_b}</textarea></dd>
+	  </dl>
+
+	  <dl class="lineD">
+	    <dt>车辆属性：</dt>
+	    <dd><select class="form-control input-sm" id="car_gongchang" name="car_gongchang" >
+                                            <option value="0" {if $list.car_gongchang!=1}selected{/if}>机动车辆</option>
+                                            <option value="1" {if $list.car_gongchang==1}selected{/if}>工厂车辆</option>
+                                            
+                                </select></dd>
+	  </dl>
+	  <dl class="lineD">
+	    <dt>车辆类型：</dt>
+	    <dd><select class="form-control input-sm" id="car_types" name="car_types" >
+                                            <option value="0"  {if $list.car_types!=1}selected{/if}>小轿车和奥德赛</option>
+                                            <option value="1" {if $list.car_types==1}selected{/if}>别克GL8和中巴车</option>
+                                            
+                                </select></dd>
+	  </dl>
+
+	  <dl class="lineD">
+	    <dt>是否绑定油卡：</dt>
+	    <dd><input type='checkbox' name='car_oilcard' {if $list.car_oilcard==1}checked="checked"{/if} value="1" /></dd>
+	  </dl>
+	  {if $list.car_status=="2" || $list.car_status=="3"}
+	  <dl class="lineD">
+	    <dt>状态：</dt>
+	    <dd>{if $list.car_status=="2"}维修{/if}{if $list.car_status=="3"}报废{/if}</dd>
+	  </dl>
+	  {/if}
+	  <dl class="lineD">
+	      <dt>车辆首图照片：</dt>
+	      <dd><input type="file" name="images" value=""/><span class="redstar">注：图片像素200*150，大小控制在50k以内</span>
+	        {if $list.car_image}<br /><img src="../../../thumb/{$list.car_image}" width="200" height="150" />{/if}
+	        <input type="hidden" name="oldimages" value="{$list.car_image}"/>
+	      </dd>
+	  </dl>
+	  <dl class="lineD">
+	      <dt>车辆详细照片：</dt>
+	      <dd>	
+	      		照片一<input type="file" name="images1" value=""/><br />
+	      		照片二<input type="file" name="images2" value=""/><br />
+	        	照片三<input type="file" name="images3" value=""/><br />
+	        	照片四<input type="file" name="images4" value=""/><br />
+	        	照片五<input type="file" name="images5" value=""/><br />
+	        	照片六<input type="file" name="images6" value=""/><br />
+	        	照片七<input type="file" name="images7" value=""/><br />
+	        	照片八<input type="file" name="images8" value=""/>
+	        {if $task=='update' && $list.car_imglist}
+	        <br />
+
+	        
+	        {foreach from=$list.car_imglist item=rows name=foo}
+
+	         <a href="picture.php?car_id={$list.car_id}&nowserial={$smarty.foreach.foo.index+1}" title="点击查看原图" target="_blank"><img src="../../../thumb/{$rows.images}" width="100" height="100" /></a>
+	         <input type="checkbox" name="delimg[]" value="{$rows.id}" />删除图片
+	        {/foreach}
+	        {/if} 
+	      </dd>
+	  </dl>
+      <dl class="lineD">
+	    <dt>车辆报价：</dt>
+	    <dd><textarea name="car_price" cols="40" rows="5">{$list.car_price}</textarea></dd>
+	  </dl>
+    <div class="page_btm">
+      <input type="submit" class="btn_b" value="确定" /><b> 注：<span class="red">*</span>为必填项</b>
+    </div>
+  </div>
+  <input type="hidden" name="uid" value="{$list.car_id}" />
+  <input type="hidden" name="task" value="{$task}" />
+  </form>
+</div>
+
+</body>
+</html>

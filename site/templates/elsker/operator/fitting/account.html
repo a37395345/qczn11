@@ -1,0 +1,101 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Insert title here</title>
+<link href="../../../css/style.css" rel="stylesheet" type="text/css">
+<script type="text/javascript" src="../../../js/jquery.js"></script>
+<script type="text/javascript" src="../../../js/common.js"></script>
+</head>
+<body>
+<form method="post" action="list.php" name="form1" id="form1" onsubmit="return ok()">
+<input type="hidden" name="task" value="account_accept" />
+<input type="hidden" name="fid" value="{$fid}" />
+<div class="so_main">
+  	<div class="page_tit_1">配件采购账务处理</div>
+	<div class="list">
+	<table width="100%" border="0" cellspacing="0" cellpadding="0">
+	  <tr>
+	    <th style="width:30px;">序号	</th>
+		<th>配件名称</th>
+		<th>品牌</th>
+		<th>型号规格</th>
+		<th>采购数量</th>
+		<th>单位</th>
+		<th>单价</th>
+		<th>金额</th>
+		<th>用途</th>
+	  </tr>
+	  {foreach from=$list item=row name=foo}
+	  {$total=$total+$row.fitting_innum*$row.fitting_price}
+	  <tr overstyle='on' id="badge_{$row.fitting_id}">
+	    	<td><input type="hidden" name="fitting_id[]" value="{$row.fitting_id}">{$smarty.foreach.foo.index+1} </td>
+		  	<td>{$row.fitting_name}</td>
+			<td>{$row.fitting_brand}</td>
+			<td>{$row.fitting_model}</td>
+			<td>{$row.fitting_innum}</td>
+			<td>{$row.fitting_unit}</td>
+			<td>{$row.fitting_price}</td>
+			<td>{$row.fitting_innum*$row.fitting_price}</td>
+			<td>{$row.fitting_remark}</td>
+	  </tr>
+	  {/foreach}
+	  <tr>
+		  <td>合计</td>
+		  <td colspan="6">&nbsp;</td>
+		  <td><input type='text' name='total_sum' id='total_sum' value="{$total}" size='4' onFocus="this.blur()"/></td>
+		  <td>&nbsp;</td>
+	  </tr>
+	 </table>
+	</div>
+	<div class="form2">
+		<dl class="lineD">
+			<dt>付款方式：</dt>
+			<dd><select name="payments" id="payments">
+		                  <option value="">请选择</option>
+		                  {foreach from=$paymentslist key=i item=rows}
+		                  <option value="{$rows.payment_id}" rel="{$rows.payment_fee}">{$rows.payment_name}</option>
+		                  {/foreach}
+		              </select>
+			</dd>
+		</dl>
+		<dl class="lineD">
+			<dt>付款 账户：</dt>
+			<dd><select name="bank" id="bank">
+		                  <option value="">请选择</option>
+		                  {foreach from=$banklist key=i item=rows}
+		                  <option value="{$rows.bank_id}" >{$rows.bank_name}</option>
+		                  {/foreach}
+		              </select>
+			</dd>
+		</dl>
+		
+	</div>
+	<div class="Toolbar_inbox">
+    	<input class="btn_b" type="submit" value="确定">
+  	</div> 
+</div>
+</form>
+<!-{literal}->
+<script>
+
+function ok(){
+	if (!$('#payments option:selected').val()){
+		alert("请选择付款方式！");
+		$('#payments').focus();
+		return false;
+	}
+	if (!$('#bank option:selected').val()){
+		alert("请选择收款账户！");
+		$('#bank').focus();
+		return false;
+	}
+	if(!confirm('请仔细核对，一旦提交就无法修改了，确定提交吗？')){
+		return false;
+	}
+	
+}
+</script>
+<!-{/literal}->
+</body>
+</html>

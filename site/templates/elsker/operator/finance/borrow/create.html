@@ -1,0 +1,170 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>管理后台</title>
+<link href="../../../../css/style.css" rel="stylesheet" type="text/css">
+<link href="../../../../js/jbox/jBox/Skins/GreyBlue/jbox.css" rel="stylesheet"  />
+<script type="text/javascript" src="../../../../js/jquery.js"></script>
+<script type="text/javascript" src="../../../../js/common.js"></script>
+<script type="text/javascript" src="../../../../js/calendar.js"></script>
+<script type="text/javascript" src="../../../../js/check_form.js"></script>
+<script type="text/javascript" src="../../../../js/jbox/jBox/jquery.jBox-2.3.min.js"></script>
+<script type="text/javascript" src="../../../../js/jbox/jBox/i18n/jquery.jBox-zh-CN.js"></script>
+<style>
+/*{literal}*/
+	.navi_name{font-size:14px;font-weight:bold;}
+	.indent{padding-left:40px;}
+/*{/literal}*/
+</style>
+</head>
+<body>
+<div class="so_main">
+  <div class="page_tit">{if $task=="insert"}添加{elseif $task=="update"}编辑{elseif $task=="bao_accept"}出账{elseif $task=="check_accept"}审核{else}还款{/if}</div>  
+  <form method="post" action="insert.php" onsubmit="return borrow_check(this)" name="form1">
+  <div class="form2">
+	  	{if $task=="bao_accept"}
+	  	<dl class="lineD">
+		  <dt>借款人：</dt>
+		  <dd>{$list.emp_name}</dd>
+		</dl>
+		<dl class="lineD">
+		  <dt>借款日期：</dt>
+		  <dd>{$list.borrow_date}</dd>
+		</dl>
+	  	<dl class="lineD">
+		  <dt>金额：</dt>
+		  <dd>{$list.borrow_money}<input type="hidden" name="borrow_money" value="{$list.borrow_money}" /></dd>
+		</dl>
+		<dl class="lineD">
+		  <dt>审核人：</dt>
+		  <dd>{$list.borrow_isAgreeMan}</dd>
+		</dl>
+	  	<dl class="lineD">
+		  <dt>审核意见：</dt>
+		  <dd>{$list.borrow_isAgreeRemarks}</dd>
+		</dl>
+		<dl class="lineD">
+			<dt><span class="redstar">*</span>付款方式：</dt>
+			<dd><select name="payments" id="payments">
+		                  {foreach from=$paymentslist key=i item=rows}
+		                  <option value="{$rows.payment_id}" rel="{$rows.payment_fee}">{$rows.payment_name}</option>
+		                  {/foreach}
+		              </select>
+			</dd>
+		</dl>
+		<dl class="lineD">
+			<dt><span class="redstar">*</span>付款 账户：</dt>
+			<dd><select name="bank" id="bank">
+		                  {foreach from=$banklist key=i item=rows}
+		                  <option value="{$rows.bank_id}" >{$rows.bank_name}</option>
+		                  {/foreach}
+		              </select>
+			</dd>
+		</dl>
+		{elseif $task=="check_accept"}
+		<dl class="lineD">
+		  <dt>借款人：</dt>
+		  <dd>{$list.emp_name}</dd>
+		</dl>
+		<dl class="lineD">
+		  <dt>借款日期：</dt>
+		  <dd>{$list.borrow_date}</dd>
+		</dl>
+	  	<dl class="lineD">
+		  <dt>借款金额：</dt>
+		  <dd>{$list.borrow_money}</dd>
+		</dl>
+		<dl class="lineD">
+		  <dt>备注：</dt>
+		  <dd>{$list.borrow_remarks}</dd>
+		</dl>
+		<dl class="lineD">
+		  <dt>审核结果：</dt>
+		  <dd><input type="radio" value="1" name="borrow_isAgree" checked/>通过 <input type="radio" value="-1" name="borrow_isAgree"/>不通过</dd>
+		</dl>
+		<dl class="lineD">
+		  <dt>审核意见：</dt>
+		  <dd><textarea name="borrow_isAgreeRemarks" id="borrow_isAgreeRemarks" cols="40" rows="4"></textarea></dd>
+		</dl>
+		{elseif $task=="ret_accept"}
+		<dl class="lineD">
+		  <dt>借款人：</dt>
+		  <dd>{$list.emp_name}</dd>
+		</dl>
+	  	<dl class="lineD">
+		  <dt>借款金额：</dt>
+		  <dd>{$list.borrow_money}</dd>
+		</dl>
+		<dl class="lineD">
+		  <dt>借款日期：</dt>
+		  <dd>{$list.borrow_date}</dd>
+		</dl>
+		<dl class="lineD">
+		  <dt>还款金额：</dt>
+		  <dd><input type="hidden" name="borrow_haveReturnmoney" value="{$list.borrow_Returnmoney}" />
+		  <input type="text" name="borrow_Returnmoney" id="borrow_Returnmoney" size="10" value="{$list.borrow_money-$list.borrow_Returnmoney}" /></dd>
+		</dl>
+		<dl class="lineD">
+			<dt><span class="redstar">*</span>收款方式：</dt>
+			<dd><select name="payments" id="payments">
+		                  {foreach from=$paymentslist key=i item=rows}
+		                  <option value="{$rows.payment_id}" rel="{$rows.payment_fee}">{$rows.payment_name}</option>
+		                  {/foreach}
+		              </select>
+			</dd>
+		</dl>
+		<dl class="lineD">
+			<dt><span class="redstar">*</span>收款 账户：</dt>
+			<dd><select name="bank" id="bank">
+		                  {foreach from=$banklist key=i item=rows}
+		                  <option value="{$rows.bank_id}" >{$rows.bank_name}</option>
+		                  {/foreach}
+		              </select>
+			</dd>
+		</dl>
+	  	{else}
+	  	<dl class="lineD">
+		  <dt><span class="redstar">*</span>借款人：</dt>
+		  <dd><input type="text" name="paicheDriver" id="paicheDriver" size="18" onFocus="this.blur()" value="{$list.emp_name}" />
+			         关键字：<input type="text" name="paicheDriverKey" id="paicheDriverKey" size="10" />
+			    <input type="hidden" name="paicheDriver2" id="paicheDriver2" value="{$list.borrow_emp}" />
+			    <a href="javascript:select_driver();"><img src="../../../../css/driver.gif" height="15" class="peoplePic" /></a>
+		  </dd>
+		</dl>
+		<dl class="lineD">
+		  <dt><span class="redstar">*</span>借款日期：</dt>
+		  <dd><input id="borrow_date" type="text" value="{$list.borrow_date}" name="borrow_date" size="16" onClick="calendar.show(this);" readonly="readonly" /></dd>
+		</dl>
+		<dl class="lineD">
+		  <dt><span class="redstar">*</span>借款金额：</dt>
+		  <dd><input type="text" name="borrow_money" id="borrow_money" size="16" value="{$list.borrow_money}" /></dd>
+		</dl>
+		<dl class="lineD">
+		  <dt>备注：</dt>
+		  <dd><textarea name="borrow_remarks" id="borrow_remarks" cols="60" rows="3">{$list.borrow_remarks}</textarea></dd>
+		</dl>
+	    {/if}
+    <div class="page_btm">
+      <input type="submit" class="btn_b" value="确定" /><b> 注：<span class="red">*</span>为必填项</b>
+    </div>
+  </div>
+  <input type="hidden" name="uid" value="{$list.borrow_id}" />
+  <input type="hidden" name="uids" value="{$uids}" />
+  <input type="hidden" name="task" value="{$task}" />
+  </form>
+</div>
+<!-{literal}->
+<script>
+
+function select_driver(){
+	var key=$("#paicheDriverKey").val();
+	
+	demo_iframe('../../business/selectemp.php?sel_type=d&item=2'+'&key='+key,'选择员工',650,380,'login_js');
+}
+
+</script>
+<!-{/literal}->
+</body>
+</html>

@@ -1,0 +1,138 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>管理后台</title>
+<link href="../../../../css/style.css" rel="stylesheet" type="text/css">
+<style>
+/*{literal}*/
+	.navi_name{font-size:14px;font-weight:bold;}
+	.indent{padding-left:40px;}
+/*{/literal}*/
+</style>
+</head>
+<body>
+<form action="month_accept.php" method="post" onsubmit="return month_check(this)" name="form1">
+<div class="so_main">
+  <div class="page_tit">{$busi.client_name}{$month}月份出车记录清单</div>  
+  <div class="list">
+  <table width="100%" border="0" cellspacing="0" cellpadding="0">
+	{if $busi.paiche_type == '3'}
+	<tr>
+	<th>日期</th>
+	<th>车号</th>
+	<th>开始公里</th>
+	<th>截止公里</th>
+	<th>公里数</th>
+	<th>周末/节假日</th>
+	<th>备注</th>
+	</tr>
+	{elseif $busi.paiche_type == '4'}
+	<tr>
+	<th rowspan="2">日期</th>
+	<th rowspan="2">车号</th>
+	<th colspan="2">开始信息</th>
+	<th colspan="2">截止信息</th>
+	<th rowspan="2">公里数</th>
+	<th rowspan="2">工作时间</th>
+	<th rowspan="2">周末<br />节假日</th>
+	<th rowspan="2">是否<br />出差</th>
+	<th rowspan="2">带宿<br />出差</th>
+	<th rowspan="2">出差备注</th>
+	<th rowspan="2">食宿费<br />过路桥</th>
+	<th rowspan="2">司机</th>
+	<th rowspan="2" width="5%">备注</th>
+	</tr>
+	<tr>
+	  <th>开始公里</th>
+	  <th>开始时间</th>
+	  <th>截止公里</th>
+	  <th>截止时间</th>
+	</tr>
+	{else}
+	<tr>
+	<th>日期</th>
+	<th>车号</th>
+	<th>时间</th>
+	<th>周末/节假日</th>
+	<th>用途</th>
+	<th>起止地点</th>
+	<th>趟数</th>
+	<th>总费用</th>
+	<th>司机</th>
+	<th>备注</th>
+	</tr>
+	{/if}
+	{foreach from=$outlist key=i item=list}
+	{if $busi.paiche_type == '3' || $busi.paiche_type == '4'}
+	{$totalKM=$totalKM+$list.drive_endKilo-$list.drive_startKilo}
+	{/if}
+	{if $busi.paiche_type == '5'}
+	{$totalTP=$totalTP+$list.drive_trips}
+	{$total=$total+$list.drive_money}
+	{/if}
+	<tr bgcolor="{$list.bgcolor}">
+	  <td><input type="hidden" name="id[]" value="{$list.drive_id}"/>{$list.drive_date}</td>
+	  <td>苏D{if $list.driveCarNum==''}{$busi.car_num}{else}{$list.driveCarNum}{/if}</td>
+	  {if $busi.paiche_type == '3' || $busi.paiche_type == '4'}
+	  <td>{$list.drive_startKilo}</td>
+	  {/if}
+	  {if $busi.paiche_type == '4' || $busi.paiche_type == '5'}
+	  <td>{$list.drive_startHour}点&nbsp;{$list.drive_startMinute}分</td>
+	  {/if}
+	  {if $busi.paiche_type == '3' || $busi.paiche_type == '4'}
+	  <td>{$list.drive_endKilo}</td>
+	  {/if}
+	  {if $busi.paiche_type == '4'}
+	  <td>{$list.drive_endHour}点&nbsp;{$list.drive_endMinute}分</td>
+	  {/if}
+	  {if $busi.paiche_type == '3' || $busi.paiche_type == '4'}
+	  <td>{$list.drive_endKilo-$list.drive_startKilo}</td>
+	  {/if}
+	  {if $busi.paiche_type == '4'}
+	  <td>{($list.drive_endTime_O-$list.drive_startTime_O)/3600}</td>
+	  {/if}
+	  <td>{$list.drive_hol}</td>
+	  {if $busi.paiche_type == '4'}
+	  <td>{if $list.drive_travel==1}是{else}否{/if}</td>
+	  <td>{if $list.drive_travelRoom==1}是{else}否{/if}</td>
+	  <td>{$list.drive_travelRemarks}</td>
+	  <td style="text-align:left;">火食:{$list.drive_mealsTimes}次
+	  住宿:{if $list.drive_roomTimes==1}是{else}否{/if}
+	  路费:{$list.drive_ioll}元</td>
+	  {/if}
+	  {if $busi.paiche_type == '5'}
+	  <td>{$list.drive_travelRemarks}</td>
+	  <td>{$list.drive_specialRemarks}</td>
+	  <td>{$list.drive_trips}趟</td>
+	  <td>{$list.drive_money}元</td>
+	  {/if}
+	  {if $busi.paiche_type == '4' || $busi.paiche_type == '5'}
+	  <td>{$list.driveDriverName}</td>
+	  {/if}
+	  <td>{$list.drive_remarks}</td>
+	</tr>
+	{/foreach}	
+  </table>
+  </div>  
+</div>
+</form>
+<!-{literal}->
+<script>
+
+var isSearchHidden = 1;
+function searchNews() {
+  if(isSearchHidden == 1) {
+    $("#searchTopic_div").slideDown("fast");
+    isSearchHidden = 0;
+  }else {
+    $("#searchTopic_div").slideUp("fast");
+    isSearchHidden = 1;
+  }
+}
+
+</script>
+<!-{/literal}->
+</body>
+</html>

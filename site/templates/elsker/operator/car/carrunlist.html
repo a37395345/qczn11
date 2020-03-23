@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html>
+
+
+<!-- Mirrored from www.zi-han.net/theme/hplus/contacts.html by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 20 Jan 2016 14:18:21 GMT -->
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>管理后台</title>
+    <meta name="keywords" content="H+后台主题,后台bootstrap框架,会员中心主题,后台HTML,响应式后台">
+    <meta name="description" content="H+是一个完全响应式，基于Bootstrap3最新版本开发的扁平化主题，她采用了主流的左右两栏式布局，使用了Html5+CSS3等现代技术">
+    <link rel="shortcut icon" href="favicon.ico"> <link href="../../../crm/css/bootstrap.min14ed.css?v=3.3.6" rel="stylesheet">
+    <link href="../../../crm/css/font-awesome.min93e3.css?v=4.4.0" rel="stylesheet">
+    <link href="../../../crm/css/animate.min.css" rel="stylesheet">
+    <link href="../../../crm/css/style.min862f.css?v=4.1.0" rel="stylesheet">
+   	<link href="../../../js/jbox/jBox/Skins/GreyBlue/jbox.css?a=2" rel="stylesheet">
+    <link href="../../../css/conmone.css" rel="stylesheet">
+   	<script type="text/javascript" src="../../../js/jquery.js"></script>
+	<script type="text/javascript" src="../../../js/jbox/jBox/jquery.jBox-2.3.min.js?a=5"></script>
+	<script type="text/javascript" src="../../../js/jbox/jBox/i18n/jquery.jBox-zh-CN1.js?a=101"></script>
+   <style type="text/css">
+       .col-sm-4{
+            padding-right: 5px;
+    padding-left: 5px;
+       }
+   </style>
+    
+</head>
+
+<body class="gray-bg">
+<div class="wrapper wrapper-content animated fadeInRight" style="">
+    <div class="ibox float-e-margins">
+            <div class="ibox-title">
+                <h5>车辆当前状况一览表</h5>&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #e4961f"></span>
+            </div>
+            <form id="form1" action="index.php?task=carrun" method="post">
+        
+            	<input type="hidden" name="status" value="{$status}">
+            	<input type="hidden" name="search_shop" value="{$search_shop}">
+               
+
+                <div class="ibox float-e-margins" style="margin:0">
+                    <div class="ibox-title" style=" margin: 0; padding: 0;">
+                        <h5 style="padding-top: 15px; padding-left: 10px;">搜索
+                        </h5>
+
+                        <div class="ibox-tools" style="padding-top: 14px; padding-left: 10px;float: left;padding-right: 20px">
+                            <a class="collapse-link">
+                            <i class="fa fa-chevron-down" id="up"></i>
+                            </a>
+                        </div>
+                        
+                    </div>
+                    <div class="ibox-content" id="content" style=" margin: 0px; padding: 0px;display: none">
+                        <div class="row row-lg">
+                            <div class="col-sm-12">
+                                <!-- Example Events -->
+                                <div class="example-wrap">
+                                    <div class="example">
+                                        <table class="table table-bordered">
+                                        <tbody>
+                                        <tr> 
+                                            <th width="15%" style="background-color:#F5F5F6">
+                                                 <span style="color:#000">最低日租金：</span>
+                                            </th>
+                                            <td width="35%">
+                                               <input type="text" class="form-control input-sm" placeholder="最低日租金" name="d_zujin" >
+                                            </td>
+                                            <th width="15%" style="background-color:#F5F5F6">
+                                                <span style="color:#000">最高日租金：</span>
+                                            </th>
+                                            <td width="35%">
+                                                <input type="text" class="form-control input-sm" placeholder="最高日租金" name="g_zujin" >
+                                            </td>
+                                            
+                                        
+                                        </tr>
+
+                                        <tr> 
+                                            <th width="15%" style="background-color:#F5F5F6">
+                                                <span style="color:#000">车牌号码：</span>
+                                            </th>
+
+                                            <td width="35%">
+                                                <input type="text" class="form-control input-sm" placeholder="车牌号码" name="car_num" >
+                                            </td>
+
+                                             <th width="15%" style="background-color:#F5F5F6">
+                                                <span style="color:#000">车辆品牌：</span>
+                                            </th>
+
+                                            <td width="35%">
+                                                <input type="text" class="form-control input-sm" placeholder="车辆品牌" name="car_model" >
+                                            </td>
+                                            
+                                        </tr>
+                                             <tr>
+                                                <th style="background-color:#F5F5F6" width="15%">
+                                                <span style="color:#000">车辆种类:</span>
+                                                </th>
+                                                <td width="35%">
+                                                    <select class="form-control input-sm" name="car_types" id="car_types">
+                                                         <option value="0">请选择</option>
+                                                         
+                                                          
+                                                          <option value="2">超级跑车</option>
+                                                          <option value="1">普通跑车</option>
+                                                           <option value="99">小轿车</option>
+                                                          <option value="3">越野车</option>
+                                                          <option value="4">商务车</option>
+                                                        <option value="5">中型客车</option>
+                                                        <option value="6">大型客车</option>
+                                                    </select>
+                                                </td>
+                                                 <th style="background-color:#F5F5F6" width="15%">
+                                                <span style="color:#000">车辆专用名称</span>
+                                                </th>
+                                                <td width="35%">
+                                                    <select class="form-control input-sm" name="zhuanyong" id="zhuanyong">
+                                                         <option value="0">请选择</option>
+                                                        {foreach from=$zhaunyong_list key=i item=rows}
+                                                          <option value="{$rows.id}">{$rows.name}</option>
+                                                        {/foreach}
+                                                    </select>
+                                                </td>
+                                            </tr>
+                                            {if $status==0}
+                                            <tr>
+                                           
+
+                                                <th style="background-color:#F5F5F6" width="15%">
+                                                <span style="color:#000">存放门店</span>
+                                                </th>
+                                                <td width="35%">
+                                                    <select class="form-control input-sm" name="car_nowSite" id="car_nowSite">
+                                                         <option value="0">请选择</option>
+                                                        {foreach from=$shop_list key=i item=rows}
+                                                          <option value="{$rows.shop_id}">{$rows.shop_name}</option>
+                                                        {/foreach}
+                                                    </select>
+                                                </td>
+                                            
+                                            <th width="15%">
+                                                <span style="color:#000"></span>
+                                            </th>
+                                            <td width="35%">
+                                                
+                                            </td>
+                                            
+                        
+                                             </tr>
+                                             {/if}
+                                             </tbody>
+                                        </table>
+
+
+                                         <button type="submit" class="btn btn-outline btn-default" style="margin-left:45%;width: 10%">
+                                <i class="glyphicon glyphicon-search" aria-hidden="true"></i>
+                                                        搜索
+                                </button>
+                                    </div>
+                                </div>
+                                <!-- End Example Events -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- End Panel Other -->
+        </form>
+            <div class="ibox-content" style="background-color:#F3F3F4">
+            <div class="row row-lg">
+                    <div class="col-sm-12">
+                        <!-- Example Events -->
+                        <div class="example-wrap">
+                            <div class="example">
+    <div class="wrapper wrapper-content animated fadeInRight" style="padding: 0;">
+        <div class="row">
+            {foreach from=$car.list item=row name=foo}
+            <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                <div class="contact-box" style="padding: 8px">
+                        <div class="col-sm-6" style="padding:0">
+                            <div class="text-center">
+                                <div style="width:100%; height:0;padding-top:100%;position:relative;">
+                             <a href="javascript:void(0);" onclick="xiangxi_a({$row.car_id});">
+                                <img alt="image" class="img-circle m-t-xs img-responsive" data-echo="../../../thumb/{$row.car_photo}" src="../../../images/wait1.gif" onerror="javascript:this.src='../../../images/wait1.gif'" style="width:100%; height:80%; position:absolute; top:0; left:0;border-radius:0px" >
+                            </a>
+                                {if $row.drive_photo}
+                            <a href="javascript:void(0);" onclick="siji_xiangxi({$row.drive});">
+                                <img alt="image" class="img-circle m-t-xs img-responsive" data-echo="../../../thumb/{$row.drive_photo}" src="../../../images/wait2.gif" onerror="javascript:this.src='../../../images/wait2.gif'" style="width:25%; height:30%; position:absolute; top:0; left:0;border-radius:0px" title="{$row.siji}" >
+                              </a> 
+                                {/if}
+                                </div>
+                                <div class="m-t-xs font-bold" style="height: 92px;overflow: hidden;">	
+                                    {$row.car_model}<br><br/>
+                                    {if $row.car_remarks_b}
+                                    <span style="font-size: 12px;color: #969292;font-weight: 500;">{$row.car_remarks_b}</span>
+                                    {/if}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-6">
+                            <h4 style="height: 30px"><nobr>
+                            <strong>苏D{$row.car_num}<br>{if $row.name!='其他车辆'}<span style="font-size: 12px;margin-top: 5px;
+    font-weight: 400;
+    color: red;">{$row.name}</span>{/if}</strong>
+                            </nobr><br><br>
+                            </h4>
+                            <nobr>
+                            	状态：{if $row.car_status_code==0}{$row.emp_image}
+                            	<span style="color: #1187ec;">
+                            	空闲
+                            	</span>
+                            	{else if $row.car_status_code==1}
+                            	<span style="color: green">
+                            	在租
+                            	</span>
+
+                            	{else if $row.car_status_code==2}
+                            		{if $row.car_maintreason==0}
+                            			<span style="color: red">
+                            			故障维修
+                            			</span>
+
+                            		{else if $row.car_maintreason==1}
+                            			<span style="color: red">
+                            			异常/被骗
+                            			</span>
+                                    {else if $row.car_maintreason==2}
+                                        <span style="color: red">
+                                        待维修
+                                        </span>
+                            		{/if}
+                            	{/if}
+                            </nobr>
+                            <br><br>
+                            <nobr>租金：
+                            {if empty($row.plan_rentamount)}暂无租赁报价{else}
+
+                            <a href="javascript:void(0);" onclick="price({$row.car_id});" style="color:#CC6600">
+                            	{$row.plan_rentamount}元/天
+                        	</a>
+                    		{/if}
+                    		</nobr><br><br>
+                            <nobr>老客户押金：
+                                {$row.plan_deposit1}元/天
+                            </nobr><br><br>
+                            <nobr>新客户押金：
+                                {$row.plan_deposit2}元/天
+                            </nobr><br><br>
+
+                           	<nobr>
+                           		{if $row.car_status_code==0||{$row.car_status_code==2&&$row.car_maintreason==2}}
+                           			存放门店：{$row.shop_name}
+                           		{else if $row.car_status_code==1}
+                            		业绩门店：{$row.paiche_shopname}
+                            	{/if}
+                            </nobr>
+                            <br><br>
+                            <nobr>
+                           		操作：
+                           		{if $row.car_status_code==1}
+                           		{if $row.paiche_type==1}
+	                           		{if $zijia_detail==1}
+	                           		<a href="/site/operator/zijia_linshi/zijia_detail.php?uid={$row.paiche_id}" target="_blank" style="color:#CC6600">查看当前订单</a>&nbsp;&nbsp;&nbsp;
+	                           		{/if}
+	                           	{else}
+	                           		<a href="/site/operator/business/detail.php?uid={$row.paiche_id}" target="blank" style="color:#CC6600">查看当前订单</a>
+                           		{/if}
+                           		{/if}
+
+                           		{if $row.car_status_code!=1}
+                           		<a href="javascript:void(0);" onclick="qiehuan({$row.car_id});" style="color:#CC6600" >切换车辆存放状态</a>
+                           		{/if}
+                            </nobr>
+                            <br><br>
+
+                        </div>
+                        <div class="clearfix"></div>
+                    
+                </div>
+            </div>
+            {/foreach}
+        </div>
+
+    </div>
+    </div>
+    </div>
+    </div>
+    </div>
+    </div>
+    </div>
+</body>
+<script src="../../../crm/js/echo.js"></script>
+
+<script>
+     Echo.init({
+            offset: 0,
+            throttle: 0
+        });
+    var body_W = $("body").width();
+    function setBody_W(){
+        body_W = $("body").width();
+    }
+	function price(carid){
+        setBody_W();
+        demo_iframe('index.php?task=price&car_id='+carid,'租赁报价方案',body_W,500,'login_js');
+	}
+	function qiehuan(carid){
+        setBody_W();
+        demo_iframe('index.php?task=qiehuan&car_id='+carid,'切换车辆状态',body_W,500,'login_js');
+	}
+	function xiangxi_a(carid){
+        setBody_W();
+        demo_iframe('index.php?task=xiangxi_a&car_id='+carid,'车辆详细资料',body_W,500,'login_js');
+	}
+	function siji_xiangxi(carid){
+        setBody_W();
+        demo_iframe('index.php?task=siji_xiangxi&u_id='+carid,'司机详细资料',body_W,500,'login_js');
+	}
+	
+    $(document).ready(function(){
+        $(".contact-box").each(function(){
+            animationHover(this,"pulse");
+        })
+    });
+        $('#up').click(function(){
+    //alert('aa');
+    var content=$('#content').css('display');
+    if(content=="none"){
+        $("#content").css('display','block');
+        $('#up').removeClass("fa-chevron-down");
+        $('#up').addClass("fa-chevron-up");
+        
+    }else{
+        $("#content").css('display','none');
+        $('#up').removeClass("fa-chevron-up");
+        $('#up').addClass("fa-chevron-down");
+    }
+    //fa fa-chevron-down
+})
+    </script>
+
+
+<!-- Mirrored from www.zi-han.net/theme/hplus/contacts.html by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 20 Jan 2016 14:18:21 GMT -->
+</html>

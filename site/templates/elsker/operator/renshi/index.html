@@ -1,0 +1,107 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Insert title here</title>
+<link href="../../../css/style.css" rel="stylesheet" type="text/css" />
+<link href="../../../css/header.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="../../../js/jquery.js"></script>
+</head>
+<body style="width: 100%">
+<style>
+	.a2{
+		width: 45%;float: left;margin-left: 2%;
+	}
+	table{
+		margin-left: 2%;float: left;
+	}
+</style>
+<div class="so_main" style="width:70%;float: left;margin-left:2%;margin-right:2%;">
+	<div class="page_tit">员工状态一览表</div>
+		<div class="Toolbar_inbox_2 a2">
+  			<div class="page ">合同快要到期的员工</div>
+		</div>
+		<div class="Toolbar_inbox_3 a2">
+  			<div class="page ">快要到过试用期的员工</div>
+		</div>
+		<div class="list">
+		<table id="maint" width="45%" border="0" cellspacing="0" cellpadding="0" align="left">
+		  <tr>
+		    <th>序号</th>
+			<th>员工姓名</th>
+			<th>身份证号</th>
+		    <th>合同开始日期</th>
+		    <th>合同到期日期</th>
+		    <th>合同剩余天数</th>
+		    <th>操作</th>
+		  </tr>
+		  {foreach from=$list key=i item=rows}
+		  <tr>
+		  	<td>{$i+1}</td>
+		  	<td>{$rows.emp_name}</td>
+		  	<td>{$rows.emp_num}</td>
+		  	<td>{$rows.emp_pactStartDate}</td>
+		  	<td>{$rows.emp_pactEndDate}</td>
+		  	{if $rows.tianshu<=0}
+		  	<td style="color:red">{$rows.tianshu}天</td>
+		  	{else}
+		  	<td >{$rows.tianshu}天</td>
+		  	{/if}
+		  	<td><a href="zemp_xiangxi.php?id={$rows.emp_id}" target="blank">详细</a></td>
+		  	
+
+		  </tr>
+		  {/foreach}
+		</table>
+		<table id="contract" width="45%" border="0" cellspacing="0" cellpadding="0" align="right">
+		  <tr>
+		    <th>序号</th>
+			<th>员工姓名</th>
+			<th>身份证号</th>
+		    <th>合同开始日期</th>
+		    <th>合同到期日期</th>
+		    <th>试用期剩余天数</th>
+		    <th>操作</th>
+		  </tr>
+		   {foreach from=$list_linshi key=i item=rows}
+		  <tr>
+		  	<td>{$i+1}</td>
+		  	<td>{$rows.emp_name}</td>
+		  	<td>{$rows.emp_num}</td>
+		  	<td>{$rows.emp_pactStartDate}</td>
+		  	<td>{$rows.emp_pactEndDate}</td>
+		  	{if $rows.tianshu<=0}
+		  	<td style="color:red">{$rows.tianshu}天</td>
+		  	{else}
+		  	<td >{$rows.tianshu}天</td>
+		  	{/if}
+
+		  	<td><a href="zemp_xiangxi.php?id={$rows.emp_id}" target="blank">详细</a></td>
+
+		  </tr>
+		  {/foreach}
+		</table>
+	</div>
+	
+</div>
+<style>
+	.a1{
+		font-size: 20px;margin-top: 10px;width: 100%;border-bottom: 1px solid #cec7c7;
+	}
+</style>
+<div style="width: 20%;float: left;padding-top: 1px;">
+	<div class="page_tit">&nbsp;</div>
+		<div class="Toolbar_inbox_2" style="width: 100%">
+  			<div class="page ">员工状态列表</div>
+
+		</div>
+		<div class="a1"><a href="zemp_index.php?emp_zhuangtai=1">总人数：{$count_zong}</a></div>
+		<div class="a1"><a href="zemp_index.php?emp_zhuangtai=2">在职人数：{$count_zaizhi}</a></div>
+		<div class="a1"><a href="zemp_index.php?emp_zhuangtai=3">正式期人数：{$count_zhenshi}</a></div>
+		<div class="a1"><a href="zemp_index.php?emp_zhuangtai=4">试用期人数：{$count_lishi}</a></div>
+		<div class="a1"><a href="zemp_index.php?emp_zhuangtai=5">离职人数：{$count_lizhi}</a></div>
+	</div>
+
+</div>
+</body>
+</html>

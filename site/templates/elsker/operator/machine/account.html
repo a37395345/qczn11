@@ -1,0 +1,230 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Insert title here</title>
+<link href="../../../css/style.css" rel="stylesheet" type="text/css">
+<link href="../../../js/jbox/jBox/Skins/GreyBlue/jbox.css" rel="stylesheet"  />
+<script type="text/javascript" src="../../../js/jquery.js"></script>
+<script type="text/javascript" src="../../../js/common.js"></script>
+<script type="text/javascript" src="../../../js/My97DatePicker/WdatePicker.js"></script>
+<script type="text/javascript" src="../../../js/jbox/jBox/jquery.jBox-2.3.min.js"></script>
+<script type="text/javascript" src="../../../js/jbox/jBox/i18n/jquery.jBox-zh-CN.js"></script>
+</head>
+<body>
+<form method="post" action="insert.php" name="form1" id="form1">
+<div class="so_main">
+<input type="hidden" name="task" value="account_accept" />
+<input type="hidden" name="bid" id="bid" value="{$bid}" />
+<input type="hidden" name="pid" id="pid" value="{$list.paiche_id}" />
+<div class="form2">
+	<dl class="lineD">
+		<dt>违章车辆：</dt>
+		<dd>苏D{$list.car_num}&nbsp;&nbsp;&nbsp;&nbsp;合计金额：{$list.breakrules_money}<input type="hidden" name="total" value="{$list.breakrules_money}"/>
+		&nbsp;&nbsp;&nbsp;&nbsp;实际合计金额：<input type="text" name="total_infact" id="total_infact" value="{$list.breakrules_money-$list.breakrules_money2}" size="5" readonly/></dd>
+	</dl>
+	<dl class="lineD">
+		<dt>违章项目：</dt>
+		<dd>{$list.breakrules_item}
+		</dd>
+	</dl>
+	<dl class="lineD">
+		<dt>违章金额：</dt>
+		<dd><input type="text" name="total1" id="total1" value="{$list.breakrules_money1}" size="5" readonly/>
+		&nbsp;&nbsp;&nbsp;&nbsp;实际违章金额：<input type="text" name="total1_infact" id="total1_infact" value="{$list.breakrules_money1}" size="5"/>
+		</dd>
+	</dl>
+	
+	<dl class="lineD">
+		<dt>违章手续费：</dt>
+		<dd><input type="text" name="total2" id="total2" value="{$list.breakrules_money2}" size="5" readonly/>
+		&nbsp;&nbsp;&nbsp;&nbsp;实际违章手续费：<input type="text" name="total2_infact" id="total2_infact" value="0" size="5" readonly/>
+		其他收入类型：<input type="radio" name="change_class" id="change_class" value="违章手续费" checked/>违章手续费
+		</dd>
+	</dl>
+	<dl class="lineD">
+		<dt>违章扣分：</dt>
+		<dd><input type="text" name="total3" id="total3" value="{$list.breakrules_money3}" size="5" readonly/>
+		&nbsp;&nbsp;&nbsp;&nbsp;实际违章扣分：<input type="text" name="total3_infact" id="total3_infact" value="{$list.breakrules_money3}" size="5"/>
+		</dd>
+	</dl>
+	<dl class="lineD">
+		<dt>金额抵扣分：</dt>
+		<dd><input type="text" name="total4" id="total4" value="{$list.breakrules_money4}" size="5" readonly/>
+		其他收入类型：<input type="radio" name="other_class" id="other_class" value="违章扣分费" checked/>违章扣分费
+		  
+		</dd>
+	</dl>
+	<dl class="lineD">
+			<dt>其他收入收款方式：</dt>
+			<dd><select name="payments_to" id="payments_to">
+		                  <option value="">请选择</option>
+		                  {foreach from=$paymentslist key=i item=rows}
+		                  <option value="{$rows.payment_id}" rel="{$rows.payment_fee}">{$rows.payment_name}</option>
+		                  {/foreach}
+		              </select>
+		         收款 账户：<select name="bank_to" id="bank_to">
+		                  <option value="">请选择</option>
+		                  {foreach from=$banklist key=i item=rows}
+		                  <option value="{$rows.bank_id}" >{$rows.bank_name}</option>
+		                  {/foreach}
+		              </select>
+			</dd>
+	</dl>
+	<dl class="lineD">
+		<dt>实际金额抵扣分：</dt>
+		<dd><input type="text" name="total4_infact" id="total4_infact" value="{$list.breakrules_money4}" size="5"/>
+		费用报销类型：<input type="radio" name="baoxiao_type" id="baoxiao_type" value="违章处理" checked>违章处理
+		  
+		</dd>
+	</dl>
+	<dl class="lineD">
+		  <dt>报销人/处理人：</dt>
+		  <dd><input type="text" name="paicheDriver" id="paicheDriver" size="18" onFocus="this.blur()" value="{$list.emp_name}" />
+			         关键字：<input type="text" name="paicheDriverKey" id="paicheDriverKey" size="10" />
+			    <input type="hidden" name="paicheDriver2" id="paicheDriver2" value="{$list.baoxiao_emp}" />
+			    <a href="javascript:select_driver();"><img src="../../../css/driver.gif" height="15" class="peoplePic" /></a>
+		  </dd>
+	</dl>
+	<dl class="lineD">
+	        <dt>指定审核人</dt>
+	        <dd><input type="text" name="driveDriver_9" id="driveDriver_9" size="18" onFocus="this.blur()" value="{$list.auditor_empname}" />
+			         关键字：<input type="text" name="searchKey" id="searchKey" size="10" />
+			    <input type="hidden" name="driveDriver2_9" id="driveDriver2_9" value="{$list.baoxiao_auditor}" />
+			    <a href="javascript:select_auditor();"><img src="../../../css/driver.gif" height="15" class="peoplePic" /></a></dd>
+    </dl>
+	
+	<dl class="lineD">
+		<dt>费用报销付款方式：</dt>
+		<dd><select name="payments" id="payments">
+	                  <option value="">请选择</option>
+	                  {foreach from=$paymentslist key=i item=rows}
+	                  <option value="{$rows.payment_id}" rel="{$rows.payment_fee}">{$rows.payment_name}</option>
+	                  {/foreach}
+	              </select>
+	              付款 账户：<select name="bank" id="bank">
+	                  <option value="">请选择</option>
+	                  {foreach from=$banklist key=i item=rows}
+	                  <option value="{$rows.bank_id}" >{$rows.bank_name}</option>
+	                  {/foreach}
+	              </select>
+		</dd>
+	</dl>
+	<dl class="lineD">
+		  <dt>报销说明：</dt>
+		  <dd><textarea name="baoxiao_content" id="baoxiao_content" cols="90" rows="3">{$list.baoxiao_content}</textarea></dd>
+	</dl>
+	
+	<dl class="lineD">
+	    <dt><span class="redstar">*</span>处理时间：</dt>
+	    <dd><input type="text" name="breakrules_endtimes" id="breakrules_endtimes" size="16" onClick="{literal}WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'}){/literal}" readonly="readonly" /></dd>
+	</dl>
+</div>
+
+  <div class="Toolbar_inbox">
+    <a href="javascript:void(0);" class="btn_a" onclick="ok();"><span>确定</span></a>
+    <a href="javascript:void(0);" class="btn_a" onclick="closebox();"><span>关闭</span></a>   	
+  </div> 
+</div>
+</form>
+
+<!-{literal}->
+<script>
+var nTotal=0;
+$(document).ready(function(){
+	$("#total1_infact,#total2_infact,#total4_infact").live('input propertychange',function(){
+		nTotal= $('#total1_infact').val()=="" ? 0 : parseFloat($('#total1_infact').val());
+		nTotal+= $('#total2_infact').val()=="" ? 0 : parseFloat($('#total2_infact').val());
+		nTotal+= $('#total4_infact').val()=="" ? 0 : parseFloat($('#total4_infact').val());
+		$("#total_infact").val(nTotal);
+	});
+	$("#payments_to").bind("change",function(){
+		var selval = $(this).val();
+		if (selval!=""){
+	    	jQuery("#payments option").each(function (){
+		        if($(this).val()==selval){
+		            $(this).attr("selected",true);
+		            jQuery("#payments").change();
+		            return false;
+		        }
+		     });
+	    }
+	});
+	$("#bank_to").bind("change",function(){
+		var selval = $(this).val();
+		if (selval!=""){
+	    	jQuery("#bank option").each(function (){
+		        if($(this).val()==selval){
+		            $(this).attr("selected",true);
+		            jQuery("#bank").change();
+		            return false;
+		        }
+		     });
+	    }
+	});
+});
+function ok(){
+	if (!$('#payments_to option:selected').val()){
+		alert("请选择收款方式！");
+		$('#payments_to').focus();
+		return false;
+	}
+	if (!$('#bank_to option:selected').val()){
+		alert("请选择收款账户！");
+		$('#bank_to').focus();
+		return false;
+	}
+	if (!$('#paicheDriver').val()){
+		alert("请选择报销人！");
+		$('#paicheDriver').focus();
+		return false;
+	}
+	if (!$('#driveDriver_9').val()){
+		alert("请选择报销审核人！");
+		$('#paicheDriver').focus();
+		return false;
+	}
+	if (!$('#payments option:selected').val()){
+		alert("请选择付款方式！");
+		$('#payments').focus();
+		return false;
+	}
+	if (!$('#bank option:selected').val()){
+		alert("请选择付款账户！");
+		$('#bank').focus();
+		return false;
+	}
+	if (!$('#breakrules_endtimes').val()){
+		alert("请选择违章处理时间！");
+		$('#breakrules_endtimes').focus();
+		return false;
+	}
+
+	if(!confirm('请仔细核对，一旦提交就无法修改了，确定提交吗？')){
+		return false;
+	}
+	
+	$("#form1").submit();
+	
+	//window.parent.window.location.reload();
+    //window.parent.window.jBox.close();
+}
+
+
+function closebox(){
+	window.parent.window.jBox.close();
+}
+function select_driver(){
+	var key=$("#paicheDriverKey").val();
+	demo_iframe('../business/selectemp.php?sel_type=d&item=2&key='+key,'选择处理人',650,380,'login_js');
+}
+function select_auditor(){
+	var key=$("#searchKey").val();
+	var item=$("#item").val();
+	var stitle="报销审核人";
+	demo_iframe('../business/selectemp.php?sel_type=g&item=3&target_id=9&key='+key,'选择'+stitle,650,380,'login_js');
+}
+</script>
+<!-{/literal}->
+</body>
+</html>

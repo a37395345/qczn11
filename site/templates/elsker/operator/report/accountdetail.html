@@ -1,0 +1,194 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>管理后台</title>
+<link href="../../../../css/style.css" rel="stylesheet" type="text/css">
+<script type="text/javascript" src="../../../../js/jquery.js"></script>
+<script type="text/javascript" src="../../../../js/common.js"></script>
+<script type="text/javascript" src="../../../../js/calendar.js"></script>
+</head>
+<body>
+<div class="so_main">
+  <div class="page_tit">{$PAGETITLE}</div>
+  <div id="searchTopic_div" style="display:none;">
+    <div class="page_tit">
+    搜索 [<a onclick="searchNews();" href="javascript:void(0);">隐藏</a>]
+    </div>
+    <div class="form2">
+        <form action="detail.php" method="get">
+            <input type="hidden" name="bankid" value="{$bankid}" />
+            <input type="hidden" name="op_flag" value="{$op_flag}" />
+            {if $op_flag == 'detail'}
+            <dl class="lineD">
+	            <dt>开始日期：</dt>
+	            <dd><input type="text" name="startdate" size="16" value="{$startdate}" onClick="calendar.show(this);" readonly="readonly" /></dd>
+            </dl>
+            <dl class="lineD">
+	            <dt>截止日期：</dt>
+	            <dd><input type="text" name="enddate" size="16" value="{$enddate}" onClick="calendar.show(this);" readonly="readonly" /></dd>
+            </dl>
+            <dl class="lineD">
+	            <dt>单位名称：</dt>
+	            <dd>
+	            <input type="text" name="name" size="16"  />(支持模糊查询)
+	            </dd>
+            </dl>
+            {/if}
+            {if $op_flag == 'daily'}
+            <dl class="lineD">
+	            <dt>记账日期：</dt>
+	            <dd><input type="text" name="date" size="16" value="{$date}" onClick="calendar.show(this);" readonly="readonly" /></dd>
+            </dl>
+            {/if}
+            <div class="page_btm">
+            <input class="btn_b" type="submit" value="确定">
+            </div>            
+        </form>
+    </div>
+</div>
+
+  <div class="Toolbar_inbox">
+    <a href="javascript:void(0);" class="btn_a" onclick="searchNews();" id="searchTopic_action"><span>搜索</span></a>
+  </div>
+  <div class="list">
+  <table width="100%" border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <th style="width:30px;">序号</th>
+    <th width="13%">发生时间</th>
+	{if $op_flag == 'detail'}
+	<th width="6%">收入</th>
+	<th width="6%">支出</th>
+	<th width="6%">账户余额</th>
+	{/if}
+	{if $op_flag == 'daily'}
+	<th width="6%">增加金额</th>
+	<th width="6%">减少金额</th>
+	<th width="6%">账户余额</th>
+	{/if}
+	<th>往来单位</th>
+	<th>摘要</th>
+	<th width="11%">关联业务</th>
+	<th width="11%">业务类型</th>
+  </tr>
+  {if $list}
+	  <tr overstyle='on' id="0">
+	  	<td colspan="4" style="text-align:left;">此前余额</td>
+	  	<td>{$beforetotal}{assign var="nowtotal" value=$beforetotal}{assign var="totalin" value=0}{assign var="totalout" value=0}</td>
+	  	<td colspan="4">&nbsp;</td>
+	  </tr>
+  {/if}
+  {foreach from=$list key=i item=row name=foo}
+  <tr overstyle='on' id="badge_{$row.id}">
+    	<td>{$smarty.foreach.foo.index+1}</td>
+	  	<td>{$row.add_time}</td>
+	  	{if $row.bill_type==99}
+	  	<td>&nbsp;</td>
+	  	<td>&nbsp;</td>
+	  	<td>{number_format($row.money,2,".","")}</td>
+	  	{else}
+		{$nowtotal=$nowtotal+$row.money}
+		{if $row.money>0}
+		{$totalin=$totalin+$row.money}
+		<td>{number_format($row.money,2,".","")}</td>
+		<td>&nbsp;</td>
+		{else}
+		{$totalout=$totalout+-1*$row.money}
+		<td>&nbsp;</td>
+		<td>{number_format(-1*$row.money,2,".","")}</td>
+		{/if}
+		<td>{number_format($nowtotal,2,".","")}</td>
+		{/if}
+		<td>{if $row.client_name!=''}{$row.client_name}{elseif $row.paiche_client_name!=''}{$row.paiche_client_name}{elseif $row.bro_name!=''}{$row.bro_name}{elseif $row.paiche_linker!=''}{$row.paiche_linker}{/if}{if $row.emp_name!=''}{$row.emp_name}{elseif $row.siji!=''}-{$row.siji}{/if}{if $row.car_num!=''}苏D{$row.car_num}{/if}</td>
+		<td>{$row.name}</td>
+		<td style="text-align:left;">{if $row.bill_type==1}<a href="../../finance/baoxiao/detail.php?uid={$row.bill_id}" target="blank">{$row.baoxiao_code}</a>
+		{elseif $row.bill_type==5}<a href="../../business/batchcountdetail.php?pcode={$row.bill_code}" target="blank">{$row.bill_code}</a>
+		{elseif $row.bill_type==6}<a href="../../business/shuntcountdetail.php?pcode={$row.bill_code}" target="blank">{$row.bill_code}</a>
+		{elseif $row.bill_type==2 || $row.bill_type==3}<a href="../../finance/change/detail.php?uid={$row.bill_id}" target="blank">{$row.change_code}</a>
+		{else}
+		{if $row.paiche_id>0}{if $row.paiche_type==4 || $row.paiche_type==5}<a href="../../busilong/list.php?task=paichedetail&uid={$row.paiche_id}" target="blank">{else}<a href="../../business/detail.php?uid={$row.paiche_id}" target="blank">{/if}{$row.paiche_contractNum}</a>{else}{$row.paiche_contractNum}{/if}
+		
+		{/if}</td>
+		<td>{if $row.bill_type==1}其他费用报销{elseif $row.bill_type==4}司机出车报销{elseif $row.bill_type==2}资金变动{elseif $row.bill_type==3}其他收入{elseif $row.bill_type==5}批量结算{elseif $row.bill_type==6}调车结算{else}{$row.item_name}{/if}</td>
+  </tr>  
+ {/foreach}
+ {if $list && $op_flag == 'detail'}
+ 	  <tr overstyle='on' id="0">
+	  	<td colspan="9" style="text-align:left;">{$startdate}到{$enddate}这段时间收支金额合计:总收入:<font color="#BB2200" size="6">{$totalin}</font>元&nbsp;&nbsp;总支出:<font color="#BB2200" size="6">{$totalout}</font>元</td>
+	  </tr>
+  {/if}
+ </table>
+ </div>
+</div>
+<!-{literal}->
+<script>
+	//鼠标移动表格效果
+	$(document).ready(function(){
+        $("a.zoomIn").fancybox({
+            'overlayShow'   : false,
+            'transitionIn'  : 'elastic',
+            'transitionOut' : 'elastic'
+        });         
+        
+		$("tr[overstyle='on']").hover(
+		  function () {
+		    $(this).addClass("bg_hover");
+		  },
+		  function () {
+		    $(this).removeClass("bg_hover");
+		  }
+		);
+	});
+	
+	function checkon(o){
+		if( o.checked == true ){
+			$(o).parents('tr').addClass('bg_on') ;
+		}else{
+			$(o).parents('tr').removeClass('bg_on') ;
+		}
+	}
+	
+	function checkAll(o){
+		if( o.checked == true ){
+			$('input[name="checkbox"]').attr('checked','true');
+			$('tr[overstyle="on"]').addClass("bg_on");
+		}else{
+			$('input[name="checkbox"]').removeAttr('checked');
+			$('tr[overstyle="on"]').removeClass("bg_on");
+		}
+	}
+
+	
+    //导出Excel
+    function excel(){
+    	
+    }
+        
+    var isSearchHidden = 1;
+    function searchNews() {
+      if(isSearchHidden == 1) {
+        $("#searchTopic_div").slideDown("fast");
+        isSearchHidden = 0;
+      }else {
+        $("#searchTopic_div").slideUp("fast");
+        isSearchHidden = 1;
+      }
+    }         
+	
+	
+	function folder(type, _this) {
+		$('#search_'+type).slideToggle('fast');
+		if ($(_this).html() == '展开') {
+			$(_this).html('收起');
+		}else {
+			$(_this).html('展开');
+		}
+		
+	}
+
+</script>
+<!-{/literal}->
+
+</body>
+</html>

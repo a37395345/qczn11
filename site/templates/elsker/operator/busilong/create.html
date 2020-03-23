@@ -1,0 +1,245 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>管理后台</title>
+<link href="../../../css/style.css" rel="stylesheet" type="text/css">
+<link href="../../../css/box.css" rel="stylesheet" type="text/css" />
+<link href="../../../js/jbox/jBox/Skins/GreyBlue/jbox.css" rel="stylesheet"  />
+<script type="text/javascript" src="../../../js/jquery.js"></script>
+<script type="text/javascript" src="../../../js/common.js"></script>
+<script type="text/javascript" src="../../../js/calendar.js"></script>
+<script type="text/javascript" src="../../../js/check_form.js"></script>
+<script type="text/javascript" src="../../../js/jbox/jBox/jquery.jBox-2.3.min.js"></script>
+<script type="text/javascript" src="../../../js/jbox/jBox/i18n/jquery.jBox-zh-CN.js"></script>
+    
+
+<style>
+/*{literal}*/
+	.navi_name{font-size:14px;font-weight:bold;}
+	.indent{padding-left:40px;}
+/*{/literal}*/
+</style>
+</head>
+<body>
+<div class="so_main">
+  <div class="page_tit">编辑-{$PAGETITLE}</div>
+  <form method="post" action="insert.php" onsubmit="return check()" name="form1">
+  <div class="form2">
+	<dl class="lineD">
+      <dt><span class="redstar">*</span>合同号：</dt>
+      <dd>
+        <input type="text" name="contract_num" id="contract_num" size="16" value="{$list.contract_num}" />
+      </dd>
+    </dl>
+	<dl class="lineD">
+      <dt><span class="redstar">*</span>用车单位：</dt>
+      <dd>
+        <select name="paiche_name2" id="paiche_name2">
+	                  <option value="0">请选择</option>
+	                  {foreach from=$clientlist key=i item=rows}
+	                  <option value="{$rows.client_id}" {if $list.client_id==$rows.client_id}selected{/if} at="{$rows.client_Mlinker}#{$rows.client_Mphone}">{$rows.client_name}</option>
+	                  {/foreach}
+	    </select><input type="text" id="search_key" size="10" placeholder="快速检索" />
+	  </dd>
+    </dl>
+    
+	<dl class="lineD">
+      <dt><span class="redstar">*</span>开始日期：</dt>
+      <dd>
+        <input type="text" name="paiche_startDate" id="paiche_startDate" size="16" value="{$list.contract_startDate}" onClick="calendar.show(this);" readonly="readonly" />
+      </dd>
+    </dl>
+    <dl class="lineD">
+      <dt><span class="redstar">*</span>结束日期：</dt>
+      <dd>
+        <input type="text" name="paiche_endDate" id="paiche_endDate" size="16" value="{$list.contract_endDate}" onClick="calendar.show(this);" readonly="readonly" />
+      </dd>
+    </dl>
+    <dl class="lineD">
+	    <dt><span class="redstar">*</span>业务员：</dt>
+	    <dd><input type="text" name="paicheCounterMan" id="paicheCounterMan" size="16" onFocus="this.blur()" value="{$list.yewuyuan}" />
+	    <input type="hidden" name="paicheCounterMan2" id="paicheCounterMan2" size="16" value="{$list.contract_CounterMan}" />
+	    <a href="javascript:select_emp();"><img src="../../../css/driver.gif" width="16" height="15" class="peoplePic" /></a></dd>
+	</dl>
+	
+	<dl class="lineD" >
+	    <dt>押金：</dt>
+	    <dd><input type="hidden" name="paiche_deposit_id" value="1" />
+	    <input type="text" id="paiche_deposit" name="paiche_deposit" value="{$list.contract_deposit}" size="3"/>&nbsp;&nbsp;需退金额：<input type="text" id="paiche_deposit_back" name="paiche_deposit_back" value="{$list.contract_deposit_back}" size="3"/></dd>
+	</dl>
+
+	<dl class="lineD" >
+	    <dt><span class="redstar">*</span>租金：</dt>
+	    <dd><input type="hidden" name="paiche_rent_id" value="2" />
+	    <input type="text" id="paiche_rent" name="paiche_rent" value="{$list.contract_rent}" size="3"/></dd>
+	</dl>
+
+	<dl class="lineD">
+	    <dt>油费：</dt>
+	    <dd>
+	    每百公里：<input type="text" name="youfei_sheng" id="youfei_sheng" size="6"  value="{$list.youfei_sheng}" />升&nbsp;
+	     每升：<input type="text" name="youfei_danjia" id="youfei_danjia" size="6"  value="{$list.youfei_danjia}" />元&nbsp;
+
+	    不需要油费<input type="checkbox" id="youfei" name="youfei" {if $list.youfei=="Y"}checked{else}{/if} value="Y" />
+	    </dd>
+	</dl>
+
+
+
+
+	<dl class="lineD">
+	    <dt>限制公里数：</dt>
+	    <dd><input type="text" name="paiche_limitKm" id="paiche_limitKm" size="16"  value="{$list.contract_limitKm}" />&nbsp;
+	    超公里费用：<input type="text" name="paiche_overKm" id="paiche_overKm" size="6"  value="{$list.contract_overKm}" />/公里&nbsp;
+	    不限公里<input type="checkbox" id="paiche_unlimitKm" name="paiche_unlimitKm" onClick="unlimited(this,'paiche_limitKm','paiche_overKm')" {if $list.contract_unlimitKm=="Y"}checked{else}{/if} value="Y" />
+	    </dd>
+	</dl>
+	<dl class="lineD">
+	    <dt>超公里累计方式：</dt>
+	    <dd><input type="radio" name="paiche_limitKmType" value="0" {if $list.contract_limitKmType == "0"}checked{/if} />按月
+	    <input type="radio" name="paiche_limitKmType" value="1" {if $list.contract_limitKmType == "1"}checked{/if} />按季
+	    <input type="radio" name="paiche_limitKmType" value="2" {if $list.contract_limitKmType == "2"}checked{/if} />按年&nbsp;&nbsp;&nbsp;
+		</dd>
+	</dl>
+	<dl class="lineD" id="dlitems">
+	    <dt>条款约定：</dt>
+	    <dd>
+	    <div id="divitems" style="width:344px;">
+	    <ul>
+          <li class="aaa">编号</li><li class="bbb">约定条款</li><li class="aaa">约定结果</li><li class="aaa">删除</li>
+        </ul>
+	    {if $task=="update"}
+        {foreach from=$itemlist key=i item=row}
+	    <ul id="V{$row.item_id}">
+          <li class="aaa"><input type="hidden" id="Recid" name="Recid[]" value="{$row.id}" />{$row.item_id}<input type="hidden" id="Iid" name="Iid[]" value="{$row.item_id}" /></li>
+          <li class="bbb">{$row.item_name}</li>
+          <li class="aaa">{$row.conv_result}<input type="hidden" id="result" name="result[]" value="{$row.conv_result}" /></li>
+          <li class="aaa"><a href="javascript:delV({$row.item_id})"><img src="../../../css/error.gif" /></a><input type="hidden" id="DV{$row.item_id}" name="DVid[]" value="0" /></li>
+        </ul>
+        {/foreach}
+        {/if}
+	    </div><div style="padding:5px 0 0 276px;"><a href="javascript:select_items();"><img src="../../../css/list.gif" height="15" class="peoplePic" /></a></div>
+	    </dd>
+	</dl>
+	<dl class="lineD">
+	    <dt>备注：</dt>
+	    <dd><textarea name="paiche_specialRemarks" id="paiche_specialRemarks" cols="40" rows="5">{$list.contract_note}</textarea></dd>
+	</dl>
+	<dl class="lineD" id="showCar">
+	    <dt>选择车辆：</dt>
+	    <dd><input type="text" name="paicheCar" id="paicheCar" size="38" onFocus="this.blur()" value="{$list.car_num}" /> 
+	         <input type="button" value="清 空" onClick="clearValue('paicheCar','paicheCar2')" />&nbsp;
+	         关键字：<input type="text" name="paicheCarKey" id="paicheCarKey" size="10" />
+	    <input type="hidden" name="paicheCar2" id="paicheCar2" value="{$list.contract_car}" />
+	    <a href="javascript:select_car();"><img src="../../../css/car2.gif" height="15" class="peoplePic" /></a>
+	    
+	    <input type="hidden" name="shunt" id="shunt" value="0" />
+	    </dd>
+    </dl>
+    {if $busitype != '3'}
+    <dl class="lineD" id="showDrive">
+	    <dt>选择司机：</dt>
+	    <dd><input type="text" name="paicheDriver" id="paicheDriver" size="18" onFocus="this.blur()" value="{$list.siji}" /> 
+	         <input type="button" value="清 空" onClick="clearValue('paicheDriver','paicheDriver2')" />&nbsp;
+	         关键字：<input type="text" name="paicheDriverKey" id="paicheDriverKey" size="10" />
+	    <input type="hidden" name="paicheDriver2" id="paicheDriver2" value="{$list.contract_driver}" />
+	    <a href="javascript:select_driver();"><img src="../../../css/driver.gif" height="15" class="peoplePic" /></a>
+	    </dd>
+    </dl>
+    {/if}
+	{if $busitype == '4'}
+	<dl class="lineD">
+	    <dt>月结方式：</dt>
+	    <dd><input type="radio" name="paiche_calType" value="0" {if empty($list.paiche_calType)}checked{/if} />按出车单
+	        <input type="radio" name="paiche_calType" value="1" {if $list.paiche_calType == "1"}checked{/if} />按费用单&nbsp;&nbsp;&nbsp;
+		</dd>
+	</dl>
+	
+	{/if}
+	
+    <div class="page_btm">
+      <input type="submit" class="btn_b" name="btn_save" value="确定" />
+    </div>
+  </div>
+  <input type="hidden" name="uid" value="{$list.contract_id}" />
+  <input type="hidden" name="task" value="{$task}" />
+  <input type="hidden" name="b_id" id="b_id" value="{$busitype}" />
+  </form>
+</div>
+
+<!-{literal}->
+<script>
+$(document).ready(function(){
+    $("#search_key").live('input propertychange',function(){
+        var aa=$("#search_key").val();
+        $("#paiche_name2 option").each(function (){  
+            var txt = $(this).text();  
+            if(txt.toLowerCase().indexOf(aa) >-1){  
+                $(this).attr("selected",true);
+                
+                return false;
+            }
+         });
+	});
+    $("#paiche_deposit").live('input propertychange',function(){
+	    var aa=$(this).val();
+	    $("#paiche_deposit_back").val(aa);
+	});
+});
+function select_car(){
+	var key=$("#paicheCarKey").val();
+	demo_iframe('../business/selectemp.php?sel_type=c&key='+key,'选择车辆',650,380,'login_js');
+}
+function select_driver(){
+	var key=$("#paicheDriverKey").val();
+	demo_iframe('../business/selectemp.php?sel_type=d&key='+key,'选择驾驶员',650,380,'login_js');
+}
+function select_emp(){
+	demo_iframe('../business/selectemp.php?sel_type=e','选择业务员',650,380,'login_js');
+}
+function select_items(){
+	demo_iframe('../business/selectitem.php?busi_type='+$("#b_id").val(),'选择合同约定条款',650,500,'login_js');
+}
+function delV(id){
+	if ($("#DV"+id).val()==0){//删除
+		$("#V"+id).find("li").css("text-decoration","line-through");
+		$("#DV"+id).val(1);
+	}else{//恢复
+		$("#V"+id).find("li").css("text-decoration","none");
+		$("#DV"+id).val(0);
+	}
+}
+function check(){
+    var p1=$("#paiche_name2").children('option:selected').val();
+    if (p1==0){
+		alert("请选择用车单位！");
+		$("#paiche_name2").focus();
+		return false;
+    }
+    if ($("#paicheCounterMan").val()==""){
+		alert("请选择业务员");
+		return false;
+	}
+    if ($("#paiche_startDate").val()==""){
+		alert("请选择开始日期");
+		$("#paiche_startDate").focus();
+		return false;
+    }
+    if ($("#paiche_endDate").val()==""){
+		alert("请选择截止日期");
+		$("#paiche_endDate").focus();
+		return false;
+	}
+    if ($("#paiche_rent").val()==""){
+		alert("请填写租金");
+		$("#paiche_rent").focus();
+		return false;
+	}
+    
+}
+</script>
+<!-{/literal}->
+</body>
+</html>

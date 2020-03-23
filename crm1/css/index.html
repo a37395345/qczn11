@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+    <title>备用金管理</title>
+    <meta name="keywords" content="H+后台主题,后台bootstrap框架,会员中心主题,后台HTML,响应式后台">
+    <meta name="description" content="H+是一个完全响应式，基于Bootstrap3最新版本开发的扁平化主题，她采用了主流的左右两栏式布局，使用了Html5+CSS3等现代技术">
+    <style>
+       @media (max-width: 768px){
+           .jbox-close{
+            position: absolute;
+            display: block;
+            cursor: pointer;
+            top: 15px;
+            right: 132px;
+            width: 15px;
+            height: 15px;
+           }
+       }
+       
+    </style>
+    <link rel="shortcut icon" href="favicon.ico"> <link href="../../../crm1/css/bootstrap.min.css?v=3.3.6" rel="stylesheet">
+    <link href="../../../crm1/css/font-awesome.css?v=4.4.0" rel="stylesheet">
+
+    <link href="../../../crm1/css/animate.css" rel="stylesheet">
+    <link href="../../../crm1/css/style.css?v=4.1.0" rel="stylesheet">
+     <script type="text/javascript" src="../../../js/jquery.js">
+</script>
+    <link href="../../../js/jbox/jBox/Skins/GreyBlue/jbox.css?a=2" rel="stylesheet">
+    <script type="text/javascript" src="../../../js/jbox/jBox/jquery.jBox-2.3.min.js?a=5"></script>
+    <script type="text/javascript" src="../../../js/jbox/jBox/i18n/jquery.jBox-zh-CN.js?a=1"></script>
+
+</head>
+
+<body class="gray-bg">
+     <div class="wrapper wrapper-content animated fadeInRight">
+        
+        <!-- Panel Other -->
+        <div class="ibox float-e-margins" >
+            <div class="ibox-title" style="    padding-top: 5px">
+                <h5 style="padding-top: 10px">备用金管理</h5>
+
+                {if $dakuan==1}
+                <div class="ibox-tools" style="margin-left: 40px;">
+                    <a class="btn btn-outline btn-default" href="javascript:;" onclick="dakuan();return false">
+                        打款备用金
+                    </a>
+                </div>
+                {/if}
+                {if $guihuan==1}
+                <div class="ibox-tools" style="margin-left: 40px;">
+                    <a class="btn btn-outline btn-default" href="javascript:;" onclick="guihuan();return false">
+                        备用金归还
+                    </a>
+                </div>
+                {/if}
+                {if $jk_index==1}
+                <div class="ibox-tools" style="margin-left: 40px;">
+                    <a class="btn btn-outline btn-default" href="index.php?task=jk_index">
+                        借款管理
+                    </a>
+                </div>
+                {/if}
+                
+            </div>
+
+
+            <div class="ibox-content_a">
+                <div class="row row-lg">
+
+
+                    <div class="col-sm-12">
+                        <!-- Example Events -->
+                        <div class="ibox float-e-margins">
+                             <div class="ibox-title">
+                                <h5>备用金收支总计</h5>
+                        
+                            </div>
+                            <div class="ibox-content">
+                                
+                                <table class="table table-bordered table-hover" 
+                                       data-height="400"
+                                       style="margin-bottom:0px"
+                                       data-mobile-responsive="true">
+                                    <thead>
+                                        <tr>
+                                            <th style="text-align: center;">打款备用金总额</th>
+                                            <th style="text-align: center;">备用金归还总额</th>
+                                            <th style="text-align: center;">借款金额</th>
+                                            <th style="text-align: center;">已还金额</th>
+                                            <th style="text-align: center;">备用金剩余</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                       
+                                        <tr>
+                                            <td style="text-align: center;">{$dk}</td>
+                                            <td style="text-align: center;">{$gh}</td>
+                                            <td style="text-align: center;">{$jie}</td>
+                                            <td style="text-align: center;">{$huan}</td>
+                                            <td style="text-align: center;">{$zongji}</td>
+                                            
+
+                                        </tr>
+                                        
+
+                                   
+                    
+                                    </tbody>
+                                </table>
+                            
+                                
+                                
+                            </div>
+                        </div>
+                        <!-- End Example Events -->
+                    </div>
+
+
+                    <div class="col-sm-12">
+                        <!-- Example Events -->
+                        <div class="ibox float-e-margins">
+                             <div class="ibox-title">
+                                <h5>备用金收支详细</h5>
+                            </div>
+                            <div class="ibox-content">
+                                <table class="table table-bordered table-hover" 
+                                       data-height="400"
+                                       style="margin-bottom:0px"
+                                       data-mobile-responsive="true">
+                                    <thead>
+                                        <tr>
+                                            <th style="text-align: center;">名称</th>
+                                            <th style="text-align: center;">金额</th>
+                                            <th style="text-align: center;">操作人</th>
+                                            <th style="text-align: center;">操作时间</th>
+                                            <th style="text-align: center;">方式</th>
+                                            <th style="text-align: center;">账户</th>
+                                            
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        
+                                       {foreach from=$list_a key=i item=rows}
+                                        <tr>
+                                            <td style="text-align: center;">{if $rows.type_id==1}备用金归还{else}打款备用金{/if}</td>
+                                            <td style="text-align: center;">{$rows.money*-1}</td>
+                                            <td style="text-align: center;">{$rows.emp_name}</td>
+                                            <td style="text-align: center;">{$rows.add_time}</td>
+                                            <td style="text-align: center;">{$rows.payment_name}</td>
+                                            <td style="text-align: center;">{$rows.bank_name}</td>
+                                           
+                                        </tr>
+                                        
+                                        {/foreach}
+
+                                        
+                    
+                                    </tbody>
+                                </table>
+                            
+                                
+                                
+                            </div>
+                        </div>
+                        <!-- End Example Events -->
+                    </div>
+
+
+                    <div class="col-sm-12">
+                        <!-- Example Events -->
+                        <div class="ibox float-e-margins">
+                             <div class="ibox-title">
+                                <h5>未全部归还的备用金</h5>
+
+                            </div>
+                            <div class="ibox-content">
+                                
+                                <table class="table table-bordered table-hover" 
+                                       data-height="400"
+                                       style="margin-bottom:0px"
+                                       data-mobile-responsive="true">
+                                    <thead>
+                                        <tr>
+                                            <th style="text-align: center;">借款人</th>
+                                            <th style="text-align: center;">借款金额</th>
+                                            <th style="text-align: center;">已还金额</th>
+                                            <th style="text-align: center;">欠款</th>
+                                            
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {$borrow_money=0}
+                                        {$borrow_Returnmoney=0}
+                                       {foreach from=$list key=i item=rows}
+                                        <tr>
+                                            <td style="text-align: center;">{$rows.emp_name}</td>
+                                            <td style="text-align: center;">{$rows.borrow_money}</td>
+                                            <td style="text-align: center;">{$rows.borrow_Returnmoney}</td>
+                                            <td style="text-align: center;">{$rows.borrow_money-$rows.borrow_Returnmoney}</td>
+                                           
+                                        </tr>
+                                        {$borrow_money=$borrow_money+$rows.borrow_money}
+                                        {$borrow_Returnmoney=$rows.borrow_Returnmoney+$borrow_Returnmoney}
+                                        {/foreach}
+
+                                        <tr style="background-color: red;color: #ffffff">
+                                            <td style="text-align: center;">合计：</td>
+                                            
+                                            <td style="text-align: center;">{$borrow_money}</td>
+                                            <td style="text-align: center;">{$borrow_Returnmoney}</td>
+                                            <td style="text-align: center;">{$borrow_money-$borrow_Returnmoney}</td>
+                                        </tr>
+                    
+                                    </tbody>
+                                </table>
+                            
+                                
+                                
+                            </div>
+                        </div>
+                        <!-- End Example Events -->
+                    </div>
+
+
+
+                </div>
+            </div>
+        </div>
+        <!-- End Panel Other -->
+    </div> 
+    </div>
+    <!-- 全局js -->
+    <script src="../../../crm1/js/bootstrap.min.js?v=3.3.6"></script>
+    <!-- Bootstrap-Treeview plugin javascript -->
+<script src="../../../crm1/js/plugins/treeview/bootstrap-treeview.js"></script>
+
+    <!-- 自定义js -->
+    <script>
+        function guihuan(){
+            demo_iframe('index.php?task=guihuan','备用金归还',1000,500,'login_js');
+        }
+        function dakuan(){
+            demo_iframe('index.php?task=dakuan','打款备用金',1000,500,'login_js');
+        }
+        
+    </script>
+
+
+
+  
+    
+    
+
+</body>
+
+</html>

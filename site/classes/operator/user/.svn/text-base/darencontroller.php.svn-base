@@ -1,0 +1,313 @@
+<?php
+import('imag.utilities.pagination');
+import('imag.utilities.pagestyle');
+import('operator.navi.admincontroller');
+import('operator.navi.privilegehelper');
+import('imag.fusecookie');
+
+class DarenController extends AdminController
+{
+	/**
+	 * Constructor
+	 *
+	 * @params	array	Controller configuration array
+	 */
+	var $userList;
+	function __construct($config = array())
+	{
+		parent::__construct($config);
+		
+		//if(!($this->checkPrivilege("system"))){
+			//$this->redirect("/admincp/empty.php","您没有权限访问该页面！");
+		//}
+		
+		$this->registerTask( 'list','userList');
+		$this->registerTask( 'create','create');
+		$this->registerTask( 'insert','insert');
+		$this->registerTask( 'modify','modify');
+		$this->registerTask( 'update','update');
+		$this->registerTask( 'delete','delete');
+		$this->registerTask( 'changeState','changeState');
+		$this->registerTask( 'UpdateDaren','UpdateDaren');
+		$this->registerTask( 'changeDaren','changeDaren');
+        
+	}
+	function display(){
+		echo "display";
+	}
+	
+	function userList()
+	{
+		$p = Request::getVar('p','get');
+        $daren = Request::getVar('daren','get');
+		$model = $this->createModel("daren",dirname( __FILE__ ));
+		
+		if(empty($p)){$p=1;}
+		$base_url = "list.php";
+		$per_page = 20;
+		if(empty($daren)){
+			$daren = 0;
+		}
+		$where = "`daren` = ".$daren." ORDER BY `user_id` DESC";
+		
+		$order = Request::getVar('order','get');
+		
+		if(!empty($order)){
+			$where = " `daren` = ".$daren." ORDER BY `".$order."` ASC";
+		}
+		//var_dump($where);
+		$style = new PageStyle();
+		$start = ($p-1)*$per_page;
+		$userList = $model->getUserList($start,$per_page,$where);
+		$total_item = $model->getTotal($where);
+
+		$options = array(
+			"baseurl"	 => $base_url,
+			"totalitems" => $total_item,
+			"perpage"	 => $per_page,
+			"page"	     => $p,
+			"maxpage"	 => 15,
+			"pagestyle"  => $style,
+			"showtotal"  => false
+		);
+		$pagination = new Pagination($options);
+		$p = $pagination->getPage();
+		if($daren==1){
+		$view  = $this->createView("operator/user/daren/list.html");}
+		if($daren==0){
+		$view  = $this->createView("operator/user/daren/list2.html");}
+
+		$object = new stdClass();
+		$object->PAGINATION = $pagination->fetch();
+		$object->userList = $userList;
+		$object->total = $total_item;		
+		$view->assign($object);
+		$view->display();
+	}
+	
+	function create()
+	{
+		$view  = $this->createView("operator/user/daren/create.html");
+		$object = new stdClass();		
+		$object->task = "insert";
+		$view->assign($object);
+		$view->display();
+	}
+	
+	function insert()
+	{
+		$forward = Request::getVar("forward");
+		if(empty($forward))
+		{
+			$forward = "list.php?daren=1";
+		}		
+		$user_id = Request::getVar('user_id','post');
+		$object = new stdClass();
+		
+		$object->daren   = 1;
+		$object->daren_time   = gmdate('Y-m-d H:i:s');
+		$object->verified_reason = Request::getVar('verified_reason','post');
+		$model = $this->createModel("daren",dirname( __FILE__ ));	
+		$u_id = $model->getUserInfo($user_id);
+		if(!empty($u_id)){
+			$object->user_id  =	$user_id;
+		}else{
+			$this->redirect($forward,"ID不存在");
+		}
+		if ($model->update($object,'user_id'))
+		{	$nickname = FuseCookie::getInstance()->get("a_username");
+			$admin_user_id = FuseCookie::getInstance()->get("a_uid");
+			$name = $model->getUserInfo($user_id);
+			$title = $nickname."添加会员".$name['nickname']."为达人";			   
+			$ip   = $_SERVER['REMOTE_ADDR'];
+			$time = gmdate('Y-m-d H:i:s');
+			$sql = "INSERT INTO `admin_users_action` SET `admin_user_id`= '".$admin_user_id."',`title` = '".$title."',`ip` = '".$ip."',`time` = '".$time."'";
+			mysql_query($sql);
+				$this->redirect($forward,"添加成功");
+		}
+		else
+		{
+				$this->redirect($forward,"添加失败");
+		}
+				
+	}
+
+	function modify()
+	{
+		$uid = Request::getVar('uid','get');		
+		$model = $this->createModel("daren",dirname( __FILE__ ));		
+		$darenInfo = $model->getUserInfo($uid);
+		$view  = $this->createView("operator/user/daren/create2.html");
+		$object = new stdClass();	
+		$object->daren = $darenInfo;
+		$object->task = "update";
+		$view->assign($object);
+		$view->display();
+	}
+	
+	function update()
+	{
+		$forward = Request::getVar("forward");
+		if(empty($forward))
+		{
+			$forward = "list.php?daren=1";
+		}
+		$user_id = Request::getVar("user_id","post");
+		$object = new stdClass();
+		$object->user_id = $user_id;
+		$object->verified_reason = Request::getVar('verified_reason','post');	
+		$model = $this->createModel("daren",dirname( __FILE__ ));		
+		if ($model->update($object,'user_id'))
+		{	
+			$nickname = FuseCookie::getInstance()->get("a_username");
+			$admin_user_id = FuseCookie::getInstance()->get("a_uid");
+			$name = $model->getUserInfo($user_id);
+			$title = $nickname."修改达人".$name['nickname']."的信息";			   
+			$ip   = $_SERVER['REMOTE_ADDR'];
+			$time = gmdate('Y-m-d H:i:s');
+			$sql = "INSERT INTO `admin_users_action` SET `admin_user_id`= '".$admin_user_id."',`title` = '".$title."',`ip` = '".$ip."',`time` = '".$time."'";
+			mysql_query($sql);
+			$this->redirect($forward,"修改成功!");
+		}
+		else
+		{
+			$this->redirect($forward,"修改失败!");
+		}
+	}	
+  /*  
+	function delete()
+	{
+		$forward = Request::getVar("forward");
+		if(empty($forward))
+		{
+			$forward = "list.php";
+		}
+		$uid = Request::getVar('uid','get');
+		$multi = Request::getVar('multi','get');
+		if($uid==1){
+			if(!empty($multi)){
+				echo "0";
+			}else{
+				$this->redirect($forward,"此达人不能被删除！");
+			}
+		}
+		
+		if(empty($uid)){
+			$uid = Request::getVar('uid','post');
+		}
+		
+		$uidlist = explode(",",$uid);
+
+		$model = $this->createModel("daren",dirname( __FILE__ ));
+		foreach($uidlist as $uid){
+			if($uid!=1&&!empty($uid)){
+				$model->delete($uid);
+			}
+		}
+		if(!empty($multi)){
+			echo "1";
+		}else{
+			
+			$this->redirect($forward,"删除成功");
+		}
+	}
+*/
+	function changeState()
+	{
+		$forward = Request::getVar("forward");
+		if(empty($forward))
+		{
+			$forward = "list.php?daren=1";
+		}
+		$aid = Request::getVar('aid','get');
+		$object = new stdClass();
+		$object->user_id = $aid;
+		
+		$object->daren = '0';
+		
+		$model = $this->createModel("daren",dirname( __FILE__ ));
+		
+		if ($model->update($object,'user_id'))
+		{	
+			$nickname = FuseCookie::getInstance()->get("a_username");
+			$admin_user_id = FuseCookie::getInstance()->get("a_uid");
+			$name = $model->getUserInfo($aid);
+			$title = $nickname."取消".$name['nickname']."的达人认证";			   
+			$ip   = $_SERVER['REMOTE_ADDR'];
+			$time = gmdate('Y-m-d H:i:s');
+			$sql = "INSERT INTO `admin_users_action` SET `admin_user_id`= '".$admin_user_id."',`title` = '".$title."',`ip` = '".$ip."',`time` = '".$time."'";
+			mysql_query($sql);
+			$this->redirect($forward,"取消认证成功!");
+		}
+		else
+		{
+			$this->redirect($forward,"取消认证失败!");
+		}
+	}
+	function UpdateDaren()
+	{
+		$forward = Request::getVar("forward");
+		if(empty($forward))
+		{
+			$forward = "list.php?daren=0";
+		}
+		$aid = Request::getVar('aid','get');
+		$object = new stdClass();
+		$object->user_id = $aid;
+		
+		$object->daren = '1';
+		
+		$model = $this->createModel("daren",dirname( __FILE__ ));
+		
+		if ($model->update($object,'user_id'))
+		{	
+			$nickname = FuseCookie::getInstance()->get("a_username");
+			$admin_user_id = FuseCookie::getInstance()->get("a_uid");
+			$name = $model->getUserInfo($aid);
+			$title = $nickname."通过".$name['nickname']."的达人认证";			   
+			$ip   = $_SERVER['REMOTE_ADDR'];
+			$time = gmdate('Y-m-d H:i:s');
+			$sql = "INSERT INTO `admin_users_action` SET `admin_user_id`= '".$admin_user_id."',`title` = '".$title."',`ip` = '".$ip."',`time` = '".$time."'";
+			mysql_query($sql);
+			$this->redirect($forward,"认证成功!");
+		}
+		else
+		{
+			$this->redirect($forward,"认证失败!");
+		}
+	}
+	function changeDaren()
+	{
+		$forward = Request::getVar("forward");
+		if(empty($forward))
+		{
+			$forward = "list.php?daren=0";
+		}
+		$aid = Request::getVar('aid','get');
+		$object = new stdClass();
+		$object->user_id = $aid;
+		
+		$object->daren = '2';
+		
+		$model = $this->createModel("daren",dirname( __FILE__ ));
+		
+		if ($model->update($object,'user_id'))
+		{	
+			$nickname = FuseCookie::getInstance()->get("a_username");
+			$admin_user_id = FuseCookie::getInstance()->get("a_uid");
+			$name = $model->getUserInfo($aid);
+			$title = $nickname."驳回".$name['nickname']."的达人认证";			   
+			$ip   = $_SERVER['REMOTE_ADDR'];
+			$time = gmdate('Y-m-d H:i:s');
+			$sql = "INSERT INTO `admin_users_action` SET `admin_user_id`= '".$admin_user_id."',`title` = '".$title."',`ip` = '".$ip."',`time` = '".$time."'";
+			mysql_query($sql);
+			$this->redirect($forward,"驳回认证成功!");
+		}
+		else
+		{
+			$this->redirect($forward,"驳回认证失败!");
+		}
+	}
+
+}
+

@@ -1,0 +1,157 @@
+<?php
+
+/**
+ * An Archive handling class
+ *
+ * @static
+ * @package 	Imag.Framework
+ * @subpackage	FileSystem
+ * @modify by   gary wang (wangbaogang123@hotmail.com)
+ * 
+ */
+class Archive
+{
+	/**
+	 * @param	string	The name of the archive file
+	 * @param	string	Directory to unpack into
+	 * @return	boolean	True for success
+	 */
+	public static function extract( $archivename, $extractdir)
+	{
+		import('imag.filesystem.fusefile');
+		import('imag.filesystem.folder');
+		$untar = false;
+		$result = false;
+		$ext = FuseFile::getExt(strtolower($archivename));
+		// check if a tar is embedded...gzip/bzip2 can just be plain files!
+		if (FuseFile::getExt(FuseFile::stripExt(strtolower($archivename))) == 'tar') {
+			$untar = true;
+		}
+
+		switch ($ext)
+		{
+			case 'zip':
+				$adapter = Archive::getAdapter('zip');
+				if ($adapter) {
+					$result = $adapter->extract($archivename, $extractdir);
+				}
+				break;
+			case 'tar':
+				$adapter = Archive::getAdapter('tar');
+				if ($adapter) {
+					$result = $adapter->extract($archivename, $extractdir);
+				}
+				break;
+			case 'tgz'  :
+				$untar = true;	// This format is a tarball gzip'd
+			case 'gz'   :	// This may just be an individual file (e.g. sql script)
+			case 'gzip' :
+				$adapter = Archive::getAdapter('gzip');
+				if ($adapter)
+				{
+					$tmpfname = Config::tmp_path()."/".uniqid('gzip');
+					$gzresult = $adapter->extract($archivename, $tmpfname);
+					if (Archive::isError($gzresult))
+					{
+						@unlink($tmpfname);
+						return false;
+					}
+					if($untar)
+					{
+						// Try to untar the file
+						$tadapter = Archive::getAdapter('tar');
+						if ($tadapter) {
+							$result = $tadapter->extract($tmpfname, $extractdir);
+						}
+					}
+					else
+					{
+						$path = Path::clean($extractdir);
+						Folder::create($path);
+						$result = FuseFile::copy($tmpfname,$path."/".FuseFile::stripExt(FuseFile::getName(strtolower($archivename))));
+					}
+					@unlink($tmpfname);
+				}
+				break;
+			case 'tbz2' :
+				$untar = true; // This format is a tarball bzip2'd
+			case 'bz2'  :	// This may just be an individual file (e.g. sql script)
+			case 'bzip2':
+				$adapter = Archive::getAdapter('bzip2');
+				if ($adapter)
+				{
+					$tmpfname = Config::getValue('config.tmp_path')."/".uniqid('bzip2');
+					$bzresult = $adapter->extract($archivename, $tmpfname);
+					if (Archive::isError($bzresult))
+					{
+						@unlink($tmpfname);
+						return false;
+					}
+					if ($untar)
+					{
+						// Try to untar the file
+						$tadapter = Archive::getAdapter('tar');
+						if ($tadapter) {
+							$result = $tadapter->extract($tmpfname, $extractdir);
+						}
+					}
+					else
+					{
+						$path = Path::clean($extractdir);
+						Folder::create($path);
+						$result = FuseFile::copy($tmpfname,$path."/".FuseFile::stripExt(FuseFile::getName(strtolower($archivename))));
+					}
+					@unlink($tmpfname);
+				}
+				break;
+			default:
+				throw(new Exception("UNKNOWNARCHIVETYPE"));
+				return false;
+				break;
+		}
+
+		if (! $result || Archive::isError($result)) {
+			if(Archive::isError($result)){
+				throw($result);
+			}
+			return false;
+		}
+		return true;
+	}
+
+	public static function getAdapter($type)
+	{
+		import('imag.filesystem.fusefile');
+		import('imag.filesystem.folder');
+		static $adapters;
+
+		if (!isset($adapters)) {
+			$adapters = array();
+		}
+
+		if (!isset($adapters[$type]))
+		{
+			// Try to load the adapter object
+			$class = 'Archive'.ucfirst($type);
+
+			if (!class_exists($class))
+			{
+				$path = dirname(__FILE__)."/".'archive'."/".strtolower($type).'.php';
+				if (file_exists($path)) {
+					require_once($path);
+				} else {
+					throw(new Exception("Unable to load archive"));
+				}
+			}
+
+			$adapters[$type] = new $class();
+		}
+		return $adapters[$type];
+	}
+	
+	public static function isError( $object)
+	{
+		// supports PHP 5 exception handling
+		return $object instanceof Exception;
+	}
+}

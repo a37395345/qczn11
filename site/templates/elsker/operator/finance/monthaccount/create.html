@@ -1,0 +1,126 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>管理后台</title>
+<link href="../../../../css/style.css" rel="stylesheet" type="text/css">
+<link href="../../../../js/jbox/jBox/Skins/GreyBlue/jbox.css" rel="stylesheet"  />
+<script type="text/javascript" src="../../../../js/jquery.js"></script>
+<script type="text/javascript" src="../../../../js/common.js"></script>
+<script type="text/javascript" src="../../../../js/calendar.js"></script>
+<script type="text/javascript" src="../../../../js/check_form.js"></script>
+<script type="text/javascript" src="../../../../js/jbox/jBox/jquery.jBox-2.3.min.js"></script>
+<script type="text/javascript" src="../../../../js/jbox/jBox/i18n/jquery.jBox-zh-CN.js"></script>
+<style>
+/*{literal}*/
+	.navi_name{font-size:14px;font-weight:bold;}
+	.indent{padding-left:40px;}
+/*{/literal}*/
+</style>
+</head>
+<body>
+<div class="so_main">
+  <div class="page_tit">结账</div>  
+  <form method="post" action="list.php" onsubmit="return monthaccount_check(this)" name="form1">
+  <input type="hidden" id="clientmoney" value="{$list.client_balance}" />
+  <input type="hidden" name="client_id" id="client_id" value="{$list.client_id}" />
+  <input type="hidden" name="month_clientid" id="month_clientid" value="{$list.month_clientid}" />
+  <input type="hidden" name="month_brotherid" id="month_brotherid" value="{$list.month_brotherid}" />
+  <input type="hidden" name="month_code" id="month_code" value="{$list.month_code}" />
+  <input type="hidden" name="pid" value="{$list.monthPaicheId}" />
+  <div class="form2">
+	  	<dl class="lineD">
+		  <dt>单位名称：</dt>
+		  <dd>{if $list.bro_name!=""}{$list.bro_name}{elseif $list.client_name==""}{$list.client_name2}{else}{$list.client_name}{/if}</dd>
+		</dl>
+		<dl class="lineD">
+		  <dt>月结金额：</dt>
+		  <dd><input type="hidden" name="total0" id="total0" value="{$list.settle_infact}" />{$list.settle_infact}</dd>
+		</dl>
+		{if $list.settle_billNum==''}
+		<dl class="lineD">
+		<dt>发票号码：</dt>
+		<dd><input type="text" name="settle_billNum" size="15"/></dd>
+		</dl>
+		<dl class="lineD">
+		<dt>开票日期：</dt>
+		<dd><input type="text" name="settle_billDate" size="16" onClick="calendar.show(this);" readonly="readonly" /></dd>
+		</dl>
+		{else}
+		<dl class="lineD">
+		  <dt>发票号码：</dt>
+		  <dd>{$list.settle_billNum}</dd>
+		</dl>
+		<dl class="lineD">
+		  <dt>开票日期：</dt>
+		  <dd>{$list.settle_billDate}</dd>
+		</dl>
+		{/if}
+		<dl class="lineD">
+		  <dt>开票金额：</dt>
+		  <dd>{$list.settle_billMoney}</dd>
+		</dl>
+		<dl class="lineD">
+		  <dt>已结金额：</dt>
+		  <dd><input type="hidden" name="total1" id="total1" value="{$list.settle_billMoney_have}"/>{$list.settle_billMoney_have}</dd>
+		</dl>
+		<dl class="lineD">
+		  <dt>优惠金额：</dt>
+		  <dd><input type="text" name="favor" id="favor" size="10" value="{$list.settle_billFavor}" /></dd>
+		</dl>
+	  	<dl class="lineD">
+		  <dt>本次结账金额：</dt>
+		  <dd><input type="text" name="total" id="total" size="10" value="{$list.settle_infact-$list.settle_billMoney_have}" /></dd>
+		</dl>
+		<dl class="lineD">
+	    	<dt>结账时间：</dt>
+	    	<dd><input type="text" name="month_accounttime" size="18" value="{$monthtime}" readonly /></dd>
+	    </dl>
+		<dl class="lineD">
+			<dt><span class="redstar">*</span>收款方式：</dt>
+			<dd><select name="payments" id="payments">
+		                  <option value="">请选择</option>
+		                  {foreach from=$paymentslist key=i item=rows}
+		                  <option value="{$rows.payment_id}" rel="{$rows.payment_fee}" {if $rows.payment_id==2}selected{/if}>{$rows.payment_name}</option>
+		                  {/foreach}
+		              </select>
+			</dd>
+		</dl>
+		<dl class="lineD">
+			<dt><span class="redstar">*</span>收款 账户：</dt>
+			<dd><select name="bank" id="bank">
+		                  <option value="">请选择</option>
+		                  {foreach from=$banklist key=i item=rows}
+		                  <option value="{$rows.bank_id}" {if $rows.bank_id==5}selected{/if}>{$rows.bank_name}</option>
+		                  {/foreach}
+		              </select>
+			</dd>
+		</dl>
+		<dl class="lineD">
+		    <dt>备注说明：</dt>
+		    <dd><textarea name="Remarks" id="Remarks" cols="80" rows="5"></textarea></dd>
+		</dl>
+    <div class="page_btm">
+      <input type="submit" class="btn_b" value="确定" />
+    </div>
+  </div>
+  <input type="hidden" name="uid" value="{$list.month_id}" />
+  <input type="hidden" name="task" value="{$task}" />
+  </form>
+</div>
+<!-{literal}->
+<script>
+$(document).ready(function(){
+    $("#favor").live('input propertychange',function(){
+		if ($(this).val()!=""){
+		    aa=parseFloat($("#total0").val(),2)-parseFloat($("#total1").val(),2)-parseFloat($(this).val(),2);
+		    $("#total").val(aa.toFixed(2));
+		}
+    });
+});
+
+</script>
+<!-{/literal}->
+</body>
+</html>

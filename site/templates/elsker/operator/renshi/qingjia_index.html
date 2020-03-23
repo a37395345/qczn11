@@ -1,0 +1,53 @@
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>管理后台</title>
+<link href="../../../../css/style.css" rel="stylesheet" type="text/css">
+<link href="../../../../js/jbox/jBox/Skins/GreyBlue/jbox.css" rel="stylesheet"  />
+<script type="text/javascript" src="../../../../js/jquery.js"></script>
+
+</head>
+<body>
+<div class="so_main">
+  <div class="page_tit">职位分类</div>
+  <!-------- 用户列表 -------->
+  <div class="Toolbar_inbox">
+  	<div class="page right"> </div>
+  		<button><a href="qingjia_add.php">添加请假项目</a></button>&nbsp;&nbsp;&nbsp;&nbsp;
+  </div>
+  </div>
+  <div class="list">
+  <table width="100%" border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <th class="line_l">排序</th>
+    <th class="line_l">请假名称</th>
+    <th class="line_l">是否扣工资</th>
+	   <th class="line_l">操作</th>
+  </tr>
+  	{foreach from=$list key=i item=rows}
+  <tr>
+  	<td >{$i+1}</td>
+  	<td>{$rows.qingjia_name}</td>
+  	<td>{if $rows.qingjia_kou==0}不扣工资
+  	{elseif $rows.qingjia_kou==1}扣工资
+  
+  	{/if}
+  </td>
+  	<td>
+  		<a href="qingjia_add.php?id={$rows.id}&op=update">修改</a> &nbsp;&nbsp;&nbsp;<a href="qingjia_delete.php?id={$rows.id}">删除</a>
+  	</td>
+  	
+ </tr>
+ 	{/foreach}
+
+ </table>
+ </div>
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,279 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>管理后台</title>
+<link href="../../../../css/style.css" rel="stylesheet" type="text/css">
+<script type="text/javascript" src="../../../../js/jquery.js"></script>
+<script type="text/javascript" src="../../../../js/common.js"></script>
+<script type="text/javascript" src="../../../../js/calendar.js"></script>
+<!-{literal}->
+<style>
+.aaa{background-color:#FF0000;}
+.aaa a:link {color:#333333;}
+</style>
+<!-{/literal}->
+</head>
+<body>
+<div class="so_main">
+  <div class="page_tit">收支统计{if $flag=="2"}(一楼){/if}</div>
+  <div id="searchTopic_div" style="display:none;">
+    <div class="page_tit">
+    搜索 [<a onclick="searchNews();" href="javascript:void(0);">隐藏</a>]
+    </div>
+    <div class="form2">
+        <form action="{$url}" method="get">
+            <dl class="lineD">
+	            <dt>开始日期：</dt>
+	            <dd><input type="text" name="startdate" size="16" value="{$startdate}" onClick="calendar.show(this);" readonly="readonly" /></dd>
+            </dl>
+            <dl class="lineD">
+	            <dt>截止日期：</dt>
+	            <dd><input type="text" name="enddate" size="16" value="{$enddate}" onClick="calendar.show(this);" readonly="readonly" /></dd>
+            </dl>
+            <div class="page_btm">
+            	<input class="btn_b" type="submit" value="确定">
+            </div>
+        </form>
+    </div>
+  </div>
+  <div class="Toolbar_inbox">
+    <form action="{$url}" method="get">
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+		  <tr>
+		    <th>开始日期：<input type="text" name="startdate" size="16" value="{$startdate}" onClick="calendar.show(this);" readonly="readonly" />
+		    截止日期：<input type="text" name="enddate" size="16" value="{$enddate}" onClick="calendar.show(this);" readonly="readonly" />
+		    店铺：<input type="radio" name="search_shop" value="" {if empty($search_shop)}checked{/if} />全部 
+            {foreach from=$shoplist key=i item=rows}
+            <input type="radio" name="search_shop" value="{$rows.shop_id}" {if $search_shop==$rows.shop_id}checked{/if}/>{$rows.shop_name}
+            {/foreach}
+		    <input class="btn_b" type="submit" value="确定"></th>
+		    
+		  </tr>
+		  </table>
+            
+        </form>
+    
+  </div>
+  <div class="list">
+  <table width="100%" border="0" cellspacing="0" cellpadding="0">
+  <tr>
+  <td width="25%" style="vertical-align:top;">
+  	<table width="100%" border="1" cellspacing="0" cellpadding="3">
+  		<tr>
+			<td width="25%">项目</td>
+	  		<td width="15%">收入</td>
+	  		<td width="15%">支出</td>
+	  	</tr>
+	  	<tr style="background-color:#B1C9FF;height:50px;">
+			<td>业务收入</td>
+	  		<td style="text-align:right;padding-right:10px;"><a href="detail{$flag}.php?startdate={$startdate}&enddate={$enddate}&search_shop={$search_shop}" target="_blank">{number_format($income.total_money1+$income.total_money2+$income.total_money22+$income.total_money21+$income.total_money3+$income.total_money4+$income.total_money5,2,".","")}</a></td>
+	  		<td>&nbsp;</td>
+	  	</tr>
+	  	<tr style="background-color:#B1C9FF;height:50px;">
+			<td>其他收入</td>
+			<td style="text-align:right;padding-right:10px;"><a href="detail{$flag}.php?startdate={$startdate}&enddate={$enddate}&search_shop={$search_shop}&b_type=6" target="_blank">{number_format($income.total_money6,2,".","")}</a></td>
+			<td>&nbsp;</td>
+		</tr>
+		<tr style="background-color:#B1C9FF;height:50px;">
+			<td>费用报销</td>
+			<td>&nbsp;</td>
+			<td style="text-align:right;padding-right:10px;"><a href="../baoxiao/detail{$flag}.php?startdate={$startdate}&enddate={$enddate}&search_shop={$search_shop}" target="_blank">{number_format($baoxiao.total_money7,2,".","")}</a></td>
+		</tr>
+
+
+		
+		<tr style="background-color:#FE6E47;height:50px;">
+			<td>合计</td>
+			<td style="text-align:right;padding-right:10px;">{number_format($income.total_money1+$income.total_money2+$income.total_money22+$income.total_money21+$income.total_money3+$income.total_money4+$income.total_money5+$income.total_money6,2,".","")}</td>
+			<td style="text-align:right;padding-right:10px;">{number_format($baoxiao.total_money7,2,".","")}</td>
+		</tr>
+		<tr style="background-color:#FE6E47;height:50px;">
+			<td>结余</td>
+			<td style="text-align:center;padding-right:10px;" colspan="2">{number_format($income.total_money1+$income.total_money2+$income.total_money22+$income.total_money21+$income.total_money3+$income.total_money4+$income.total_money5+$income.total_money6-$baoxiao.total_money7,2,".","")}</td>
+		</tr>
+		<tr style="background-color:#B1C9FF;height:50px;">
+			<td>押金</td>
+			<td style="text-align:right;padding-right:10px;"><a href="detail{$flag}.php?startdate={$startdate}&enddate={$enddate}&search_shop={$search_shop}&b_type=7" target="_blank">{number_format($income.deposit_money,2,".","")}</a></td>
+			<td style="text-align:right;padding-right:10px;"><a href="detail{$flag}.php?startdate={$startdate}&enddate={$enddate}&search_shop={$search_shop}&b_type=8" target="_blank">{number_format($income.depositback_money,2,".","")}</a></td>
+		</tr>
+		<tr style="background-color:#B1C9FF;height:50px;">
+			<td>押金结余</td>
+			<td style="text-align:center;" colspan="2">{number_format($income.deposit_money-$income.depositback_money,2,".","")}</td>
+		</tr>
+		<!-- 
+		<tr style="background-color:#B1C9FF;height:50px;">
+			<td>违章资金</td>
+			<td style="text-align:right;padding-right:10px;"><a href="../../machine/breaklist.php?search_startDate={$startdate}&search_endDate={$enddate}&op=s&type=add" target="_blank">{number_format($breaks.total1,2,".","")}</a></td>
+			<td style="text-align:right;padding-right:10px;"><a href="../../machine/breaklist.php?search_startDate={$startdate}&search_endDate={$enddate}&op=s&type=reduce" target="_blank">{number_format($breaks.total2,2,".","")}</a></td>
+		</tr>
+		<tr style="background-color:#B1C9FF;height:50px;">
+			<td>待处理违章资金</td>
+			<td style="text-align:center;" colspan="2"><a href="../../machine/list.php?task=breakfirst&op=s" target="_blank">{number_format($breaks.total,2,".","")}</a></td>
+		</tr> -->
+		<tr style="background-color:#B1C9FF;height:50px;">
+			<td>打款蒋政</td>
+			<td>&nbsp;</td>
+			{foreach from=$baoxiao_2 item=row name=foo}
+			{if $row.typeid==10}
+			<td style="text-align:right;padding-right:10px;"><a href="../baoxiao/detail{$flag}.php?startdate={$startdate}&enddate={$enddate}&search_shop={$search_shop}&b_type={$row.typeid}" target="_blank">{number_format($row.total_money20,2,".","")}</a></td>
+			{/if}
+			{/foreach}
+		</tr>
+		<tr style="background-color:#B1C9FF;height:50px;">
+			<td>备用金总额</td>
+			<td style="text-align:center;" colspan="2"><a href="detail{$flag}.php?startdate={$startdate}&enddate={$enddate}&search_shop={$search_shop}&b_type=9" target="_blank">{number_format($beiyong.total_money,2,".","")}</a></td>
+		</tr>
+		<tr style="background-color:#B1C9FF;height:50px;">
+			<td>备用金结余</td>
+			<td style="text-align:center;" colspan="2"><a href="detail{$flag}.php?startdate={$startdate}&enddate={$enddate}&search_shop={$search_shop}&b_type=10" target="_blank">{number_format($beiyong.now_money,2,".","")}</a></td>
+		</tr>
+  	</table>
+  </td>
+  <td width="25%" style="vertical-align:top;">
+	  <table width="100%" border="1" cellspacing="0" cellpadding="0">
+	  <tr>
+		<td colspan="2">业务收入大项明细</td>
+	  </tr>
+	  <tr style="height:50px;">
+		<th>临时自驾业务收入</th><td width="35%" {if $income.total_count1!=0}class="aaa"{/if}><a href="detail{$flag}.php?startdate={$startdate}&enddate={$enddate}&search_shop={$search_shop}&b_type=1" target="_blank">{$income.total_money1}</a></td>
+	  </tr>
+	  <tr style="height:50px;">
+		<th>临时带驾现结收入</th><td {if $income.total_count2!=0}class="aaa"{/if}><a href="detail{$flag}.php?startdate={$startdate}&enddate={$enddate}&search_shop={$search_shop}&b_type=2" target="_blank">{$income.total_money2}</a></td>
+	  </tr>
+	  <tr style="height:50px;">
+		<th>临时用车批结收入</th><td {if $income.total_count22!=0}class="aaa"{/if}><a href="detail{$flag}.php?startdate={$startdate}&enddate={$enddate}&search_shop={$search_shop}&b_type=22" target="_blank">{$income.total_money22}</a></td>
+	  </tr>
+	  <tr style="height:50px;">
+		<th>调车结算收入</th><td {if $income.total_count21!=0}class="aaa"{/if}><a href="detail{$flag}.php?startdate={$startdate}&enddate={$enddate}&search_shop={$search_shop}&b_type=21" target="_blank">{$income.total_money21}</a></td>
+	  </tr>
+	  <tr style="height:50px;">
+		<th>长期自驾业务收入</th><td {if $income.total_count3!=0}class="aaa"{/if}><a href="detail{$flag}.php?startdate={$startdate}&enddate={$enddate}&search_shop={$search_shop}&b_type=3" target="_blank">{$income.total_money3}</a></td>
+	  </tr>
+	  <tr style="height:50px;">
+		<th>长期带驾业务收入</th><td {if $income.total_count4!=0}class="aaa"{/if}><a href="detail{$flag}.php?startdate={$startdate}&enddate={$enddate}&search_shop={$search_shop}&b_type=4" target="_blank">{$income.total_money4}</a></td>
+	  </tr>
+	  <tr style="height:50px;">
+		<th>长期大客业务收入</th><td {if $income.total_count5!=0}class="aaa"{/if}><a href="detail{$flag}.php?startdate={$startdate}&enddate={$enddate}&search_shop={$search_shop}&b_type=5" target="_blank">{$income.total_money5}</a></td>
+	  </tr>
+	  </table>
+  </td>
+  <td width="25%" style="vertical-align:top;">
+	  <table width="100%" border="1" cellspacing="0" cellpadding="0">
+	  <tr>
+		<td colspan="2">其他收入大项明细</td>
+	  </tr>
+	  <tr style="height:50px;">
+			<th>刷卡费</th><td {if $other_count.total_count61!=0}class="aaa"{/if}><a href="../other/detail{$flag}.php?startdate={$startdate}&enddate={$enddate}&search_shop={$search_shop}&b_type=61" target="_blank">{$other.total_money61}</a></td>
+	  </tr>
+	  <tr style="height:50px;">
+			<th>保险理赔及退保</th><td {if $other_count.total_count62!=0}class="aaa"{/if}><a href="../other/detail{$flag}.php?startdate={$startdate}&enddate={$enddate}&search_shop={$search_shop}&b_type=62" target="_blank">{$other.total_money62}</a></td>
+	  </tr>
+	  <tr style="height:50px;">
+			<th>税金</th><td {if $other_count.total_count63!=0}class="aaa"{/if}><a href="../other/detail{$flag}.php?startdate={$startdate}&enddate={$enddate}&search_shop={$search_shop}&b_type=63" target="_blank">{$other.total_money63}</a></td>
+	  </tr>
+	  <tr style="height:50px;">
+			<th>违章手续费</th><td {if $other_count.total_count67!=0}class="aaa"{/if}><a href="../other/detail{$flag}.php?startdate={$startdate}&enddate={$enddate}&search_shop={$search_shop}&b_type=67" target="_blank">{$other.total_money67}</a></td>
+	  </tr>
+	  <tr style="height:50px;">
+			<th>违章扣分费</th><td {if $other_count.total_count68!=0}class="aaa"{/if}><a href="../other/detail{$flag}.php?startdate={$startdate}&enddate={$enddate}&search_shop={$search_shop}&b_type=68" target="_blank">{$other.total_money68}</a></td>
+	  </tr>
+	  <tr style="height:50px;">
+			<th>卖车及报废收入</th><td {if $other_count.total_count65!=0}class="aaa"{/if}><a href="../other/detail{$flag}.php?startdate={$startdate}&enddate={$enddate}&search_shop={$search_shop}&b_type=65" target="_blank">{$other.total_money65}</a></td>
+	  </tr>
+	  <tr style="height:50px;">
+			<th>一嗨多收费用</th><td {if $other_count.total_count69!=0}class="aaa"{/if}><a href="../other/detail{$flag}.php?startdate={$startdate}&enddate={$enddate}&search_shop={$search_shop}&b_type=69" target="_blank">{$other.total_money69}</a></td>
+	  </tr>
+	  <tr style="height:50px;">
+			<th>备用金归还</th><td {if $other_count.total_count66!=0}class="aaa"{/if}><a href="../other/detail{$flag}.php?startdate={$startdate}&enddate={$enddate}&search_shop={$search_shop}&b_type=66" target="_blank">{$other.total_money66}</a></td>
+	  </tr>
+	  <tr style="height:50px;">
+			<th>其他</th><td {if $other_count.total_count64!=0}class="aaa"{/if}><a href="../other/detail{$flag}.php?startdate={$startdate}&enddate={$enddate}&search_shop={$search_shop}&b_type=64" target="_blank">{$other.total_money64}</a></td>
+	  </tr>
+  	  </table>
+  </td>
+  <td width="25%" style="vertical-align:top;">
+  <table width="100%" border="1" cellspacing="0" cellpadding="0">
+  <tr>
+	<td colspan="3">费用报销大项明细</td>
+  </tr>
+  <tr style="height:50px;">
+	<th rowspan="5" width="8%">司机出车报销</th>
+	<th>过路费</th><td width="35%"><a href="../baoxiao/detail{$flag}.php?startdate={$startdate}&enddate={$enddate}&search_shop={$search_shop}&b_type=0" target="_blank">{number_format($baoxiao_1.total_money11,2,".","")}</a></td>
+  </tr>
+  <tr style="height:50px;">
+	<th>停车费</th><td><a href="../baoxiao/detail{$flag}.php?startdate={$startdate}&enddate={$enddate}&search_shop={$search_shop}&b_type=0" target="_blank">{number_format($baoxiao_1.total_money15,2,".","")}</a></td>
+  </tr>
+  <tr style="height:50px;">
+    <th>加油费</th><td><a href="../baoxiao/detail{$flag}.php?startdate={$startdate}&enddate={$enddate}&search_shop={$search_shop}&b_type=0" target="_blank">{number_format($baoxiao_1.total_money12,2,".","")}</a></td>
+  </tr>
+  <tr style="height:50px;">
+	<th>住宿费</th><td><a href="../baoxiao/detail{$flag}.php?startdate={$startdate}&enddate={$enddate}&search_shop={$search_shop}&b_type=0" target="_blank">{number_format($baoxiao_1.total_money13,2,".","")}</a></td>
+  </tr>
+  <tr style="height:50px;">
+	<th>就餐费</th><td><a href="../baoxiao/detail{$flag}.php?startdate={$startdate}&enddate={$enddate}&search_shop={$search_shop}&b_type=0" target="_blank">{number_format($baoxiao_1.total_money14,2,".","")}</a></td>
+  </tr>
+  
+  {foreach from=$baoxiao_2 item=row name=foo}
+  {if $row.typeclass==1}
+  <tr style="height:50px;">
+	{if $row.typeid==17}
+	<th rowspan="7">机务报销</th>
+	{/if}
+	<th>{$row.typename}</th><td><a href="../baoxiao/detail{$flag}.php?startdate={$startdate}&enddate={$enddate}&search_shop={$search_shop}&b_type={$row.typeid}" target="_blank">{number_format($row.total_money20,2,".","")}</a></td>
+  </tr>
+  {else}
+  {if $row.typeid!=10}
+  <tr style="height:50px;">
+	{if $smarty.foreach.foo.index==0}
+	<th rowspan="15">公司运营报销</th>
+	{/if}
+	<th>{$row.typename}</th><td><a href="../baoxiao/detail{$flag}.php?startdate={$startdate}&enddate={$enddate}&search_shop={$search_shop}&b_type={$row.typeid}" target="_blank">{number_format($row.total_money20,2,".","")}</a></td>
+  </tr>
+  {/if}
+  {/if}
+  {/foreach}
+  </table>
+  </td>
+  </tr>
+  </table>
+  
+ </div>
+</div>
+<!-{literal}->
+<script>
+	//鼠标移动表格效果
+	$(document).ready(function(){
+        $("a.zoomIn").fancybox({
+            'overlayShow'   : false,
+            'transitionIn'  : 'elastic',
+            'transitionOut' : 'elastic'
+        });         
+        
+		$("tr[overstyle='on']").hover(
+		  function () {
+		    $(this).addClass("bg_hover");
+		  },
+		  function () {
+		    $(this).removeClass("bg_hover");
+		  }
+		);
+	});	
+	var isSearchHidden = 1;
+    function searchNews() {
+      if(isSearchHidden == 1) {
+        $("#searchTopic_div").slideDown("fast");
+        isSearchHidden = 0;
+      }else {
+        $("#searchTopic_div").slideUp("fast");
+        isSearchHidden = 1;
+      }
+    }
+    
+
+</script>
+<!-{/literal}->
+
+</body>
+</html>

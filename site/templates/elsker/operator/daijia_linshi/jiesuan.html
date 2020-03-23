@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta charset="utf-8">
+    <link rel="shortcut icon" href="favicon.ico">
+<link href="../../../crm/fonts1/iconfont.css?a=2" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>临时代驾批量结算</title>
+    <link rel="shortcut icon" href="favicon.ico"> <link href="../../../crm1/css/bootstrap.min.css?v=3.3.6" rel="stylesheet">
+    <link href="../../../crm1/css/font-awesome.css?v=4.4.0" rel="stylesheet">
+
+    <link href="../../../crm1/css/animate.css" rel="stylesheet">
+    <link href="../../../crm1/css/style.css?v=4.1.0" rel="stylesheet">
+    <link href="../../../crm1/css/plugins/treeview/bootstrap-treeview.css" rel="stylesheet">
+
+    <link href="../../../crm/css/plugins/sweetalert/sweetalert.css" rel="stylesheet">
+  <script src="../../../crm/js/plugins/sweetalert/sweetalert.min.js"></script>
+
+
+
+    <script type="text/javascript" src="../../../js/jquery.js">
+</script>
+    <link href="../../../js/jbox/jBox/Skins/GreyBlue/jbox.css?a=2" rel="stylesheet">
+  <script type="text/javascript" src="../../../js/jbox/jBox/jquery.jBox-2.3.min.js?a=5"></script>
+  <script type="text/javascript" src="../../../js/jbox/jBox/i18n/jquery.jBox-zh-CN.js?a=1"></script>
+</head>
+
+<body class="gray-bg">
+    <div class="row wrapper wrapper-content animated fadeInRight">
+        
+       
+       
+        <div class="col-sm-12">
+          <div class="ibox float-e-margins" >
+            <div class="ibox-title" style="padding-top: 5px">
+                <h5 style="padding-top: 10px">临时代驾批量结算</h5>
+            </div>
+            <div class="ibox-tools changebtn" style="padding-right: 20px;float: left;">
+                <div style="margin-top:5px;" >
+                    <a href="javascript:;" class="btn btn-outline btn-default">未结算</a>
+                    <a href="javascript:;" class="btn btn-outline btn-default">已结算未结账</a>
+                </div>
+            </div>
+            <table class="table table-bordered table-hover" data-height="400" style="margin-bottom:0px" data-mobile-responsive="true">
+                    <thead>
+                    <tr>
+                        <th style="text-align: center;width: 10%">
+                            排序
+                        </th>
+                        <th style="text-align: center;width: 40%">
+                            企业名称
+                        </th>
+                        <th style="text-align: center;width: 15%">
+                            未结算订单数量
+                        </th>
+                        <th style="text-align: center;width: 25%">
+                            操作
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {foreach from=$list key=i item=rows}
+                    <tr>
+                      <td style="text-align: center;">
+                        {$i+1}
+                      </td>
+                      <td style="text-align: center;">{$rows.client_name}</td>
+                      <td style="text-align: center;">{$rows.count}</td>
+                     
+                      <td style="text-align: center;">
+                       <a href="index.php?task=jiesuan_xiangxi&paicheCom={$rows.paicheCom}" title="结算" style="color:#CC6600">
+    <i class="iconfont icon-qitafeiyong" aria-hidden="true"></i>
+    </a>
+                    </td>
+                    </tr>
+                    {/foreach}
+                </tbody>
+            </table>
+            <table style="display: none" class="table table-bordered table-hover" data-height="400" style="margin-bottom:0px" data-mobile-responsive="true">
+                    <thead>
+                    <tr>
+                        <th style="text-align: center;width: 10%">
+                            排序
+                        </th>
+                        <th style="text-align: center;width: 15%">
+                            结算单号
+                        </th>
+                        <th style="text-align: center;width: 15%">
+                            结算时间
+                        </th>
+                        <th style="text-align: center;width: 25%">
+                            企业名称
+                        </th>
+                        <th style="text-align: center;width: 10%">
+                            已结算未结账数量
+                        </th>
+                        
+                        <th style="text-align: center;width: 20%">
+                            操作
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {foreach from=$list1 key=i item=rows}
+                    <tr>
+                      <td style="text-align: center;">
+                        {$i+1}
+                      </td>
+                      <td style="text-align: center;">{$rows.qiye_num}</td>
+                      <td style="text-align: center;">{$rows.qiye_num_time}</td>
+                      <td style="text-align: center;">{$rows.client_name}</td>
+                      <td style="text-align: center;">{$rows.count}</td>
+                      <td style="text-align: center;">
+                       <a href="index.php?task=yijie_xiangxi&qiye_num={$rows.qiye_num}" title="详细" style="color:#CC6600">
+    <i class="iconfont icon-mingxi1" aria-hidden="true"></i>
+    </a>
+                    </td>
+                    </tr>
+                    {/foreach}
+                </tbody>
+            </table>
+                </div>
+        </div> 
+    </div>
+    </div>
+
+    <script>
+        $(function(){
+            $(".changebtn a").click(function(){
+                var idx = $(this).index();
+                $(".table").eq(idx).show().siblings(".table").hide();
+            });
+        });
+    </script>
+    <!-- 全局js -->
+    
+    <script src="../../../crm1/js/bootstrap.min.js?v=3.3.6"></script>
+    <!-- Bootstrap-Treeview plugin javascript -->
+    <script src="../../../crm1/js/plugins/treeview/bootstrap-treeview.js"></script>
+
+
+
+
+</body>
+
+</html>

@@ -1,0 +1,247 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<title>管理后台</title>
+	<link href="../../../css/style.css" rel="stylesheet" type="text/css">
+	<link href="../../../js/jbox/jBox/Skins/GreyBlue/jbox.css" rel="stylesheet" />
+	<link rel="stylesheet" href="../../../../../crm/css/bootstrap.min14ed.css">
+	<link rel="stylesheet" href="../../../../../crm/css/style.min862f.css">
+	<script type="text/javascript" src="../../../js/jquery.js"></script>
+	<script type="text/javascript" src="../../../js/common.js"></script>
+	<script type="text/javascript" src="../../../js/My97DatePicker/WdatePicker.js"></script>
+	<script type="text/javascript" src="../../../js/check_form.js"></script>
+	<script type="text/javascript" src="../../../js/jbox/jBox/jquery.jBox-2.3.min.js"></script>
+	<script type="text/javascript" src="../../../js/jbox/jBox/i18n/jquery.jBox-zh-CN.js"></script>
+	<style>
+		/*{literal}*/
+
+		.navi_name {
+			font-size: 14px;
+			font-weight: bold;
+		}
+
+		.indent {
+			padding-left: 40px;
+		}
+
+		/*{/literal}*/
+	</style>
+</head>
+
+<body class="gray-bg">
+	<div class="wrapper wrapper-content animated fadeInRight">
+		<!-- Panel Other -->
+		<div class="ibox float-e-margins">
+			<div class="ibox-title">
+				<h5>编辑</h5>
+			</div>
+			<form method="post" action="insert.php" onsubmit="return break_check(this)" name="form1">
+				<div class="wrapper wrapper-content animated fadeInRight" style=" margin: 0; padding: 0;">
+					<div class="ibox float-e-margins" style="margin:0">
+
+						<div class="form2">
+							<div class="ibox-content" id="content" style=" margin: 0px; padding: 0px;">
+								<div class="row row-lg">
+									<div class="col-sm-12">
+										<!-- Example Events -->
+										<div class="example-wrap">
+											<div class="example">
+												<table class="table table-bordered">
+													<tr>
+														<th width="15%" style="background-color:#F5F5F6">
+															<span style="color:#000;">违章车辆：</span>
+														</th>
+														<td width="35%">
+															<input type="text" name="paicheCar"
+																class="form-control input-sm" id="paicheCar" size="38"
+																value="{$list.car_num}" readonly />
+															<input type="hidden" name="paicheCar2" id="paicheCar2"
+																value="{$list.breakrules_CarId}" />
+															<!-- 	关键字：<input type="text" name="paicheCarKey" id="paicheCarKey" size="10" />
+	    <a href="javascript:select_car();"><img src="../../../css/car2.gif" height="15" class="peoplePic" /></a> -->
+														</td>
+
+														<th width="15%" style="background-color:#F5F5F6">
+															<span style="color:#000;"> 违章时间：</span>
+														</th>
+														<td width="35%">
+															<input type="text" name="breakrules_date"
+																class="form-control input-sm" placeholder="必填"
+																id="breakrules_date" size="16"
+																value="{$list.breakrules_date}"
+																onClick="{literal}WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'}){/literal}"
+																readonly="readonly" /></td>
+													</tr>
+													<tr>
+														<th width="15%" style="background-color:#F5F5F6">
+															<span style="color:#000;"> 违章项目：</span>
+														</th>
+														<td width="35%">
+															<select name="breakrules_item" id="breakrules_item"
+																class="form-control input-sm">
+																<option value="">请选择</option>
+																{foreach from=$itemlist key=i item=rows}
+																<option value="{$rows.item_name}"
+																	at="{$rows.item_money1}#{$rows.item_money2}#{$rows.item_scope}#{$rows.item_money4}"
+																	{if
+																	$list.breakrules_item==$rows.item_name}selected{/if}>{$rows.item_name}
+																	</option> {/foreach} </select> </td> <th width="15%"
+																	style="background-color:#F5F5F6">
+																	<span style="color:#000;">违章款：</span>
+																	</th>
+														<td width="35%">
+															
+															<input type="text" name="breakrules_money1"class="form-control input-sm"
+																id="breakrules_money1" value="{$list.breakrules_money1}" placeholder="元"
+																size="4" readonly />
+													<tr>
+														<th width="15%" style="background-color:#F5F5F6">
+															<span style="color:#000;">手续费：</span>
+														</th>
+														<td width="35%">
+
+															<input type="text" name="breakrules_money2"
+																class="form-control input-sm" id="breakrules_money2"
+																value="{$list.breakrules_money2}" size="4" placeholder="元"
+																readonly />
+														</td>
+
+														<th width="15%" style="background-color:#F5F5F6">
+															<span style="color:#000;">扣分：</span>
+														</th>
+														<td width="35%">
+
+															<input type="text" name="breakrules_money3" class="form-control input-sm"
+																id="breakrules_money3" value="{$list.breakrules_money3}" placeholder="分"
+																size="1" readonly />
+
+														</td>
+													</tr>
+													<tr>
+														<th width="15%" style="background-color:#F5F5F6">
+															<span style="color:#000;">罚分金额</span>
+														</th>
+														<td>
+															<input type="text" name="breakrules_money4" class="form-control input-sm"
+																id="breakrules_money4" value="{$list.breakrules_money4}"
+																size="4" placeholder="元" readonly />
+														</td>
+														<th width="15%" style="background-color:#F5F5F6">
+															<span style="color:#000;"> 违章总金额：</span>
+														</th>
+														<td width="35%"><input type="text" name="breakrules_money"
+																id="breakrules_money" size="4"
+																class="form-control input-sm"
+																value="{$list.breakrules_money}" readonly="readonly"
+																placeholder="元" />
+														</td>
+														</td>
+														<!-- 
+	<tr>
+	    <th width="15%" style="background-color:#F5F5F6">
+                                                <span style="color:#000;">违章驾驶员：</span>
+                                            </th>
+	    <td width="35%"><input type="text" name="paicheDriver" id="paicheDriver" size="18" onFocus="this.blur()" value="{$list.siji}" />
+	    <input type="hidden" name="paicheDriver2" id="paicheDriver2" value="{$list.breakrules_DriverID}" />
+	    关键字：<input type="text" name="paicheDriverKey" id="paicheDriverKey" size="10" />
+	    <a href="javascript:select_driver();"><img src="../../../css/driver.gif" height="15" class="peoplePic" /></a></td>
+	</tr> -->
+													<tr>
+														<th width="15%" style="background-color:#F5F5F6">
+															<span style="color:#000;">违章备注：</span>
+														</th>
+														<td width="35%">
+															<input name="breakrules_remarks" cols="40"
+																class="form-control input-sm" rows="5"
+																value=" {$list.breakrules_remarks}" />
+														</td>
+														<th width="15%" style="background-color:#F5F5F6">
+															<span style="color:#000;"></span>
+														</th>
+														<td width="35%">
+															
+														</td>
+													</tr>
+												</table>
+
+												<div class="page_btm">
+														<input type="button" value="返回" class="btn btn-outline btn-default" onclick="window.location.href='javascript:history.back(-1)'"
+														style="width: 10%;margin-left: -15%;" />
+													<input type="submit" value="确定" class="btn btn-outline btn-default"
+														style="width: 10%;margin-left: 25%;" />
+												</div>
+											</div>
+											<input type="hidden" name="uid" value="{$list.breakrules_id}" />
+											<input type="hidden" name="task" value="{$task}" />
+											<input type="hidden" name="search_car" value="{$search_car}" />
+			</form>
+		</div>
+		<script>
+			$(document).ready(function () {
+				$('#breakrules_item').change(function () {
+					var p1 = $(this).children('option:selected').val();
+					if (p1 == "") {
+
+					} else {
+						p2 = $(this).children('option:selected').attr("at");
+						var arrMoney = p2.split('#');
+						$("#breakrules_money1").val(arrMoney[0]);
+						$("#breakrules_money2").val(arrMoney[1]);
+						$("#breakrules_money3").val(arrMoney[2]);
+						$("#breakrules_money4").val(arrMoney[3]);
+						cal();
+					}
+				});
+				$("#breakrules_money3").live('input propertychange', function () {
+					if ($("#breakrules_money3").val() == "" || $("#breakrules_money3").val() == 0) {
+						$("#breakrules_money4").val("0");
+					} else {
+						var scope = $(this).val();
+						$("#breakrules_money4").val(parseInt(scope) * 150);
+					}
+					cal();
+				});
+				$("#breakrules_money1,#breakrules_money2,#breakrules_money4").live('input propertychange', function () {
+					cal();
+				});
+			});
+			function cal() {
+				var a = b = c = 0;
+				if ($("#breakrules_money1").val() != "" || $("#breakrules_money1").val() != 0) {
+					a = $("#breakrules_money1").val();
+				}
+				if ($("#breakrules_money2").val() != "" || $("#breakrules_money2").val() != 0) {
+					b = $("#breakrules_money2").val();
+				}
+				if ($("#breakrules_money4").val() != "" || $("#breakrules_money4").val() != 0) {
+					c = $("#breakrules_money4").val();
+				}
+				$("#breakrules_money").val(parseInt(a) + parseInt(b) + parseInt(c));
+			}
+			function select_driver() {
+				var key = $("#paicheDriverKey").val();
+				demo_iframe('../business/selectemp.php?sel_type=d&key=' + key, '选择驾驶员', 650, 380, 'login_js');
+			}
+			function select_car() {
+				var key = $("#paicheCarKey").val();
+				demo_iframe('../machine/selectcar.php?sel_type=c&key=' + key, '选择车辆', 650, 380, 'login_js');
+			}
+			function select_user() {
+				if ($("#breakrules_date").val() == "") {
+					alert("请先选择违章时间！");
+					$("#breakrules_date").focus();
+					return false;
+				}
+				if ($("#paicheCar").val() == "" && $("#paicheCar2").val() == "") {
+					alert("请先选择违章车辆或者输入车牌号！");
+					$("#paicheCar").focus();
+					return false;
+				}
+				demo_iframe('../business/selectemp.php?sel_type=f&key=' + $("#breakrules_date").val() + "&key2=" + $("#paicheCar2").val() + "&key1=" + $("#paicheCar").val(), '选择承租人', 950, 480, 'login_js');
+			}
+		</script>
+</body>
+
+</html>

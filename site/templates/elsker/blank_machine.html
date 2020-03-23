@@ -1,0 +1,158 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Insert title here</title>
+<link href="../../../css/style.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="../../../js/jquery.js"></script>
+<script>
+$(function(){
+	//取近期需要保养的车辆
+	$.get("../../../site/operator/machine/list.php?task=getMaintList",{}, function(jsonmsg){
+		if (jsonmsg.status==0){
+			var nRe=jsonmsg.totalRecords;
+			var sResult="<tr><th>序号</th><th>车牌号</th><th>当前行驶公里数</th>	<th>最近一次保养</th><th>下一次保养公里数</th><th>项目</th></tr>";
+			$('#maint').html(sResult);
+			if (nRe>0){
+				var nowcarnum=nowoptions='';
+				var dataObj = jsonmsg.data;
+				for (var i=0;i<nRe;i++){
+					if (nowcarnum!=dataObj[i].car_num || nowoptions!=dataObj[i].item_id){
+						nowcarnum=dataObj[i].car_num;
+						nowoptions=dataObj[i].item_id;
+					    if (parseInt(dataObj[i].car_nowKilo)>parseInt(dataObj[i].car_nextmaintKilo)){
+							sResult3="<tr style='color:#AA3355;'>";
+					    }else{
+							sResult3="<tr>";
+					    }
+						sResult3+="<td>"+ (i+1)+"</td><td>苏D"+dataObj[i].car_num+"</td><td>"+ dataObj[i].car_nowKilo+"</td><td>"+
+						dataObj[i].car_lastmaintDate+"</td><td>"+dataObj[i].car_nextmaintKilo+"</td><td>"+dataObj[i].option_name+"</td></tr>";
+						$('#maint').append(sResult3);
+					}
+				}
+			}else{
+				$('#maint').append("<tr><td colspan=\"6\">近期无待保养的车辆！</td></tr>");
+			}
+		}else{
+			$('#maint').append("<tr><td colspan=\"6\">获取数据失败！</td></tr>");
+		}
+	},"json");
+	//取保险要到期的车辆
+	$.get("../../../site/operator/machine/list.php?task=getInsurList",{}, function(jsonmsg){
+		if (jsonmsg.status==0){
+			var nRe=jsonmsg.totalRecords;
+			var sResult="<tr><th>序号</th><th>车牌号</th><th>车辆购买日期</th><th>险种</th><th>保险开始日期</th><th>保险截止日期</th></tr>";
+			$('#insur').html(sResult);
+			if (nRe>0){
+				var dataObj = jsonmsg.data;
+				
+				for (var i=0;i<nRe;i++){
+					sResult3="<tr><td>"+ (i+1)+"</td><td>苏D"+dataObj[i].car_num+"</td><td>"+
+					dataObj[i].car_saleDate+"</td><td>"+dataObj[i].insurance_type+"</td><td>"+
+					dataObj[i].insurance_start+"</td><td>"+dataObj[i].insurance_end+"</td></tr>";
+					$('#insur').append(sResult3);
+				}
+			}else{
+				$('#insur').append("<tr><td colspan=\"6\">近期无要续保的车辆！</td></tr>");
+			}
+		}else{
+			$('#insur').append("<tr><td colspan=\"6\">获取数据失败！</td></tr>");
+		}
+	},"json");
+	//近期需要年审的车辆
+	$.get("../../../site/operator/machine/list.php?task=getCarefulList",{}, function(jsonmsg){
+		if (jsonmsg.status==0){
+			var nRe=jsonmsg.totalRecords;
+			var sResult="<tr><th>序号</th><th>车牌号</th><th>车辆注册日期</th><th>最近一次年审</th><th>下次年审日期</th><th>大小年审</th><th>倒计时</th></tr>";
+			$('#careful').html(sResult);
+			if (nRe>0){
+				var dataObj = jsonmsg.data;
+				for (var i=0;i<nRe;i++){
+						if (parseInt(dataObj[i].diffday)<0){
+							sResult3="<tr style='color:#f00;'>";
+						}else if (parseInt(dataObj[i].diffday)<30){
+							sResult3="<tr style='color:#AA3355;'>";
+					    }else if(parseInt(dataObj[i].diffday)<60){
+					    	sResult3="<tr style='color:#F7850F;'>";
+					    }else{
+							sResult3="<tr>";
+					    }
+						sResult3+="<td>"+ (i+1)+"</td><td>苏D"+dataObj[i].car_num+"</td><td>"+ dataObj[i].car_cartDate+"</td><td>"+
+						dataObj[i].car_lastcarefulDate+"</td><td>"+dataObj[i].car_nextcarefulDate+"</td><td>"+dataObj[i].type_a+"</td><td>"+dataObj[i].diffday+"天</td></tr>";
+						$('#careful').append(sResult3);
+				}
+			}else{
+				$('#careful').append("<tr><td colspan=\"6\">近期无待年审的车辆！</td></tr>");
+			}
+		}else{
+			$('#careful').append("<tr><td colspan=\"6\">获取数据失败！</td></tr>");
+		}
+	},"json");
+	$("#spancareful").click(function(){
+		$("#spancareful").css({"font-size":"14px","color":"#000000"});
+		$("#spaninsur").removeAttr("style");
+		$("#careful").css("display","inline-table");
+		$("#insur").css("display","none");
+	});
+	$("#spaninsur").click(function(){
+		$("#spaninsur").css({"font-size":"14px","color":"#000000"});
+		$("#spancareful").removeAttr("style");
+		$("#insur").css("display","inline-table");
+		$("#careful").css("display","none");
+	});
+});
+</script>
+</head>
+<body>
+<div class="so_main" style="width:1003px;">
+	<div class="page_tit">机务待办事宜提醒</div>
+	<div class="Toolbar_inbox_2" style="width:510px;">
+  	<div class="page ">近1000公里内需要保养的车辆</div>
+	</div>
+	<div class="Toolbar_inbox_3" style="width:450px;">
+  	<div class="page "><span id="spancareful" style="font-size: 14px;color: #000000;">近期需要年审的车辆</span>&nbsp;&nbsp;&nbsp;&nbsp;<span id="spaninsur">近1个月需要续保的车辆</span></div>
+	</div>
+	<div class="list">
+		<table id="maint" width="520px" border="0" cellspacing="0" cellpadding="0" align="left">
+		  <tr>
+		    <th>序号</th>
+			<th>车牌号</th>
+			<th>当前行驶公里数</th>
+		    <th>最近一次保养</th>
+		    <th>下一次保养公里数</th>
+		    <th>项目</th>
+		  </tr>
+		  <tr>
+		  	<td colspan="6"><img src="../../../images/wait.gif" /></td>
+		  </tr>
+		</table>
+		<table id="careful" width="460px" border="0" cellspacing="0" cellpadding="0" align="right">
+		  <tr>
+		    <th>序号</th>
+			<th>车牌号</th>
+			<th>车辆注册日期</th>
+			<th>最近一次年审</th>
+		    <th>下次年审日期</th>
+		    <th>倒计时</th>
+		  </tr>
+		   <tr>
+		  	<td colspan="6"><img src="../../../images/wait.gif" /></td>
+		  </tr>
+		</table>
+		<table id="insur" width="460px" border="0" cellspacing="0" cellpadding="0" align="right" style="display:none;">
+		  <tr>
+		    <th>序号</th>
+			<th>车牌号</th>
+			<th>车辆购买日期</th>
+			<th>险种</th>
+		    <th>保险开始日期</th>
+		    <th>保险截止日期</th>
+		  </tr>
+		   <tr>
+		  	<td colspan="6"><img src="../../../images/wait.gif" /></td>
+		  </tr>
+		</table>
+	</div>
+</div>
+</body>
+</html>

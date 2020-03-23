@@ -1,0 +1,194 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>管理后台</title>
+<link href="../../../../css/style.css" rel="stylesheet" type="text/css">
+<link href="../../../../css/box.css" rel="stylesheet" type="text/css" />
+<link href="../../../../js/jbox/jBox/Skins/GreyBlue/jbox.css" rel="stylesheet"  />
+<script type="text/javascript" src="../../../../js/jquery.js"></script>
+<script type="text/javascript" src="../../../../js/common.js"></script>
+<script type="text/javascript" src="../../../../js/fancybox/jquery.mousewheel-3.0.4.pack.js"></script>
+<script type="text/javascript" src="../../../../js/fancybox/jquery.fancybox-1.3.4.pack.js"></script>
+<script type="text/javascript" src="../../../../js/jbox/jBox/jquery.jBox-2.3.min.js"></script>
+<script type="text/javascript" src="../../../../js/jbox/jBox/i18n/jquery.jBox-zh-CN.js"></script>
+
+</head>
+<body>
+<div class="so_main">
+  <div class="page_tit">报销内容详情</div>
+  <div class="form2">
+	  	<dl class="lineD">
+		  <dt>报销单号：</dt>
+		  <dd>{$list.baoxiao_code}</dd>
+		</dl>
+	  	<dl class="lineD">
+		  <dt>报销人：</dt>
+		  <dd>{$list.emp_name}</dd>
+		</dl>
+		<dl class="lineD">
+		  <dt>报销日期：</dt>
+		  <dd>{$list.baoxiao_date}</dd>
+		</dl>
+		{if $item==1}
+	  	<dl class="lineD">
+		  <dt>合同号：</dt>
+		  <dd>{$list.baoxiaoPaicheContractNum}</dd>
+		</dl>
+		<dl class="lineD">
+		  <dt>现金加油费：</dt>
+		  <dd>{$list.baoxiao_oil}元&nbsp;&nbsp;&nbsp;&nbsp;加油量：{$list.baoxiao_oil_number}升&nbsp;&nbsp;&nbsp;&nbsp;加油日期：{$list.baoxiao_oil_date}</dd>
+		</dl>
+		<dl class="lineD">
+		  <dt>过桥过路费：</dt>
+		  <dd>{$list.baoxiao_roadQiao}</dd>
+		</dl>
+		<dl class="lineD">
+		  <dt>停车费：</dt>
+		  <dd>{$list.baoxiao_stopCar}</dd>
+		</dl>
+		<dl class="lineD">
+		  <dt>住宿费：</dt>
+		  <dd>{$list.baoxiao_room}</dd>
+		</dl>
+		<dl class="lineD">
+		  <dt>餐费：</dt>
+		  <dd>{$list.baoxiao_meal}</dd>
+		</dl>
+		{/if}
+		{if $item==2}
+		<dl class="lineD">
+		  <dt>报销内容：</dt>
+		  <dd>{$list.baoxiao_content}</dd>
+		</dl>
+		<dl class="lineD">
+		  <dt>报销金额：</dt>
+		  <dd>{$list.baoxiao_money}</dd>
+		</dl>
+		<dl class="lineD">
+		  <dt>费用类别：</dt>
+		  <dd>{$list.baoxiao_type}</dd>
+		</dl>
+		<dl class="lineD">
+		  <dt>店铺：</dt>
+		  <dd>{$list.shop_name}</dd>
+		</dl>
+		{if $list.bill_id}
+		<dl class="lineD">
+	    <dt>违章车辆：</dt>
+	    <dd>苏D{$list.baoxiao_breakinfo.car_num}</dd>
+	    </dl>
+		<dl class="lineD">
+	    <dt>违章时间：</dt>
+	    <dd>{$list.baoxiao_breakinfo.breakrules_date}</dd>
+	  </dl>
+	  <dl class="lineD">
+		<dt>违章项目：</dt>
+		<dd>{$list.baoxiao_breakinfo.breakrules_item}
+		</dd>
+		</dl>
+		<dl class="lineD">
+			<dt>违章处罚：</dt>
+			<dd>违章款：{$list.baoxiao_breakinfo.breakrules_money1}元&nbsp;&nbsp;&nbsp;&nbsp;手续费：{$list.baoxiao_breakinfo.breakrules_money2}元&nbsp;&nbsp;&nbsp;&nbsp;
+			扣分：{$list.baoxiao_breakinfo.breakrules_money3}分={$list.baoxiao_breakinfo.breakrules_money4}元
+			</dd>
+		</dl>
+		<dl class="lineD">
+			<dt>违章总金额：</dt>
+			<dd>{$list.baoxiao_breakinfo.breakrules_money}元</dd>
+		</dl>
+		<dl class="lineD">
+			<dt>实际违章处理：</dt>
+			<dd>实际违章款：{$list.baoxiao_breakinfo.breakrules_money1_infact}元&nbsp;&nbsp;&nbsp;&nbsp;实际手续费：{$list.baoxiao_breakinfo.breakrules_money2_infact}元&nbsp;&nbsp;&nbsp;&nbsp;
+			实际扣分：{$list.baoxiao_breakinfo.breakrules_money3_infact}分={$list.baoxiao_breakinfo.breakrules_money4_infact}元
+			</dd>
+		</dl>
+		<dl class="lineD">
+			<dt>实际违章总金额：</dt>
+			<dd>{$list.baoxiao_breakinfo.breakrules_money_infact}元</dd>
+		</dl>
+		{if $list.baoxiao_breakinfo.breakrulesPaicheId!=0}
+		<dl class="lineD">
+			<dt>派车单号：</dt>
+			<dd><a href="../../business/detail.php?uid={$list.baoxiao_breakinfo.breakrulesPaicheId}" target="blank">{$list.baoxiao_breakinfo.paiche_contractNum}</a></dd>
+		</dl>
+		{/if}
+		{/if}
+		{/if}
+		<dl class="lineD">
+		  <dt>付款方式：</dt>
+		  <dd>{$list.payment_name}</dd>
+		</dl>
+		<dl class="lineD">
+		  <dt>付款账户：</dt>
+		  <dd>{$list.bank_name}</dd>
+		</dl>
+		<dl class="lineD">
+		  <dt>报销备注：</dt>
+		  <dd>{$list.baoxiao_remarks}</dd>
+		</dl>
+		<dl class="lineD">
+	      <dt>发票扫描件：</dt>
+	      <dd>
+	      <div>
+	        <ul>
+	        {foreach from=$list.baoxiao_imglist key=i item=rows name=foo}
+	         <li style="float:left;text-align:center;"><a href="picture.php?baoxiao_id={$list.baoxiao_id}&nowserial={$smarty.foreach.foo.index+1}" title="点击查看原图" target="_blank"><img src="../../../../thumb/{$rows.images}" width="100" height="100" /></a><br />{$smarty.foreach.foo.index+1}</li>
+	        {/foreach}
+	        </ul>
+	        </div>
+			<input onclick="uploadfile({$list.baoxiao_id})" type="button" class="btn_b" value="补传发票" style="float:right;"/>
+	      </dd>
+	   </dl>
+		
+		<dl class="lineD">
+		  <dt>审核结果：</dt>
+		  <dd>{if $list.baoxiao_isAgree==0}未审核{elseif $list.baoxiao_isAgree==1}审核通过{else}审核未通过{/if}</dd>
+		</dl>
+		{if $list.baoxiao_isAgree!=0}
+		<dl class="lineD">
+		  <dt>说明：</dt>
+		  <dd>审核人：{$list.baoxiao_isAgreeMan}&nbsp;&nbsp;审核时间：{$list.baoxiao_isAgreeTime}&nbsp;&nbsp;审核意见：{$list.baoxiao_isAgreeRemarks}</dd>
+		</dl>
+		{/if}
+		<dl class="lineD">
+		  <dt>审批结果：</dt>
+		  <dd>{if $list.baoxiao_isCheck==0}未审批{elseif $list.baoxiao_isCheck==1}审批通过{else}审批未通过{/if}</dd>
+		</dl>
+		{if $list.baoxiao_isCheck!=0}
+		<dl class="lineD">
+		  <dt>说明：</dt>
+		  <dd>审批人：{$list.baoxiao_isCheckMan}&nbsp;&nbsp;审批时间：{$list.baoxiao_isCheckTime}&nbsp;&nbsp;审批意见：{$list.baoxiao_checkRemarks}</dd>
+		</dl>
+		{/if}
+		<dl class="lineD">
+		  <dt>受理结果：</dt>
+		  <dd>{if $list.baoxiao_isOver==0}未受理{else}已受理{/if}</dd>
+		</dl>
+		{if $list.baoxiao_isOver==1}
+		<dl class="lineD">
+		  <dt>说明：</dt>
+		  <dd>受理人：{$list.baoxiao_isOverMan}&nbsp;&nbsp;受理时间：{$list.baoxiao_isOverTime}</dd>
+		</dl>
+		{/if}
+		{if $translist}
+		<dl class="lineD">
+		  <dt>转批：</dt>
+		  <dd>{foreach from=$translist key=i item=rows name=foo}
+		  [{$rows.trans_time}]{if $rows.from_userid==24}蒋政{else}何艳阳{/if}转给{if $rows.to_userid==24}蒋政{else}何艳阳处理{/if}<br/>
+		  {/foreach}
+		</dl>
+		{/if}
+		
+  </div>
+</div>
+<!-{literal}->
+<script>
+	function uploadfile(bid){
+		demo_iframe('list.php?task=upload&b_id='+bid,'上传附件',950,560,'login_js');
+	}
+</script>
+<!-{/literal}->
+</body>
+</html>

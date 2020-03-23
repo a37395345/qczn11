@@ -1,0 +1,210 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+
+<head>
+  
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <title>管理后台</title>
+  <link href="../../../css/style.css" rel="stylesheet" type="text/css">
+  <link href="../../../js/jbox/jBox/Skins/GreyBlue/jbox.css" rel="stylesheet" />
+  <link rel="stylesheet" href="../../../../../crm/css/bootstrap.min14ed.css">
+  <link rel="stylesheet" href="../../../../../crm/css/style.min862f.css">
+  <link rel="stylesheet" href="../../../../../crm/css/font-awesome.min93e3.css">
+  <script type="text/javascript" src="../../../js/jquery.js"></script>
+  <script type="text/javascript" src="../../../js/common.js"></script>
+  <script type="text/javascript" src="../../../js/calendar.js"></script>
+  <script type="text/javascript" src="../../../js/fancybox/jquery.mousewheel-3.0.4.pack.js"></script>
+  <script type="text/javascript" src="../../../js/fancybox/jquery.fancybox-1.3.4.pack.js"></script>
+  <script type="text/javascript" src="../../../js/jbox/jBox/jquery.jBox-2.3.min.js"></script>
+  <script type="text/javascript" src="../../../js/jbox/jBox/i18n/jquery.jBox-zh-CN.js"></script>
+</head>
+
+<body class="gray-bg">
+  <div class="wrapper wrapper-content animated fadeInRight">
+    <div class="ibox float-e-margins">
+      <div class="ibox-title">
+        <h5>车辆违章总览</h5>
+      </div>
+      <div class="ibox float-e-margins" style="margin:0">
+        <!-- 表头栏 -->
+        <div class="ibox-title" style=" margin: 0; padding: 0;">
+          <h5 style="padding-top: 15px; padding-left: 10px;">查找
+          </h5>
+
+          <div class="ibox-tools" style="padding-top: 14px; padding-left: 10px;float: left;">
+            <a class="collapse-link">
+              <i class="fa fa-chevron-down" id="up"></i>
+            </a>
+          </div>
+          <div class="ibox-tools" style=" padding-right: 20px;float: left;">
+            <div style="margin-top:5px;">
+
+              <a href="javascript:breakitem();" class="btn btn-outline btn-default">
+                违章项目
+              </a>
+
+            </div>
+          </div>
+          <!-- 表头栏结束 -->
+          <!-- 收索栏 -->
+          <div class="ibox-content" id="content" style=" margin: 0px; padding: 0px; display: none">
+            <div class="row row-lg">
+              <div class="col-sm-12">
+                <!-- Example Events -->
+                <div class="example-wrap">
+                  <div class="example">
+                    <form action="list.php" method="get">
+                      <input type="hidden" name="task" value="breakfirst">
+                      <input type="hidden" name="op" value="{$op}">
+                      <table class="table table-bordered">
+                        <tr>
+                          <th width="15%" style="background-color:#F5F5F6">
+                            <span style="color:#000;">车牌号：</span>
+                          </th>
+                          <td width="35%">
+                            <input type="text" class="form-control input-sm" name="title" value="{$search_car}">
+                          </td>
+                          <th width="15%" style="background-color:#F5F5F6"></th>
+                          <td width="35%"></td>
+                        </tr>
+                      </table>
+                      <div class="page_btm">
+                        <input class="btn btn-outline btn-default" style="width: 10%" type="submit"
+                          value="确定">
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- 收索栏结束 -->
+
+
+          <!-- <div class="Toolbar_inbox">
+                    <a href="javascript:void(0);" class="btn_a" onclick="searchNews();"
+                      id="searchTopic_action"><span>查找</span></a>
+                    <a href="javascript:breakitem();" class="btn_a"><span>违章项目</span></a>
+                     	<a href="list.php?task=exportoutcar&paicheDriver2={$driveid}&startdate={$startdate}&enddate={$enddate}" class="btn_a"  id="exportUser_action"><span>导出</span></a> -->
+        </div> 
+        <div class="list">
+          <table class="table table-bordered table-hover">
+            <tr>
+              <th>序号</th>
+              <th>车牌</th>
+              <th width="10%">发动机号</th>
+              <th width="8%">车型</th>
+              <th width="9%">车辆年审日期</th>
+              <th>违章数</th>
+              <th>冻结数</th>
+
+              <th>企业冻结数</th>
+              <th>未冻结数</th>
+              <th>违章款</th>
+              <th>手续费</th>
+              <th>扣分</th>
+              <th>金额抵扣分</th>
+              <th>总金额</th>
+              <th>操作</th>
+            </tr>
+            {foreach from=$list item=row name=foo}
+            {$num1=$num1+$row.nCount}
+            {$num2=$num2+$row.nPerCount}
+            {$num3=$num3+$row.nComCount}
+            {$num4=$num4+$row.nNoCount}
+            {$total1=$total1+$row.breakrules_money1}
+            {$total2=$total2+$row.breakrules_money2}
+            {$total3=$total3+$row.breakrules_money3}
+            {$total4=$total4+$row.breakrules_money4}
+            {$total5=$total5+$row.breakrules_money}
+            <tr overstyle='on' id="badge_{$row.car_id}">
+              <td>{$smarty.foreach.foo.index+1}</td>
+              <td>苏D{$row.car_num}</td>
+              <td>{$row.car_motor}</td>
+              <td>{$row.car_model}</td>
+              <td>{$row.car_nextcarefulDate}</td>
+              <td>{number_format($row.nCount,0,".","")}</td>
+              <td>{number_format($row.nPerCount,0,".","")}</td>
+              <td>{number_format($row.nComCount,0,".","")}</td>
+              <td>{number_format($row.nNoCount,0,".","")}</td>
+              <td>{number_format($row.breakrules_money1,0,".","")}</td>
+              <td>{number_format($row.breakrules_money2,0,".","")}</td>
+              <td>{number_format($row.breakrules_money3,0,".","")}</td>
+              <td>{number_format($row.breakrules_money4,0,".","")}</td>
+              <td>{number_format($row.breakrules_money,0,".","")}</td>
+              <td>
+                <a href="breaklist.php?title={$row.car_num}&op={$op}" title="明细" style="color:#ff0101" >
+                  <i class="glyphicon glyphicon-th-list" aria-hidden="true"></i></a>{if $op!="s"}&nbsp;&nbsp;
+                <a href="list.php?task=breakcreate&c_id={$row.car_id}&search_car={$search_car}"title="添加" style="color:#ff0101" >
+                      <i class="glyphicon glyphicon-plus" aria-hidden="true"></i></a>{/if}
+              </td>
+            </tr>
+            {/foreach}
+            <tr>
+              <th colspan="5">合计</th>
+              <th>{$num1}</th>
+              <th>{$num2}</th>
+              <th>{$num3}</th>
+              <th>{$num4}</th>
+              <th>{$total1}</th>
+              <th>{$total2}</th>
+              <th>{$total3}</th>
+              <th>{$total4}</th>
+              <th>{$total5}</th>
+              <th colspan="2">&nbsp;</th>
+            </tr>
+          </table>
+        </div>
+      </div>
+    </div>
+    <!-- End Example Events -->
+  </div>
+</body>
+  <!-{literal}->
+    <script>
+
+      $("#up").click(function () {
+        var content = $("#content").css('display');
+        if (content == "none") {
+
+          $("#content").css('display', 'block');
+          $('#up').removeClass("fa-chevron-down");
+          $('#up').addClass("fa-chevron-up");
+        } else {
+          $("#content").css('display', 'none');
+          $('#up').removeClass("fa-chevron-up");
+          $('#up').addClass("fa-chevron-down");
+        }
+      });
+      //鼠标移动表格效果
+      $(document).ready(function () {
+        $("a.zoomIn").fancybox({
+          'overlayShow': false,
+          'transitionIn': 'elastic',
+          'transitionOut': 'elastic'
+        });
+
+        $("tr[overstyle='on']").hover(
+          function () {
+            $(this).addClass("bg_hover");
+          },
+          function () {
+            $(this).removeClass("bg_hover");
+          }
+        );
+      });
+      var isSearchHidden = 1;
+      function searchNews() {
+        if (isSearchHidden == 1) {
+          $("#searchTopic_div").slideDown("fast");
+          isSearchHidden = 0;
+        } else {
+          $("#searchTopic_div").slideUp("fast");
+          isSearchHidden = 1;
+        }
+      }
+      function breakitem() {
+        demo_iframe('breakitem.php', '违章项目设置', 960, 480, 'login_js');
+      }
+    </script>
+    <!-{/literal}-> </body> </html>

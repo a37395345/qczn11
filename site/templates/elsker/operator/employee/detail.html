@@ -1,0 +1,61 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>管理后台</title>
+<link href="../../../css/style.css" rel="stylesheet" type="text/css">
+<style>
+/*{literal}*/
+	.navi_name{font-size:14px;font-weight:bold;}
+	.indent{padding-left:40px;}
+/*{/literal}*/
+</style>
+</head>
+<body>
+<div class="so_main">
+  <div class="form2">
+  <dl class="lineD">
+    <dt>姓名：</dt>
+    <dd>{$employee.emp_name}</dd>
+  </dl>
+  <dl class="lineD">
+    <dt>性别：</dt>
+    <dd>{$employee.emp_sex}</dd>
+  </dl>
+  <dl class="lineD">
+    <dt>身份证号：</dt>
+    <dd>{$employee.emp_num}</dd>
+  </dl>
+  <dl class="lineD">
+    <dt>手机号：</dt>
+    <dd>{$employee.emp_phone}</dd>
+  </dl>
+  <dl class="lineD">
+    <dt>家庭电话：</dt>
+    <dd>{$employee.emp_homeTel}</dd>
+  </dl>
+  <dl class="lineD">
+    <dt>家庭地址：</dt>
+    <dd>{$employee.emp_homeAdd}</dd>
+  </dl>
+  <dl class="lineD">
+    <dt>介绍：</dt>
+    <dd>{$employee.emp_introduce}</dd>
+  </dl>
+  <dl class="lineD">
+    <dt>入职日期：</dt>
+    <dd>{$employee.emp_EntryDate}</dd>
+  </dl>
+  <dl class="lineD">
+      <dt>照片：</dt>
+      <dd>
+        {foreach from=$employee.emp_imglist key=i item=rows}
+         <a href="../../../thumb/{$rows.images}" title="点击查看原图" target="_blank"><img src="../../../thumb/{$rows.images}" width="100" height="100" /></a>
+        {/foreach}
+      </dd>
+    </dl>
+</div>
+</div>
+</body>
+</html>

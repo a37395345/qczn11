@@ -1,0 +1,39 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>管理后台</title>
+<link href="../../../css/style.css" rel="stylesheet" type="text/css">
+<link href="../../../css/flbao.css" rel="stylesheet" type="text/css">
+<script type="text/javascript" src="../../../js/jquery.js"></script>
+<script type="text/javascript" src="../../../js/common.js"></script>
+
+</head>
+<body>
+<div class="so_main">
+  <div class="page_tit">加油卡一览</div>
+  <div class="list">
+            <table width="100%" border="1" cellspacing="0" cellpadding="0">
+            <tbody>
+            <tr style="height:70px;">
+			    {foreach from=$first item=row name=foo}
+			    <td class="ccc_bg" width="20%" style="font-size: 16px;">{if $row.card_state==-2}暂停使用{elseif $row.card_state==-1}挂失{else}正常{/if}</td>
+			    {/foreach}
+			    <td class="ccc_bg" width="20%" style="font-size: 16px;">合计</td>
+			</tr>
+		  	<tr style="height:80px;">
+			    {foreach from=$first item=row1 name=foo}
+			    {$total=$total+$row1.nCount}
+			    <td style="text-align:center;background-color:#B1C9FF;font-size: 16px;"><a href="list.php?search_status={$row1.card_state}">{$row1.nCount}</a></td>
+			    {/foreach}
+			    <td style="text-align:center;background-color:#B1C9FF;font-size: 16px;"><a href="list.php?search_status=9">{$total}</a></td>
+			  </tr>
+		    </tbody>
+            </table>
+  </div>
+
+</div>
+
+</body>
+</html>

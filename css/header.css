@@ -1,0 +1,17 @@
+@CHARSET "UTF-8";
+body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,code,form,fieldset,legend,input,button,textarea,p,blockquote,th,td
+{margin:0;padding:0;}
+.box-16css{ background:url(1.png) no-repeat; width:450px; height:317px; position:fixed ; _position:absolute; z-index:200; right:0px; bottom:0px;
+_top:expression(eval(document.documentElement.scrollTop+document.documentElement.clientHeight-this.offsetHeight-(parseInt(this.currentStyle.marginTop,10)||0)-(parseInt(this.currentStyle.marginBottom,10)||0)));}
+.pop_title{ width:100%; float:left; height:33px; line-height:33px;}
+.pop_title_left{float:left; padding-left:10px;}
+.pop_title_left strong{ font-size:14px;}
+.pop_title_right{float:right; padding-top:10px; padding-right:12px;}
+.pop_title_right img{ margin-left:10px; cursor:pointer;vertical-align:top;}
+.pop_Content{ width:445px; height:163px; }
+.pop_Content ul li{padding-left:15px;line-height:25px;color:#FA4905;font-size:15px;list-style: none;}
+.pop_Content ul li a{color:#FA4905;text-decoration: none;}
+.pop_Content ul li a:hover{color:#000000;}
+.pop_Content table th { background-color:#f2f4f6; border-bottom:1px solid #c1c8d2; height:21px; text-align:center; padding-left:5px; color:#7d7d7d; font-weight: normal; }
+.pop_Content table th.line_l { background: #f2f4f6 url(th_bg.gif) repeat-y 0 0 }
+.pop_Content table td { padding:6px 0 6px 5px; border-bottom:1px solid #e3e6eb; text-align:center;}

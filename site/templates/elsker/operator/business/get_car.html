@@ -1,0 +1,57 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Insert title here</title>
+<link href="../../../css/style.css" rel="stylesheet" type="text/css">
+<style type="text/css">
+	html{
+		background-color: #908c8c;
+	}
+</style>
+</head>
+<body>
+
+<div style="">
+  	<ul class="newwindowcar" >
+  	{foreach from=$car_list key=i item=row}
+  	<li><a style="color: #ffffff" href="javascript:changeCar('{$row.car_id}','{$row.car_num}','{$row.car_color}','{$row.car_brand}','{$row.car_type}','{$row.car_motor}','{$row.car_frame}','{$row.plan_chaoshi}','{$row.plan_deposit}','{$row.xianzhikm}','{$row.plan_rentamount}','{$row.plan_chaokm_a}','{$row.plan_chaokms}','{$row.plan_chaokmy}','{$row.car_id}');">{$row.car_num}-{$row.car_color}-{$row.car_brand}-{$row.car_type}</a></li>
+  	{/foreach}
+  	</ul>
+
+</div>
+<script language="javascript">
+
+
+
+function changeCar(id,car_num,car_color,car_brand,car_type,car_motor,car_frame,plan_chaoshi,plan_deposit,xianzhikm,plan_rentamount,plan_chaokm_a,plan_chaokms,plan_chaokmy,car_id){
+	
+		window.parent.window.document.getElementById("car_num").value="苏D"+car_num;
+		window.parent.window.document.getElementById("car_color").value=car_color;
+		window.parent.window.document.getElementById("car_brand").value=car_brand;
+		window.parent.window.document.getElementById("car_type").value=car_type;
+		window.parent.window.document.getElementById("car_motor").value=car_motor;
+		window.parent.window.document.getElementById("car_frame").value=car_frame;
+		window.parent.window.document.getElementById("plan_rentamount").value=plan_rentamount;
+
+		window.parent.window.document.getElementById("paiche_overTime_a").value=plan_chaoshi+"元/小时";
+		window.parent.window.document.getElementById("paiche_overTime").value=plan_chaoshi;
+		window.parent.window.document.getElementById("paiche_deposit").value=plan_deposit;
+		window.parent.window.document.getElementById("xianzhikm").value=xianzhikm;
+
+		window.parent.window.document.getElementById("paiche_unlimitKm").value=plan_chaokm_a;
+		window.parent.window.document.getElementById("paiche_limitKm").value=plan_chaokms;
+		window.parent.window.document.getElementById("paiche_overKm").value=plan_chaokmy;
+		window.parent.window.document.getElementById("paicheCar").value=car_id;
+		
+		window.parent.window.document.getElementById("paicheCars").value="苏D"+car_num+"-"+car_color+"-"+car_brand+"-"+car_type;
+		
+	
+	window.parent.window.jBox.close();
+
+}
+
+</script>
+</body>
+</html>

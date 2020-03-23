@@ -1,0 +1,74 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>管理后台</title>
+<link href="../../../../css/style.css" rel="stylesheet" type="text/css">
+<link href="../../../../css/flbao.css" rel="stylesheet" type="text/css">
+<script type="text/javascript" src="../../../../js/jquery.js"></script>
+<script type="text/javascript" src="../../../../js/common.js"></script>
+<script type="text/javascript" src="../../../../js/jsapi.js"></script>
+<script type="text/javascript" src="../../../../js/corechart.js"></script>		
+<script type="text/javascript" src="../../../../js/jquery.gvChart-1.0.1.min.js"></script>
+<script type="text/javascript" src="../../../../js/jquery.ba-resize.min.js"></script>
+</head>
+<body>
+<div class="so_main">
+  <div class="page_tit">用车业务咨询洽谈一览</div>
+  <div class="list">
+            <table width="100%" border="1" cellspacing="0" cellpadding="0">
+            <tbody>
+            <tr style="height:70px;">
+			    {foreach from=$first item=row name=foo}
+			    <td class="ccc_bg" width="20%" style="font-size: 16px;">{$row.consult_result_name}</td>
+			    {/foreach}
+			</tr>
+		  	<tr style="height:80px;">
+			    {foreach from=$first item=row1 name=foo}
+			    {$total=$total+$row1.nCount}
+			    <td style="text-align:center;background-color:#B1C9FF;font-size: 16px;"><a href="list.php?search_status={$row1.consult_result}">{$row1.nCount}</a></td>
+			    {/foreach}
+			  </tr>
+		    </tbody>
+            </table>
+            <table id='myTable5'>
+			<caption>各状态分布</caption>
+			<thead>
+				<tr>
+					<th></th>
+					{foreach from=$first item=row name=foo}
+					<th>{$row.consult_result_name}</th>
+					{/foreach}
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<th>{$total}</th>
+					{foreach from=$first item=row1 name=foo}
+					<td>{$row1.nCount}</td>
+					{/foreach}
+				</tr>
+			</tbody>
+		</table>
+  </div>
+
+</div>
+<!-{literal}->
+<script type="text/javascript">
+gvChartInit();
+$(document).ready(function(){
+	$('#myTable5').gvChart({
+		chartType: 'PieChart',
+		gvSettings: {
+			vAxis: {title: 'No of players'},
+			hAxis: {title: 'Month'},
+			width: 600,
+			height: 350
+		}
+	});
+});
+</script>
+<!-{/literal}->
+</body>
+</html>

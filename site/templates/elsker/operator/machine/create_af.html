@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html>
+
+
+<!-- Mirrored from www.zi-han.net/theme/hplus/table_bootstrap.html by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 20 Jan 2016 14:20:03 GMT -->
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>编辑车辆</title>
+    <meta name="keywords" content="H+后台主题,后台bootstrap框架,会员中心主题,后台HTML,响应式后台">
+    <meta name="description" content="H+是一个完全响应式，基于Bootstrap3最新版本开发的扁平化主题，她采用了主流的左右两栏式布局，使用了Html5+CSS3等现代技术">
+
+    <link rel="shortcut icon" href="favicon.ico"> <link href="../../../crm/css/bootstrap.min14ed.css?v=3.3.6" rel="stylesheet">
+    <link href="../../../crm/css/font-awesome.min93e3.css?v=4.4.0" rel="stylesheet">
+    <link href="../../../crm/css/plugins/bootstrap-table/bootstrap-table.min.css" rel="stylesheet">
+    <link href="../../../crm/css/animate.min.css" rel="stylesheet">
+    <link href="../../../crm/css/style.min862f.css?v=4.1.0" rel="stylesheet">
+    <script type="text/javascript" src="../../../js/jquery.js"></script>
+    <script type="text/javascript" src="../../../js/laydate/laydate.js"></script>
+
+    <object classid="clsid:F1317711-6BDE-4658-ABAA-39E31D3704D3" codebase="SDRdCard.cab#version=1,3,5,0" width="330" height="0" align="center" hspace="0" vspace="0" id="idcard" name="rdcard"></object>
+    <style type="text/css">
+    
+    .span1{
+        margin-bottom: 5px;    color: inherit;
+    background-color: transparent;
+    -webkit-transition: all .5s;
+    transition: all .5s;    border-color: #c2c2c2;border-radius: 3px;    display: inline-block;
+    padding: 6px 12px;
+    }
+
+</style>
+
+</head>
+
+<body class="gray-bg">
+    <div class="wrapper wrapper-content animated fadeInRight">
+        
+        <!-- Panel Other -->
+        <div class="ibox float-e-margins">
+            <div class="ibox-title">
+                <h5>编辑车辆</h5>
+            </div>
+            <form method="post" action="insert.php" name="form1" enctype="multipart/form-data">
+            <div class="ibox-content">
+                <div class="row row-lg">
+                    <div class="col-sm-12">
+                        <!-- Example Events -->
+                        <div class="example-wrap">
+                            <div class="example">
+
+                   
+
+
+
+                       
+                         <table class="table table-bordered">
+                        <tr>
+                            <th style="background-color:#F5F5F6" width="15%">
+                                <span style="color:#000">所属职位：</span>
+                            </th>
+                            <td width="35%">
+                               <select class="form-control input-sm" name="emp_zhiweiid" id="emp_shopid">
+                                                    <option value="0">请选择</option>
+                                                {foreach from=$list_zhiwei key=i item=rows}
+                                                    <option value="{$rows.id}">{$rows.zhiwei_name}</option>
+                                                {/foreach}
+                                </select>
+                            </td>
+                            <th style="background-color:#F5F5F6" width="15%">
+                                <span style="color:#000">所属门店：</span>
+                            </th>
+                             <td width="35%">
+                                 <select class="form-control input-sm" name="emp_shopid" id="emp_shopid">
+                                                    <option value="0">请选择</option>
+                                                {foreach from=$list_shop key=i item=rows}
+                                                    <option value="{$rows.shop_id}">{$rows.shop_name}</option>
+                                                {/foreach}
+                                </select>
+                            </td>
+                        </tr>
+
+
+                        <tr>
+                                    <th style="background-color:#F5F5F6" width="15%">
+                                        <span style="color:#000">车牌号：（苏D）</span>
+                                    </th>
+                                     <td width="35%">
+                                        <input type="text" id="car_num" name="car_num"  class="form-control input-sm" placeholder="">
+                                    </td>
+                                     <th style="background-color:#F5F5F6" width="15%">
+                                        <span style="color:#000">车辆颜色：</span>
+                                    </th>
+                                     <td width="35%">
+                                        <input type="text" id="car_color" name="car_color"  class="form-control input-sm" placeholder="" >
+                                    </td>
+                                   
+                                
+                            </tr>
+                            <tr>
+                                    <th style="background-color:#F5F5F6" width="15%">
+                                        <span style="color:#000">车辆品牌：</span>
+                                    </th>
+                                     <td width="35%">
+                                        <input type="text" id="car_brand" name="car_brand"  class="form-control input-sm" placeholder="" >
+                                    </td>
+                                     <th style="background-color:#F5F5F6" width="15%">
+                                        <span style="color:#000">车辆颜色：</span>
+                                    </th>
+                                     <td width="35%">
+                                        <input type="text" id="car_color" name="car_color"  class="form-control input-sm" placeholder="" minlength="11" maxlength="11">
+                                    </td>
+                                   
+                                
+                            </tr>
+                            <tr>
+                                    <th style="background-color:#F5F5F6" width="15%">
+                                        <span style="color:#000">车辆种类：</span>
+                                    </th>
+                                     <td width="35%">
+                                        <input type="text" id="car_type" name="car_type"  class="form-control input-sm" placeholder="" >
+                                    </td>
+                                     <th style="background-color:#F5F5F6" width="15%">
+                                        <span style="color:#000">车型：</span>
+                                    </th>
+                                     <td width="35%">
+
+                                         <select class="form-control input-sm" name="emp_zhiweiid" id="emp_shopid">
+                                                <option value="0">小轿车</option>
+                                                <option value="1">SUV</option>
+                                                <option value="2">面包车</option>
+                                                <option value="3">跑车</option>
+                                                <option value="4">跑车</option>
+                                        </select>
+                                    </td>
+                                   
+                                
+                            </tr>
+
+                            <tr>
+                                    <th style="background-color:#F5F5F6" width="15%">
+                                        <span style="color:#000">发动机号：</span>
+                                    </th>
+                                     <td width="35%">
+                                        <input type="text" id="car_motor" name="car_motor"  class="form-control input-sm" placeholder="" >
+                                    </td>
+                                
+                                
+                                     <th style="background-color:#F5F5F6" width="15%">
+                                        <span style="color:#000">车辆识别号：</span>
+                                    </th>
+                                     <td width="35%">
+                                        <input type="text" id="car_frame" name="car_frame"  class="form-control input-sm" placeholder="" >
+                                    </td>
+                                
+                            </tr>
+
+                        <tr>
+                            <th style="background-color:#F5F5F6" width="15%">
+                                <span style="color:#000">座位数：</span>
+                            </th>
+                            <td width="35%">
+                               <input type="text" id="car_seat" name="car_seat"  class="form-control input-sm" placeholder="">
+                            </td>
+                            
+                             <th style="background-color:#F5F5F6" width="15%">
+                                <span style="color:#000">安全奖励：</span>
+                            </th>
+                            <td width="35%">
+                                        <label style="margin:0px;margin-right: 10px">
+                                            <input name="zemp_anquan" type="radio"  value="1"/ 
+                                             style="display: block;float: left;margin: 3px;padding: 0"> 
+                                            <span style="display: block;float: left;">有</span> 
+                                        </label>
+
+                                        <label style="margin:0px;margin-right: 10px">
+                                            <input name="zemp_anquan" type="radio" checked value="0"  
+                                             style="display: block;float: left;margin: 3px;padding: 0">
+                                            <span style="display: block;float: left;">无</span>
+                                        </label>
+                                    </td>
+                            </tr>
+
+
+                            <tr>
+                            <th style="background-color:#F5F5F6" width="15%">
+                                <span style="color:#000">驾照类型：</span>
+                            </th>
+                            <td width="35%">
+                               <input type="text" id="emp_driverlicense" name="emp_driverlicense"  class="form-control input-sm" placeholder="">
+                            </td>
+                            <th style="background-color:#F5F5F6" width="15%">
+                                        <span style="color:#000">驾照有效日期：</span>
+                                    </th>
+                                    <td width="35%">
+                                        <input name="emp_jiazhaotime"  id="emp_jiazhaotime" placeholder="请输入日期" value="" class="laydate-icon" onclick="laydate({ldelim}istime: true, format: 'YYYY-MM-DD'{rdelim})" unselectable="on" readonly>
+                                    </td>
+                            
+                            </tr>
+                            
+                            
+                            <tr>
+                                     <th style="background-color:#F5F5F6" width="15%">
+                                <span style="color:#000">备注：</span>
+                            </th>
+                                <td width="35%">
+                                        <input type="text" id="emp_introduce" name="emp_introduce"  class="form-control input-sm" placeholder="">
+                                </td>
+                                    <th style="background-color:#F5F5F6" width="15%">
+                                        <span style="color:#000">职位A（后期会取消此选项）</span>
+                                    </th>
+                                    <td width="35%">
+                                        <select class="form-control input-sm" name="emp_post" id="emp_post">
+                                            <option value="0">请选择</option>
+                                            {foreach from=$list_level key=i item=rows}
+                                              <option value="{$rows.id}">{$rows.title}</option>
+                                            {/foreach}
+                                        </select>
+                                    </td>
+                                
+                            </tr>
+                            <tr>
+                             
+                        </tr>
+                        <tr>
+                                            <th style="background-color:#F5F5F6" width="15%">
+                                                <span style="color:#000">工作照片</span>
+                                            </th>
+                                            <td width="35%">
+                                                <input type="file" class="form-control input-sm" placeholder="图片" name="tp_c" id="tp_c" accept=".png, .jpeg, .jpg">
+                                            </td>
+
+                                            <th style="background-color:#F5F5F6" width="15%">
+                                                <img src="" id="images_c" width="100%" >
+                                            </th>
+                                            <th style="background-color:#F5F5F6" width="35%">
+                                                <input type="hidden" name="emp_image" id="emp_image">
+                                            </th>
+                                        </tr>
+                        
+                    </table>
+                    
+                    <input type="submit" id="submit" class="btn btn-outline btn-default" value="提交" style="width: 10%;margin-left: 45%;display: block;">
+                    
+                
+                                
+                            </div>
+                        </div>
+                        <!-- End Example Events -->
+                    </div>
+                </div>
+            </div>
+            </form>
+        </div>
+        <!-- End Panel Other -->
+    </div>
+    
+    <script src="../../../crm/js/jquery.min.js?v=2.1.4"></script>
+    <script src="../../../crm/js/bootstrap.min.js?v=3.3.6"></script>
+    
+    <script src="../../../crm/js/plugins/bootstrap-table/bootstrap-table.min.js"></script>
+    <script src="../../../crm/js/plugins/bootstrap-table/bootstrap-table-mobile.min.js"></script>
+    <script src="../../../crm/js/plugins/bootstrap-table/locale/bootstrap-table-zh-CN.min.js"></script>
+    <script src="../../../crm/js/demo/bootstrap-table-demo.min.js"></script>
+    <script type="text/javascript" src="http://tajs.qq.com/stats?sId=9051096" charset="UTF-8"></script>
+    <script type="text/javascript" src="../../../js/common1.js?a={time()}"></script>
+</body>  
+<script type="text/javascript">
+  
+
+    
+   
+
+
+</script>
+
+    
+
+<!-- Mirrored from www.zi-han.net/theme/hplus/table_bootstrap.html by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 20 Jan 2016 14:20:06 GMT -->
+</html>

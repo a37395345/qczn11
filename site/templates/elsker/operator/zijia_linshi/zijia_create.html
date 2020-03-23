@@ -1,0 +1,992 @@
+<!DOCTYPE html>
+<html>
+<!-- Mirrored from www.zi-han.net/theme/hplus/table_bootstrap.html by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 20 Jan 2016 14:20:03 GMT -->
+<head>
+<meta charset="utf-8">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=9;IE=8;IE=7;IE=EDGE">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>管理后台</title>
+<link rel="shortcut icon" href="favicon.ico">
+<link href="../../../css/box.css" rel="stylesheet" type="text/css" />
+<link href="../../../js/jbox/jBox/Skins/GreyBlue/jbox.css?a=2" rel="stylesheet"  />
+<link href="../../../css/jquery.editable-select.min.css" rel="stylesheet" type="text/css" />
+<link href="../../../crm/css/bootstrap.min14ed.css?v=3.3.6" rel="stylesheet">
+<link href="../../../crm/css/font-awesome.min93e3.css?v=4.4.0" rel="stylesheet">
+<link href="../../../crm/css/plugins/bootstrap-table/bootstrap-table.min.css" rel="stylesheet">
+<link href="../../../crm/css/animate.min.css" rel="stylesheet">
+<link href="../../../crm/css/style.min862f.css?v=2" rel="stylesheet">
+<script type="text/javascript" src="../../../js/jquery.js"></script>
+<script type="text/javascript" src="../../../js/laydate/laydate.js"></script>
+<script type="text/javascript" src="../../../js/common.js"></script>
+<script type="text/javascript" src="../../../js/calendar.js"></script>
+<script type="text/javascript" src="../../../js/check_form.js"></script>
+<script type="text/javascript" src="../../../js/jbox/jBox/jquery.jBox-2.3.min.js?a=5"></script>
+
+<script type="text/javascript" src="../../../js/jbox/jBox/i18n/jquery.jBox-zh-CN1.js?a=101"></script>
+<script type="text/javascript" src="../../../js/jquery.editable-select.min.js"></script>
+<!-{literal}->
+<script type="text/javascript">
+	window.onload=function(){
+		$("#div_a").css("display","none");
+		$("#div_b").css("display","block");
+		
+	}
+	
+	var current=0;
+		var ref = "";
+		ref = setInterval(function(){
+		    $("#img1").css("transform","rotate("+current+"deg)");
+			current=current+10;
+	},100);
+
+
+
+</script>
+<!-{/literal}-><object classid="clsid:F1317711-6BDE-4658-ABAA-39E31D3704D3" codebase="SDRdCard.cab#version=1,3,5,0" width="330" height="0" align="center" hspace="0" vspace="0" id="idcard" name="rdcard"></object>
+<style type="text/css">
+	.span1{
+		margin-bottom: 5px;    color: inherit;
+    background-color: transparent;
+    -webkit-transition: all .5s;
+    transition: all .5s;    border-color: #c2c2c2;border-radius: 3px;    display: inline-block;
+    padding: 6px 12px;
+	}
+
+</style>
+
+</head>
+<body class="gray-bg">
+	<div style="width: 100%;padding-top: 1px" id="div_a">
+		<img src="../../../images/jz.png" style="width: 10%;margin-left: 45%;margin-top: 100px;" id="img1">
+	</div>
+	
+<div class="wrapper wrapper-content animated fadeInRight" style="display: none" id="div_b">
+	<!-- Panel Other -->
+	<div class="ibox float-e-margins">
+		<div class="ibox-title">
+			<h5>{if $paidan_type_a=="add"}添加{else if $paidan_type_a=="diaoche"}调度{else}修改{/if}临时自驾{if $paidan_type_b=="s"}实时{else if $paidan_type_b=="y"}预约{/if}单</h5>
+		</div>
+		<form method="post" action="zijia_insert.php" name="form1" id="form1">
+			<!--派车id,用于判断是修改还是调车-->
+			<input type="hidden" value="{$p_id}" id="p_id" name="p_id">
+			<input type="hidden"  id="car_gongchang" value="{$paiche.car_gongchang}">
+			<input type="hidden" value="{$paiche['paiche_kehu']}" id="paiche_kehu_aaa" >
+
+			<input type="hidden" value="{$paidan_type_a}" id="paidan_type_a" name="paidan_type_a">
+			<input type="hidden" value="{$paidan_type_b}" id="paidan_type_b" name="paidan_type_b">
+			<input type="hidden"  id="paiche_stype" name="paiche_stype" value="0">
+			<div class="ibox-content"  id="tian">
+				<div class="row row-lg">
+					<div class="col-sm-12">
+						<!-- Example Events -->
+						<div class="example-wrap">
+							<div class="example">
+								<div class="btn-group hidden-xs pull-right" id="exampleTableEventsToolbar" role="group">
+								</div>
+								{if $paidan_type_a!='diaoche'&&$paidan_type_a!='update'}
+								<span  class="span1">
+								<img src="../../../images/a2.png" style="width: 20px">
+										客户来源
+								</span>
+								<table class="table table-bordered">
+								<tr>
+									<th style="background-color:#F5F5F6" width="15%">
+										<span style="color:#000">客户来源</span>
+									</th>
+									<td width="35%" style="text-align: center;">
+										<select class="form-control input-sm" id="paiche_kehu" name="paiche_kehu" >
+
+											<option value="0">请选择
+											</option>
+											<option  value="1" {if $paiche['paiche_kehu']==1}selected{/if}>临时散客
+											</option>
+											<option  value="2" {if $paiche['paiche_kehu']==2}selected{/if}>平台客户
+											<option  value="3" {if $paiche['paiche_kehu']==3}selected{/if}>凹凸代步车
+											</option>
+											<option  value="5" {if $paiche['paiche_kehu']==5}selected{/if}>境外客户
+											</option>
+											{if $paidan_type_b=="s"}
+											<option  value="4" {if $paiche['paiche_kehu']==4}selected{/if}>冻结违章
+											</option>
+											{/if}
+										</select>
+									</td>
+
+									<div style="" id="ke_leixing">
+										<th style="background-color:#F5F5F6;" width="15%">
+											<span style="color:#000">客户类型</span>
+										</th>
+										<td width="35%">
+											<input type="text" class="form-control input-sm" value=""   readonly="readonly" unselectable="on" id="pingtai_cc">
+
+											<select class="form-control input-sm" id="pintai" name="pintai">
+												<option {if $paiche.paiche_pintaiid==0}selected{/if} value="0">
+								  			请选择
+												</option>
+									{foreach from=$pintai_list key=i item=rows}
+												<option {if $paiche.paiche_pintaiid==$rows.id}selected{/if} value="{$rows.id}">
+								  			{$rows.name}
+												</option>
+								 	{/foreach}
+											</select>
+										</td>
+									</div>
+								</tr>
+
+
+									<tr id="paiche_bb">
+										<th style="background-color:#F5F5F6;" width="15%">
+											<span style="color:#000">平台单号</span>
+										</th>
+										
+										<td width="35%">
+											<input type="text" class="form-control input-sm" placeholder="平台订单的合同号（必填）" name="paiche_pintainum" id="paiche_pintainum" value="{$paiche.paiche_pintainum}" >
+										</td>
+										<th style="background-color:#F5F5F6;" width="15%"></th>
+										<td width="35%"></td>
+										
+									</tr>
+								
+								</table>
+								{/if}
+
+
+								<input type="hidden" class="form-control input-sm" value="{$paiche.paiche_pintaiid}"  id="pintai_a" >
+
+								<span  class="span1" style="float: left;">
+								<img src="../../../images/a1.png" style="width: 20px">
+										门店信息
+								</span>
+								<table class="table table-bordered">
+								{if $paidan_type_a!='diaoche'}
+								<tr id="yewu_guishu">
+									<th style="background-color:#F5F5F6" width="15%">
+										<span style="color:#000">业务归属</span>
+									</th>
+									<td width="35%">
+										<select class="form-control input-sm" id="paicheCounterShop" name="paicheCounterShop">
+											<option  value="0">请选择</option>
+								{foreach from=$shop_list key=i item=rows}
+											<option {if $paiche['paicheCounterShop']==$rows.shop_id}selected{/if} value="{$rows.shop_id}">
+								  {$rows.shop_name}
+											</option>
+								 {/foreach}
+										</select>
+									</td>
+									<th style="background-color:#F5F5F6" width="15%">
+										<span style="color:#000">业务员</span>
+									</th>
+									<td width="35%">
+										<select class="form-control input-sm" id="paicheCounterMan"  name="paicheCounterMan" value="">
+											{if $paiche.paicheCounterMan}
+											<option selected value="{$paiche.paicheCounterMan}">
+								  				{$paiche.emp_name}
+											</option>
+											{/if}
+										</select>
+									</td>
+								</tr>
+								{/if}
+								<tr >
+									<th style="background-color:#F5F5F6" width="15%">
+										<span style="color:#000">服务门店</span>
+									</th>
+									<td width="35%">
+										{if $paidan_type_b=='y'&&$paidan_type_a!="diaoche"}
+											<select class="form-control input-sm" id="shop_ida" name="shop_ida">
+														<option  value="0">请选择</option>
+											{foreach from=$shop_list key=i item=rows}
+														<option {if $paiche['paiche_shopid']==$rows.shop_id}selected{/if} value="{$rows.shop_id}">
+											  {$rows.shop_name}
+														</option>
+											 {/foreach}
+											</select>
+										{else}
+											<input type="text" name="shop_name" id="shop_name" class="form-control input-sm" value="{$shop.shop_name}"  readonly="readonly" unselectable="on">
+
+											
+										{/if}
+										<input type="hidden" name="shop_id" id="shop_id" class="form-control input-sm" value="{if $paidan_type_b=='y'&&$paidan_type_a!="diaoche"}{$paiche.paiche_shopid}{else}{$shop.shop_id}{/if}" >
+
+										
+									</td>
+									<th style="background-color:#F5F5F6">
+										{if $paidan_type_b=="y"&&$paidan_type_a!="diaoche"}
+											
+										{else}
+										<span style="color:#000">接待业务员</span>
+										{/if}
+									</th>
+									<td width="35%">
+										{if $paidan_type_b=="y"&&$paidan_type_a!="diaoche"}
+											
+										{else}
+											<input type="text" class="form-control input-sm" value="{$emp.emp_name}"   readonly="readonly" unselectable="on">
+											<input type="hidden" class="form-control input-sm" value="{$emp.emp_id}"  id="paicheServerMan" name="paicheServerMan">
+										{/if}
+									</td>
+								</tr>
+								</table>
+
+								
+
+								<span  class="span1" style="float: left;">
+								<img src="../../../images/a2.png" style="width: 20px">
+										承租人信息
+								</span>
+					<div id="yanzheng">
+						<button type="button" class="btn btn-outline btn-default" id="shuaka1" onclick="beginread_onclick()" style="float: left;">
+								<img src="../../../images/a10.png" style="width: 20px">
+										刷身份证验证
+						</button>
+
+								
+							
+						
+						<button type="button" class="btn btn-outline btn-default" id="" onclick="lkehu_xianshi()" style="float: left;margin-left: 10px;display: none;" >
+								<img src="../../../images/a10.png" style="width: 20px">
+										老客户短信验证
+						</button>
+
+
+						<button type="button" class="btn btn-outline btn-default" id="" onclick="xkehu_xianshi()" style="float: left;margin-left: 10px;">
+								<img src="../../../images/a10.png" style="width: 20px">
+										新客户人脸识别验证
+						</button>
+						
+					</div>
+
+						<div style="clear: both;">
+
+
+										<div style="display: none" id="lkehu">
+										<table class="table table-bordered">
+
+										<tr>
+											<th style="background-color:#F5F5F6" width="15%">
+												<span style="color:#000" >承租人姓名</span>
+											</th>
+											<td width="35%" style="text-align: center;">
+												<input type="text" class="form-control input-sm" placeholder="承租人姓名" name="name_a" id="name_a">
+											</td>
+											<th style="background-color:#F5F5F6" width="15%">
+												<span style="color:#000" >身份证号码</span>
+											</th>
+											<td width="15%">
+												<input type="text" class="form-control input-sm" placeholder="身份证号码" name="shenfen_a" id="shenfen_a" minlength="18" maxlength="18">
+											</td>
+											<th style="background-color:#F5F5F6" width="20%">
+												<button type="button" class="btn btn-outline btn-default" id="yz_aaa" onclick="shenfen()" style="float: left;margin-left: 10px;">
+												<img src="../../../images/a10.png" style="width: 20px">
+														验证
+												</button>
+											</th>
+										</tr>
+										<tr>
+											<th style="background-color:#F5F5F6" width="15%">
+												<span style="color:#000">验证码：</span>
+											</th>
+											<td width="35%" style="text-align: center;">
+												<input type="text" class="form-control input-sm" placeholder="验证码" name="yzm" id="yzm">
+											</td>
+											<th style="background-color:#F5F5F6" width="15%">
+												
+											</th>
+											<td width="20%">
+												
+											</td>
+											<th style="background-color:#F5F5F6" width="15%">
+												<button type="button" class="btn btn-outline btn-default" id="" onclick="yzm_yanzheng()" style="float: left;margin-left: 10px;">
+												<img src="../../../images/a10.png" style="width: 20px">
+														确定
+												</button>
+											</th>
+										</tr>
+										
+										</table>
+										</div>
+
+
+
+
+
+
+
+
+										<div style="display: none" id="xin_kehu">
+										<table class="table table-bordered">
+
+										<tr>
+											<th style="background-color:#F5F5F6" width="15%">
+												<span style="color:#000">承租人姓名</span>
+											</th>
+											<td width="35%" style="text-align: center;">
+												<input type="text" class="form-control input-sm" placeholder="承租人身份证姓名" name="realname" id="realname">
+											</td>
+
+											<th style="background-color:#F5F5F6" width="15%">
+												<span style="color:#000">身份证号码</span>
+											</th>
+											<td width="35%">
+												<input type="text" class="form-control input-sm" placeholder="承租人身份证号码" name="idcard_a" id="idcard_a" minlength="18" maxlength="18">
+											</td>
+										</tr>
+										<tr>
+											<th style="background-color:#F5F5F6" width="15%">
+												<span style="color:#000">图片</span>
+											</th>
+											<td width="35%">
+												<input type="file" class="form-control input-sm" placeholder="图片" name="tp_b" id="tp_b" accept=".png, .jpeg, .jpg">
+											</td>
+
+											<th style="background-color:#F5F5F6" width="15%">
+												<img src="" id="images_a" width="100%" >
+											</th>
+
+
+
+											<th style="background-color:#F5F5F6" width="35%">
+												<button type="button" class="btn btn-outline btn-default" id="yz_bbb" onclick="yzm_yanzheng_a()" style="float: left;margin-left: 10px;">
+													<img src="../../../images/a10.png" style="width: 20px">
+															确定
+												</button>
+												<input type="hidden" name="paiche_tupian" id="paiche_tupian">
+											</th>
+										</tr>
+										
+										</table>
+										</div>
+
+						
+
+
+							
+							
+							</div>
+								<table class="table table-bordered">
+								<tr id="czr" style="display: {if $paiche.paiche_linkerPicture==''||$paidan_type_a!='update'}none{/if}">
+									<th style="background-color:#F5F5F6" width="15%">
+										<span style="color:#000">承租人照片</span>
+									</th>
+									<td width="35%" style="text-align: center;">
+										<img id="img_linker_picture" src="../../../thumb/upload/idpicture/{$paiche.paiche_linkerPicture}" style="width: 25%">
+										<input type="hidden" name="paiche_linkerPicture" id="paiche_linkerPicture" value="{$paiche.paiche_linkerPicture}">
+									</td>
+
+									<th style="background-color:#F5F5F6" width="15%">
+										<span style="color:#000">类型</span>
+									</th>
+									<td width="35%">
+										<div class="col-sm-12">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h5 id="biaoti">{$paiche.kuhu_type}{$paiche.kuhu_mew}</h5>
+                        <div class="ibox-tools">
+                            <a class="collapse-link">
+                                <i class="fa fa-chevron-down" id="up"></i>
+                                
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <div class="ibox-content" style="display: none;" id="content">
+
+                        <table class="table" id="table_a">
+                        	{if count($num_list)>0}
+                            <tbody>
+                            	{foreach from=$num_list key=i item=rows}
+                                <tr>
+                                    <td><a href="'detail.php?uid={$rows.paiche_id}">{$rows.paiche_contractNum}</a>
+									</td>
+                                   
+                                </tr>
+                                {/foreach}
+                            </tbody>
+                             {/if}
+                        </table>
+
+                    </div>
+                   
+                </div>
+            </div>
+
+									</td>
+								</tr>
+
+								<tr style="display:none"> 
+									<th style="background-color:#F5F5F6" width="15%">
+										<span style="color:#000">公民选择</span>
+									</th>
+									<td width="35%">
+										<label style="margin:0px;margin-right: 10px;margin-top: 5px">
+											<input name="gongming" type="radio"  checked value="1" 
+											style="display: block;float: left;margin: 3px;padding: 0"/>
+											<span style="display: block;float: left;">中国公民</span> 
+										</label>
+										<label style="margin:0px;margin-right: 10px;margin-top: 5px">
+											<input name="gongming" type="radio" value="0"  
+											style="display: block;float: left;margin: 3px;padding: 0"/>
+												<span style="display: block;float: left;">境外公民</span>
+										</label>
+											
+									</td>
+
+									<th style="background-color:#F5F5F6" width="15%">
+										
+									</th>
+									<td width="35%">
+										
+									</td>
+
+								</tr>
+								<tr>
+									<th style="background-color:#F5F5F6" width="15%">
+										<span style="color:#000" >承租人姓名</span>
+									</th>
+									<td width="35%">
+										<input type="text" class="form-control input-sm  yuyue" placeholder="承租人身份证姓名（必填）" name="paiche_linker" id="paiche_linker" {if $paidan_type_a=='update'||$paiche.paiche_kehu>1}
+										 value="{$paiche.paiche_linker}" {/if}  >
+
+										 
+										
+									</td>
+									<th style="background-color:#F5F5F6" width="15%" class="cz_aaab">
+										<span style="color:#000">承租人电话号码</span>
+									</th>
+									<td width="35%" class="cz_aaab">
+										<input type="text" class="form-control input-sm" placeholder="承租人的手机号码（必填）" name="paiche_linkerPhone" id="paiche_linkerPhone" value="{$paiche.paiche_linkerPhone}" >
+									</td>
+
+									<th style="background-color:#F5F5F6" width="15%" class="cz_aaa">
+										<span style="color:#000"></span>
+									</th>
+									<td width="35%" class="cz_aaa">
+									
+									</td>
+								</tr>
+
+
+								<tr class="f_changqi" id="chengzu_aaa" style="display: none">
+									<th style="background-color:#F5F5F6">
+										<span style="color:#000" id="c_xm">承租人身份证号码</span>
+									</th>
+									<td>
+										<input type="text" class="form-control input-sm  yuyue" placeholder="承租人身份证号码（必填）"  name="paiche_linkerNum" id="paiche_linkerNum" {if $paidan_type_a=='update'||$paiche.paiche_kehu>1} value="{$paiche.paiche_linkerNum}" {/if}>
+									</td>
+									<th style="background-color:#F5F5F6">
+										<span style="color:#000">承租人地址</span>
+									</th>
+
+									<td>
+										<input type="text" class="form-control input-sm  yuyue" placeholder="承租人身份证地址（必填）" name="paiche_linkerAdd" id="paiche_linkerAdd" {if $paidan_type_a=='update'||$paiche.paiche_kehu>1} value="{$paiche.paiche_linkerAdd}" {/if}>
+									</td>
+								</tr>
+								</table>
+
+
+
+								<div id="dbr_q">
+									<span  class="span1" style="float: left;">
+									<img src="../../../images/a3.png" style="width: 20px">
+										担保人信息
+									</span>
+									<button type="button" id="dbrxs" style="margin-left: 15px;margin-top: 5px">
+									<img src="../../../images/a9.png" style="width: 20px" id="dbr_img">
+									</button>
+
+									<button type="button" class="btn btn-outline btn-default" id="shuaka2" onclick="beginread_onclick2()" style="float: left;display: none">
+
+									<img src="../../../images/a10.png" style="width: 20px">
+										刷身份证验证
+									</button>
+									
+									<div style="width: 100%;margin-bottom: 40px;" id="dbr_a">
+									</div>
+
+
+									<div  id="dbr" style="display: none;">
+										<table class="table table-bordered">
+
+										<tr id="czr_a" style="display: {if $paiche.paiche_promierPicture==''}none{/if}">
+											<th style="background-color:#F5F5F6" width="15%">
+												<span style="color:#000">担保人照片</span>
+											</th>
+											<td width="35%" style="text-align: center;">
+												<img id="img_promier_picture" src="../../../thumb/upload/idpicture/{$paiche.paiche_promierPicture}" style="width: 25%">
+												<input type="hidden" name="paiche_promierPicture" id="paiche_promierPicture">
+											</td>
+											<th style="background-color:#F5F5F6" width="15%">
+											</th>
+											<td width="35%">
+											</td>
+										</tr>
+										<tr>
+											<th style="background-color:#F5F5F6" width="15%">
+												<span style="color:#000">担保人姓名</span>
+											</th>
+											<td width="35%">
+												<input type="text" class="form-control input-sm" placeholder="担保人身份证姓名" name="paiche_promier" id="paiche_promier"   value="{$paiche.paiche_promier}"  readonly="readonly" unselectable="on">
+											</td>
+											<th style="background-color:#F5F5F6" width="15%">
+												<span style="color:#000">担保人电话号码</span>
+											</th>
+											<td width="35%">
+												<input type="text" class="form-control input-sm" placeholder="担保人的手机号码" id="paiche_promierPhone" name="paiche_promierPhone" value="{$paiche.paiche_promierPhone}">
+											</td>
+										</tr>
+										<tr>
+											<th style="background-color:#F5F5F6" width="15%">
+												<span style="color:#000">担保人身份证号码</span>
+											</th>
+											<td width="35%">
+												<input type="text" class="form-control input-sm" placeholder="担保人身份证号码" id="paiche_promierNum" name="paiche_promierNum"  value="{$paiche.paiche_promierNum}"  readonly="readonly" unselectable="on">
+											</td>
+											<th style="background-color:#F5F5F6" width="15%">
+												<span style="color:#000">担保人地址</span>
+											</th>
+											<td width="35%">
+												<input type="text" class="form-control input-sm" placeholder="担保人身份证地址" id="paiche_promierAdd" name="paiche_promierAdd"  value="{$paiche.paiche_promierAdd}"  readonly="readonly" unselectable="on">
+											</td>
+										</tr>
+										</table>
+									</div>
+								</div>
+
+
+
+
+
+
+
+
+
+								<div >
+									<span  class="span1" style="float: left; ">
+									<img src="../../../images/a5.png" style="width: 20px;">
+										车辆信息
+									</span>
+									<dl class="lineD" id="showCar" style="padding-top: 3px">
+	         					关键字：
+										<input type="text" name="paicheCarKey" id="paicheCarKey" size="10" value="{$paiche.car_num}" />
+										<input type="hidden" name="paicheCar" id="paicheCar" value="{$paiche.paicheCar2}" size="10"/>
+
+
+										<input type="hidden" name="paicheCars" id="paicheCars"  value="{$paiche.paicheCar2s}" size="10"/>
+
+										<a href="javascript:get_car();" style="margin-left:10px"><img src="../../../css/car2.gif"  style="    width: 35px;
+    height: 22px;
+    /* border: 1px red solid; */
+    border-width: 2px;
+    border-style: inset;
+    border-color: initial;
+    border-image: initial;"  class="peoplePic"/></a>
+									</dl>
+
+
+
+									<table class="table table-bordered" id="che">
+									<tr>
+										<th style="background-color:#F5F5F6" width="15%">
+											<span style="color:#000">车牌号码</span>
+										</th>
+										<td width="35%">
+											<input type="text" id="car_num" class="form-control input-sm" placeholder="" readonly="readonly" unselectable="on" value="{$paiche.car_num}">
+										</td>
+										<th style="background-color:#F5F5F6" width="15%">
+											<span style="color:#000">车辆颜色</span>
+										</th>
+										<td width="35%">
+											<input type="text" id="car_color" class="form-control input-sm" placeholder="" readonly="readonly" unselectable="on"value="{$paiche.car_color}">
+										</td>
+									</tr>
+									<tr>
+										<th style="background-color:#F5F5F6" width="15%">
+											<span style="color:#000">车辆型号</span>
+										</th>
+										<td width="35%">
+											<input type="text" id="car_brand" class="form-control input-sm" placeholder="" readonly="readonly" unselectable="on" value="{$paiche.car_brand}">
+										</td>
+										<th style="background-color:#F5F5F6" width="15%">
+											<span style="color:#000">车辆种类</span>
+										</th>
+										<td width="35%">
+											<input type="text" id="car_types_a" class="form-control input-sm" placeholder="" readonly="readonly"unselectable="on" value="{$paiche.car_types_a}">
+
+											<input type="hidden" id="car_types" value="{$paiche.car_types}">
+										</td>
+									</tr>
+									<tr>
+										<th style="background-color:#F5F5F6" width="15%">
+											<span style="color:#000">发动机号</span>
+										</th>
+										<td width="35%">
+											<input type="text" id="car_motor" class="form-control input-sm" placeholder="" readonly="readonly" unselectable="on" value="{$paiche.car_motor}">
+										</td>
+										<th style="background-color:#F5F5F6" width="15%">
+											<span style="color:#000">车架号</span>
+										</th>
+										<td width="35%">
+											<input type="text" id="car_frame" class="form-control input-sm" placeholder="" readonly="readonly" unselectable="on" value="{$paiche.car_frame}">
+										</td>
+									</tr>
+									<tr id="plan_rentamount_a">
+										<th style="background-color:#F5F5F6" width="15%">
+											<span style="color:#000">车辆日租金</span>
+										</th>
+										<td width="35%">
+											<input type="text" class="form-control input-sm" placeholder="" id="plan_rentamount" readonly="readonly" unselectable="on"value="{$paiche.plan_rentamount}">
+										</td>
+										<th style="background-color:#F5F5F6" width="15%">
+											<span style="color:#000">超时费用</span>
+										</th>
+										<td width="25%">
+											<input type="text" id="paiche_overTime" name="paiche_overTime" class="form-control input-sm" readonly="readonly" unselectable="on"placeholder="" value="{$paiche.plan_chaoshi}">
+											
+										</td>
+
+									</tr>
+									
+
+
+									<tr style="{if $paiche.plan_chaokm!='y'}display:none{else}display:table-row{/if}" id='plan_chaokm'>
+										<th style="background-color:#F5F5F6" width="15%">
+											<span style="color:#000">超每公里费用</span>
+										</th>
+										<td width="25%">
+											<input type="text" id="plan_chaokmy" class="form-control input-sm"  readonly="readonly" unselectable="on" value="{$paiche.plan_chaokmy}">
+										</td>
+										<th style="background-color:#F5F5F6" width="15%">
+											<span style="color:#000">每天限制公里数</span>
+										</th>
+										<td width="25%">
+											<input type="text" id="plan_chaokms" class="form-control input-sm" placeholder="" readonly="readonly"unselectable="on"value="{$paiche.plan_chaokms}">
+										</td>
+									</tr>
+									
+									</table>
+								</div>
+
+
+
+
+
+
+
+
+								<span  class="span1" style="float: left;">
+								<img src="../../../images/a6.png" style="width: 20px">
+										用车数据
+								</span>
+								<table class="table table-bordered">
+								
+								<tr>
+									<th style="background-color:#F5F5F6" width="15%">
+										<span style="color:#000">用车开始时间</span>
+									</th>
+									<td width="35%">
+										<input name="paiche_startDate" id="paiche_startDate" placeholder="请输入日期" value="{$paiche.paiche_startDate}" class="laydate-icon"  unselectable="on" readonly>
+										
+										<input type="hidden" id="d_time"  value="{$d_time}">
+										<input type="hidden" id="time" value="{$time}">
+									</td>
+									<th style="background-color:#F5F5F6" width="15%">
+										<span style="color:#000">用车时长</span>
+									</th>
+									<td width="35%">
+										
+										<span style="display: block;width: 10%;float: left;line-height: 32px;text-align: right;">天:</span>
+										<input type="text" class="form-control input-sm" placeholder="" style="float: left;width: 10%" id="tian_a" value="{$paiche.tian_a}" onchange="jisuan_a()">
+										<input type="button" name="" value="+" style="display: block;float: left;width:5%;    padding: 0;
+    height: 30px; " id="tjia" onclick="jisuan('t','j')" >
+										<input type="button" name="" value="-" style="display: block;float: left;width:5% ;    padding: 0;
+    height: 30px;" id="tjian" onclick="jisuan('t','g')">
+
+
+										<span style="display: block;width: 10%;float: left;line-height: 32px;text-align: right;">时：</span>
+										<input type="text" class="form-control input-sm" placeholder="" style="float: left;width: 10%" id="shi" value="{$paiche.shi}" onchange="jisuan_a()">
+										<input type="button" name="" value="+" style="display: block;float: left;width:5%;    padding: 0;
+    height: 30px; " id="sjia" onclick="jisuan('s','j')">
+										<input type="button" name="" value="-" style="display: block;float: left;width:5%;    padding: 0;
+    height: 30px; " id="sjian" onclick="jisuan('s','g')">
+
+
+
+										<span style="display: block;width: 10%;float: left;line-height: 32px;text-align: right;">分：</span>
+
+										<input type="text" class="form-control input-sm" placeholder="" style="float: left;width: 10%" id="fen" value="{$paiche.fen}" onchange="jisuan_a()">
+
+										<input type="button" name="" value="+" style="display: block;float: left;width:5%;    padding: 0;
+    height: 30px; " id="fen_a" onclick="jisuan('f','j')">
+										<input type="button" name="" value="-" style="display: block;float: left;width:5%;    padding: 0;
+    height: 30px; " id="fen_b" onclick="jisuan('f','g')">
+									</td>
+								</tr>
+
+								<tr style="height: 51px">
+									<th style="background-color:#F5F5F6" width="15%">
+										<span style="color:#000">用车结束时间</span>
+									</th>
+									<td width="35%">
+										<input name="paiche_endDate" value="{$paiche.paiche_endDate}" id="paiche_endDate" placeholder="请输入日期" value="{$time}" class="laydate-icon"   unselectable="on" readonly>
+									</td>
+									<th style="background-color:#F5F5F6" width="15%">
+										<span style="color:#000"></span>
+									</th>
+									<td width="35%">
+										
+									</td>
+								</tr>
+							</table>
+								<span  class="span1" style="float: left;">
+								<img src="../../../images/a6.png" style="width: 20px">
+										费用明细
+								</span>
+								<table class="table table-bordered">
+									
+
+								<tr>
+									<th style="background-color:#F5F5F6" width="15%" class="zhujin_bbb">
+										<span style="color:#000">租金</span>
+									</th>
+									<td width="35%" class="zhujin_bbb">
+										<input type="number" min="0" id="paiche_rent" name="paiche_rent" class="form-control input-sm " placeholder="本次租车的总租金" value="{$paiche.paiche_rent}" onchange="jisuan_b()">
+									</td>
+
+									<th style="background-color:#F5F5F6" width="15%" class="zhujin_ccc">
+										<span style="color:#000">押金</span>
+									</th>
+									<td width="35%" class="zhujin_ccc">
+										<input type="number" min="0"  id="paiche_deposit" name="paiche_deposit" class="form-control input-sm" placeholder="本次租车应收的押金"  value="{$paiche.paiche_deposit}" onchange="jisuan_zujin()">
+									</td>
+									<th style="background-color:#F5F5F6" width="15%" class="zhujin_aaa">
+										<span style="color:#000"></span>
+									</th>
+									<td width="35%" class="zhujin_aaa">
+										
+									</td>
+								</tr>
+
+								<tr class="qitafeiyong_aaa" id="shuaka_aaa">
+									<th style="background-color:#F5F5F6" width="15%">
+										<span style="color:#000">刷卡费</span>
+									</th>
+									<td width="35%">
+										<input type="number" min="0" id="shuaka" name="shuaka" class="form-control input-sm " placeholder="客户刷卡收取千分之八的刷卡费用" value="{$paiche.shuaka}" onchange="jisuan_zujin()">
+									</td>
+
+									<th style="background-color:#F5F5F6" width="15%">
+										<span style="color:#000">其他费用</span>
+									</th>
+									<td width="35%">
+										<input type="number" min="0" id="qita" name="qita" class="form-control input-sm" placeholder="特殊情况使用的"  value="{$paiche.qita}" onchange="jisuan_zujin()">
+									</td>
+								</tr>
+
+								<tr class="qitafeiyong_aaa">
+									
+									<th style="background-color:#F5F5F6" width="15%" class="songche_aaa">
+										<span style="color:#000">公司送车</span>
+									</th>
+									<td width="35%" class="songche_aaa">
+										<select class="form-control input-sm" id="songche_a"  name="songche_a"  {if $paiche.jieri>0}disabled{/if}>
+											<option  value="0">
+								  				请选择
+											</option>
+											<option  value="1" {if $paiche.songche===0}selected{/if}>
+								  				不送车
+											</option>
+											<option  value="2" {if $paiche.songche==60}selected{/if}>
+								  				单程
+											</option>
+											<option  value="3" {if $paiche.songche==120}selected{/if}>
+								  				双程
+											</option>
+										</select>
+									</td>
+									
+									<th style="background-color:#F5F5F6" width="15%">
+										<span style="color:#000">送车费</span>
+									</th>
+									<td width="35%">
+										<input type="number" min="0" id="songche" name="songche" class="form-control input-sm" placeholder="公司为客户送车收取的服务费"  value="{$paiche.songche}" onchange="jisuan_zujin()">
+									</td>
+
+								
+									<th style="background-color:#F5F5F6" width="15%" class="jieri_aaa">
+										<span style="color:#000">节日服务费</span>
+									</th>
+									<td width="35%" class="jieri_aaa">
+										<input type="text" id="jieri" name="jieri" class="form-control input-sm " placeholder="节假日收取的额外服务费"  readonly="readonly" unselectable="on" value="{$paiche.jieri}">
+									</td>
+								
+								</tr>
+
+								<tr id="suijin_aaa">
+									<th style="background-color:#F5F5F6" width="15%">
+										<span style="color:#000">是否开票</span>
+									</th>
+									<td width="35%">
+										<select class="form-control input-sm" id="paiche_needtax" name="paiche_needtax" >
+
+											
+											<option  value="0" {if $paiche['paiche_needtax']==0}selected{/if}>不开票
+											</option>
+											<option  value="1" {if $paiche['paiche_needtax']==1}selected{/if}>开票
+										</select>
+										
+									</td>
+								
+									<th style="background-color:#F5F5F6" width="15%">
+										<span style="color:#000">税金</span>
+									</th>
+									<td width="35%">
+										<input type="text" id="suijin" name="suijin" class="form-control input-sm " placeholder="客户要求开票收取总费用的百分之十" value="{$paiche.suijin}" readonly="readonly" unselectable="on">
+									</td>
+									
+								</tr>
+
+								<tr style="display: none" id="huodong">
+									<th style="background-color:#F5F5F6" width="15%">
+										<span style="color:#000">活动选择：</span>
+									</th>
+									<td width="35%">
+										<select class="form-control input-sm" id="huodong_id"  name="huodong_id"  {if $paiche.jieri>0}disabled{/if}>
+											
+											<option selected  value="99999">
+								  				请选择
+											</option>
+											
+											<option  value="0" {if $paiche.jieri>0}selected{/if}>
+								  				不参与
+											</option>
+											
+											{foreach from=$huodong_list key=i item=rows}
+												<option  value="{$rows.id}">
+								  					{$rows.name}
+												</option>
+								 			{/foreach}
+								 			
+										</select>
+									</td>
+									<th style="background-color:#F5F5F6" width="15%">
+										<span style="color:#000">活动优惠：</span>
+									</th>
+									<td width="35%">
+										<input type="text" id="huodong_youhui" name="huodong_youhui"  class="form-control input-sm" placeholder="客户参加公司租车活动优惠的金额"  value="" readonly="readonly" unselectable="on">
+									</td>
+								</tr>
+
+								<tr id="feiyong_aaa">
+									{if ($paidan_type_a=="update"||$paidan_type_a=="diaoche")&&$paiche.yishou>0}
+									<th style="background-color:#F5F5F6" width="15%">
+										<span style="color:#000">已收费用</span>
+									</th>
+									<td width="35%">
+										<input type="text" id="yishou"  class="form-control input-sm" placeholder="已经收取客户的费用"  value="{$paiche.yishou}" readonly="readonly" unselectable="on">
+									</td>
+									{/if}
+									<th style="background-color:#F5F5F6" width="15%">
+										<span style="color:#000">本次应收</span>
+									</th>
+									<td width="35%">
+										<input type="text" readonly="readonly" unselectable="on" id="yinshou" class="form-control input-sm " placeholder="本次应当收取客户的费用" value="{$paiche.paiche_rent+$paiche.paiche_deposit+$paiche.dingjin+$paiche.qita+$paiche.shuaka+$paiche.songche+$paiche.suijin-$paiche.yishou}">
+									</td>
+									{if ($paidan_type_a!="update"&&$paidan_type_a!="diaoche")||$paiche.yishou<=0}
+									<th style="background-color:#F5F5F6" width="15%">
+										<span style="color:#000"></span>
+									</th>
+									<td width="35%">
+										
+									</td>
+									{/if}
+									
+								</tr>
+								</table>
+							<div id="beizhu_aaa">
+								<span  class="span1" style="float: left;">
+								<img src="../../../images/a6.png" style="width: 20px">
+										备注信息
+								</span>
+								<table class="table table-bordered">
+								<tr>
+									<th style="background-color:#F5F5F6" width="15%">
+										<span style="color:#000">开车线路</span>
+									</th>
+									<td width="35%">
+										<input type="text" id="paiche_line" name="paiche_line" class="form-control input-sm" placeholder="客户使用车辆的范围(必填)"
+										value="{$paiche.paiche_line}">
+									</td>
+									<th style="background-color:#F5F5F6" width="15%">
+										<span style="color:#000">备注说明</span>
+									</th>
+									<td width="35%">
+										<input type="text" id="paiche_specialRemarks" name="paiche_specialRemarks" class="form-control input-sm" placeholder="其他特殊情况的说明"
+										value="{$paiche.paiche_specialRemarks}">
+									</td>
+								</tr>
+								
+
+
+								</table>
+							</div>
+							</div>
+						</div>
+						<!-- End Example Events -->
+					</div>
+				</div>
+				<input type="submit" id="submit" class="btn btn-outline btn-default" value="提交" style="width: 10%;margin-left: 45%;display: block;">
+			</div>
+			
+		</form>
+	</div>
+	<!-- End Panel Other -->
+</div>
+<div id="haoma_a" style="width:30%;display: none;
+margin:0px; z-index: 1000;
+padding:0px;
+position:fixed;/* 相对于屏幕定位 */
+left:35%;/* 横向位置也可用left */
+top:100px;/* 纵向位置也可用top */
+background-color:#F5F5F6;    border: 2px solid #999999;">
+	<div style="height: 35px;width: 100%;background-color: #cacad2;text-align: center;">
+		<span style="line-height: 35px;text-align: center;font-size: 18px">请选择验证号码</span>
+	</div>
+	<div style="width: 100%;margin-top: 15px;margin-bottom: 15px;padding-left:40%" id="haoma_b">
+		<label >
+			<input name="shouji" type="radio"  checked value="1"/>
+			<span>中国公民</span> 
+		</label><br/>
+		<label >
+			<input name="shouji" type="radio"  checked value="1"/>
+			<span>中国公民</span> 
+		</label><br/>
+		<label >
+			<input name="shouji" type="radio"  checked value="1"/>
+			<span>中国公民</span> 
+		</label><br/>
+		<label >
+			<input name="shouji" type="radio"  checked value="1"/>
+			<span>中国公民</span> 
+		</label><br/>
+	</div>
+	<div style="height: 35px;width: 100%;background-color: #cacad2;text-align: center;padding-top: 5px">
+		<input type="button" name="" id="queding" value="确定" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		<input type="button" name="" id="quxiao" value="取消">
+	</div >
+</div>
+
+
+<script src="js/jquery.min.js?v=2.1.4"></script>
+<script src="js/bootstrap.min.js?v=3.3.6"></script>
+<script src="js/content.min.js?v=1.0.0"></script>
+<script src="js/plugins/bootstrap-table/bootstrap-table.min.js"></script>
+<script src="js/plugins/bootstrap-table/bootstrap-table-mobile.min.js"></script>
+<script src="js/plugins/bootstrap-table/locale/bootstrap-table-zh-CN.min.js"></script>
+<script src="js/demo/bootstrap-table-demo.min.js"></script>
+<script type="text/javascript" src="http://tajs.qq.com/stats?sId=9051096" charset="UTF-8"></script>
+</body>
+<script type="text/javascript" src="../../../js/create.js"></script>
+<script type="text/javascript" src="../../../js/zijia.js?a={time()}"></script>
+<!-- Mirrored from www.zi-han.net/theme/hplus/table_bootstrap.html by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 20 Jan 2016 14:20:06 GMT -->
+</html>

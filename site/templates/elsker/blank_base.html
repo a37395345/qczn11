@@ -1,0 +1,161 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Insert title here</title>
+<link href="../../../css/style.css" rel="stylesheet" type="text/css" />
+<link href="../../../css/header.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="../../../js/jquery.js"></script>
+<script>
+$(function(){
+  //右下角弹出层 试用期到期提醒
+	$.get("../../../site/operator/employee/list.php?task=getNearList2",{}, function(jsonmsg){
+		if (jsonmsg.status==0){
+			var nRe=jsonmsg.totalRecords;
+			if (nRe>0){
+				var dataObj = jsonmsg.data;
+				var sResult3="<table border='0' cellspacing='0' cellpadding='0' width='98%'><tr><th>序号</th><th>员工姓名</th><th>职位</th><th>身份证号</th><th>入职日期</th><th>操作</th></tr>";
+				for (var i=0;i<nRe;i++){
+				    sResult3+="<tr><td>"+ (i+1)+"</td><td>"+dataObj[i].emp_name+"</td><td>"+
+					dataObj[i].level_title+"</td><td>"+ dataObj[i].emp_num+"</td><td>"+
+					dataObj[i].emp_EntryDate+"</td><td>"+
+					"<a href=\"../../../site/operator/employee/modify.php?uid="+dataObj[i].emp_id+"\" target='blank' >编辑</a></td></tr>";
+				}
+				sResult3+="</table>";
+				$(".pop_Content").html(sResult3);
+				$("#pop").removeAttr("style");
+			}else{
+				$("#pop").hide();
+			}
+		}else{
+			$("#pop").hide();
+		}
+		
+	},"json");
+  
+  
+	//合同快到期的员工
+	$.get("../../../site/operator/employee/list.php?task=getNearList",{}, function(jsonmsg){
+		if (jsonmsg.status==0){
+			var nRe=jsonmsg.totalRecords;
+			var sResult="<tr><th>序号</th><th>员工姓名</th><th>职位</th><th>身份证号</th>	<th>合同开始日期</th><th>合同到期日期</th><th>操作</th></tr>";
+			$('#maint').html(sResult);
+			if (nRe>0){
+				var dataObj = jsonmsg.data;
+				for (var i=0;i<nRe;i++){
+					sResult3="<tr><td>"+ (i+1)+"</td><td>"+dataObj[i].emp_name+"</td><td>"+
+					dataObj[i].level_title+"</td><td>"+ dataObj[i].emp_num+"</td><td>"+
+					dataObj[i].emp_pactStartDate+"</td><td>"+dataObj[i].emp_pactEndDate+"</td><td>"+
+					"<a href=\"../../../site/operator/employee/modify.php?uid="+dataObj[i].emp_id+"\" target='blank' >编辑</a></td></tr>";
+					$('#maint').append(sResult3);
+				}
+			}else{
+				$('#maint').append("<tr><td colspan=\"6\">近期无合同到期员工！</td></tr>");
+			}
+		}else{
+			$('#maint').append("<tr><td colspan=\"6\">获取数据失败！</td></tr>");
+		}
+	},"json");
+	//租赁合同快到期的
+	$.get("../../../site/operator/sales/contract/list.php?task=getNearList",{}, function(jsonmsg){
+		if (jsonmsg.status==0){
+			var nRe=jsonmsg.totalRecords;
+			var sResult="<tr><th>序号</th><th>合同编号</th><th>所属客户</th><th>用车类型</th><th>业务员</th><th>合同生效日期</th><th>合同截止日期</th></tr>";
+			$('#contract').html(sResult);
+			if (nRe>0){
+				var dataObj = jsonmsg.data;
+				for (var i=0;i<nRe;i++){
+					sResult3="<tr><td>"+ (i+1)+"</td><td>"+dataObj[i].contract_number+"</td><td>"+dataObj[i].client_name+"</td><td>"+
+					dataObj[i].item_name+"</td><td>"+ dataObj[i].yewuyuan+"</td><td>"+
+					dataObj[i].contract_startdate+"</td><td>"+dataObj[i].contract_enddate+"</td></tr>";
+					$('#contract').append(sResult3);
+				}
+			}else{
+				var sResult="<tr><th>序号</th><th>合同编号</th><th>所属客户</th><th>用车类型</th><th>业务员</th><th>合同生效日期</th><th>合同截止日期</th></tr>";
+				$('#contract').html(sResult);
+				$('#contract').append("<tr><td colspan=\"7\">暂无快要到期的租赁合同！</td></tr>");
+			}
+		}else{
+			$('#contract').append("<tr><td colspan=\"7\">获取数据失败！</td></tr>");
+		}
+	},"json");
+	
+	jQuery("#contraction").click(function(){
+		jQuery(".box-16css").animate({
+		    height: '30px',bottom:'0px'
+			}, 1000, 'linear', function() { jQuery(".pop_Content").hide(); });
+			jQuery("#contraction").hide();
+			jQuery("#open_window").show();
+		});
+	
+	jQuery("#open_window").click(function(){
+		jQuery(".box-16css").animate({
+	    	height: '280px'
+		}, 10, 'linear', function() { jQuery(".pop_Content").show(); });
+		jQuery("#open_window").hide();
+		jQuery("#contraction").show();
+	});
+	
+	jQuery("#close_window").click(function(){
+		jQuery(".box-16css").animate({
+	        height: '0px',bottom:'0px'
+	    }, 1000, 'linear', function() { jQuery(".pop_Content").hide(); });
+	});
+});
+</script>
+</head>
+<body>
+<div class="so_main" style="width:1003px;">
+	<div class="page_tit">待办事宜提醒</div>
+	<div class="Toolbar_inbox_2">
+  	<div class="page ">合同快要到期的员工</div>
+	</div>
+	<div class="Toolbar_inbox_3">
+  	<div class="page ">快要到期的租赁合同</div>
+	</div>
+	<div class="list">
+		<table id="maint" width="490px" border="0" cellspacing="0" cellpadding="0" align="left">
+		  <tr>
+		    <th>序号</th>
+			<th>员工姓名</th>
+			<th>职位</th>
+			<th>身份证号</th>
+		    <th>合同开始日期</th>
+		    <th>合同到期日期</th>
+		    <th>操作</th>
+		  </tr>
+		  <tr>
+		  	<td colspan="7"><img src="../../../images/wait.gif" /></td>
+		  </tr>
+		</table>
+		<table id="contract" width="490px" border="0" cellspacing="0" cellpadding="0" align="right">
+		  <tr>
+		    <th>序号</th>
+			<th>合同编号</th>
+			<th>所属客户</th>
+			<th>用车类型</th>
+			<th>业务员</th>
+		    <th>合同生效日期</th>
+		    <th>合同截止日期</th>
+		  </tr>
+		  <tr>
+		  	<td colspan="7"><img src="../../../images/wait.gif" /></td>
+		  </tr>
+		</table>
+	</div>
+</div>
+	<div id="pop" class="box-16css" style="display:none;">
+		<div class="pop_title">
+			<div class="pop_title_left">
+			 	<strong>即将过试用期的员工</strong>
+			</div>
+			<div class="pop_title_right">
+				<img src="../../../css/img01.gif" id="contraction" /><img src="../../../css/img03.gif" id="open_window" style="display:none;" / ><img src="../../../css/img02.gif" id="close_window" />
+			</div>
+	    </div>
+	    <div class="pop_Content">
+	    	
+	     </div>
+	</div>
+</body>
+</html>

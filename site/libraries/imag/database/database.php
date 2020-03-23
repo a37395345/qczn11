@@ -1,0 +1,324 @@
+<?php
+// no direct access
+defined( 'PATH_BASE' ) or die( 'Restricted access' );
+
+/**
+ * Database class.
+ *
+ * @package		Imag.Framework
+ * @subpackage	Database
+ * @modify by   gary wang (wangbaogang123@hotmail.com)
+ *
+ */
+class Database extends Object
+{
+	/**
+	 * Quote for named objects
+	 *
+	 * @var string
+	 */
+	protected $_nameQuote		= null;
+
+	/**
+	 * UTF-8 support
+	 *
+	 * @var boolean
+	 */
+	protected $_utf			= 0;
+
+	/**
+	 * The fields that are to be quote
+	 *
+	 * @var array
+	 */
+	protected $_quoted	= null;
+
+	/**
+	 *  Legacy compatibility
+	 *
+	 * @var bool
+	 */
+	protected $_hasQuoted	= null;
+
+	/**
+	* Database object constructor
+	*
+	* @access	public
+	* @param	array	List of options used to configure the connection
+	*/
+	public function __construct( $options )
+	{
+		// Determine utf-8 support
+		//$this->_utf = $this->hasUTF();
+
+		//Set charactersets (needed for MySQL 4.1.2+)
+		//if ($this->_utf){
+			//$this->setUTF();
+		//}
+
+		if(DBUTF8){
+			// Determine utf-8 support
+			$this->_utf = $this->hasUTF();
+
+			//Set charactersets (needed for MySQL 4.1.2+)
+			if ($this->_utf){
+				$this->setUTF();
+			}
+		}
+
+		// Register faked "destructor" in PHP4 to close all connections we might have made
+		if (version_compare(PHP_VERSION, '5') == -1) {
+			register_shutdown_function(array($this, '__destruct'));
+		}
+	}
+
+	/**
+	 * Returns a reference to the global Database object, only creating it
+	 * if it doesn't already exist.
+	 *
+	 * The 'driver' entry in the parameters array specifies the database driver
+	 * to be used (defaults to 'mysql' if omitted). All other parameters are
+	 * database driver dependent.
+	 *
+	 * @param array Parameters to be passed to the database driver
+	 * @return Database A database object
+	*/
+	public static function getInstance( $options	= array() )
+	{
+		//var_dump($options);
+		static $instances;
+
+		if (!isset( $instances )) {
+			$instances = array();
+		}
+
+		$signature = serialize( $options );
+
+		if (empty($instances[$signature]))
+		{
+			$driver		= array_key_exists('driver', $options) 		? $options['driver']	: 'mysql';
+			$driver = preg_replace('/[^A-Z0-9_\.-]/i', '', $driver);
+			$path	= dirname(__FILE__).'/database/'.$driver.'.php';
+
+			if (file_exists($path)) {
+				require_once($path);
+			} else {
+				$error = new stdClass();
+				$error->code = 500;
+				$error->msg = 'Unable to load Database Driver:'.$driver;
+				return $error;
+			}
+
+			$adapter	= ucfirst($driver);
+			$instance	= new $adapter($options);
+
+			if (!$instance)
+			{
+				$error = new stdClass();
+				$error->code = 500;
+				$error->msg = 'UUnable to connect to the database!';
+				return $error;
+			}
+
+
+			$instances[$signature] = $instance;
+		}
+
+		return $instances[$signature];
+	}
+
+	/**
+	 * Database object destructor
+	 *
+	 * @abstract
+	 * @access private
+	 * @return boolean
+	 * 
+	 */
+	public function __destruct()
+	{
+		return true;
+	}
+
+	/**
+	 * Determines UTF support
+	 *
+	 * @abstract
+	 * @access public
+	 * @return boolean
+	 * 
+	 */
+	public function hasUTF() {
+		return false;
+	}
+
+	/**
+	 * Custom settings for UTF support
+	 *
+	 * @abstract
+	 * @access public
+	 * 
+	 */
+	public function setUTF() {
+	}
+
+	/**
+	 * Adds a field or array of field names to the list that are to be quoted
+	 *
+	 * @access public
+	 * @param mixed Field name or array of names
+	 * 
+	 */
+	public function addQuoted( $quoted )
+	{
+		if (is_string( $quoted )) {
+			$this->_quoted[] = $quoted;
+		} else {
+			$this->_quoted = array_merge( $this->_quoted, (array)$quoted );
+		}
+		$this->_hasQuoted = true;
+	}
+
+	/**
+	 * Splits a string of queries into an array of individual queries
+	 *
+	 * @access public
+	 * @param string The queries to split
+	 * @return array queries
+	 */
+	public function splitSql( $queries )
+	{
+		$start = 0;
+		$open = false;
+		$open_char = '';
+		$end = strlen($queries);
+		$query_split = array();
+		for($i=0;$i<$end;$i++) {
+			$current = substr($queries,$i,1);
+			if(($current == '"' || $current == '\'')) {
+				$n = 2;
+				while(substr($queries,$i - $n + 1, 1) == '\\' && $n < $i) {
+					$n ++;
+				}
+				if($n%2==0) {
+					if ($open) {
+						if($current == $open_char) {
+							$open = false;
+							$open_char = '';
+						}
+					} else {
+						$open = true;
+						$open_char = $current;
+					}
+				}
+			}
+			if(($current == ';' && !$open)|| $i == $end - 1) {
+				$query_split[] = substr($queries, $start, ($i - $start + 1));
+				$start = $i + 1;
+			}
+		}
+
+		return $query_split;
+	}
+
+
+	/**
+	 * Checks if field name needs to be quoted
+	 *
+	 * @access public
+	 * @param string The field name
+	 * @return bool
+	 */
+	public function isQuoted( $fieldName )
+	{
+		if ($this->_hasQuoted) {
+			return in_array( $fieldName, $this->_quoted );
+		} else {
+			return true;
+		}
+	}
+
+	/**
+	 * Sets the debug level on or off
+	 *
+	 * @access public
+	 * @param int 0 = off, 1 = on
+	 */
+	public function debug( $level ) {
+		$this->_debug = intval( $level );
+	}
+
+	/**
+	 * Get the database UTF-8 support
+	 *
+	 * @access public
+	 * @return boolean
+	 * 
+	 */
+	public function getUTFSupport() {
+		return $this->_utf;
+	}
+
+	/**
+	 * Get a database escaped string
+	 *
+	 * @param	string	The string to be escaped
+	 * @param	boolean	Optional parameter to provide extra escaping
+	 * @return	string
+	 * @access	public
+	 * @abstract
+	 */
+	public function getEscaped( $text, $extra = false )
+	{
+		return;
+	}
+
+	/**
+	 * Quote an identifier name (field, table, etc)
+	 *
+	 * @access	public
+	 * @param	string	The name
+	 * @return	string	The quoted name
+	 */
+	public function nameQuote( $s )
+	{
+		// Only quote if the name is not using dot-notation
+		if (strpos( $s, '.' ) === false)
+		{
+			$q = $this->_nameQuote;
+			if (strlen( $q ) == 1) {
+				return $q . $s . $q;
+			} else {
+				return $q{0} . $s . $q{1};
+			}
+		}
+		else {
+			return $s;
+		}
+	}
+
+	// ----
+	// ADODB Compatibility Functions
+	// ----
+
+	/**
+	* Get a quoted database escaped string
+	*
+	* @param	string	A string
+	* @param	boolean	Default true to escape string, false to leave the string unchanged
+	* @return	string
+	* @access public
+	*/
+	public function Quote( $text, $escaped = true )
+	{
+		return '\''.($escaped ? $this->getEscaped( $text ) : $text).'\'';
+	}
+	
+	public function getDbName()
+	{
+		return $this->dbname;
+		
+	}
+
+}
+?>

@@ -1,0 +1,74 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Insert title here</title>
+<link href="../../../css/style.css" rel="stylesheet" type="text/css" />
+<link href="../../../js/jbox/jBox/Skins/GreyBlue/jbox.css" rel="stylesheet"  />
+<script type="text/javascript" src="../../../js/jquery.js"></script>
+<script type="text/javascript" src="../../../js/jbox/jBox/jquery.jBox-2.3.min.js"></script>
+<script type="text/javascript" src="../../../js/jbox/jBox/i18n/jquery.jBox-zh-CN.js"></script>
+<script>
+$(function(){
+	
+
+	jQuery("#btnSearch").click(function(){
+		
+		if ($("#search_key").val()==""){
+			alert("请先输入车辆价格！");
+			return false;
+		}
+		$('#clentprice').hide();
+		$("#wait").show();
+		$.get("../../../site/operator/business/list.php?task=getclientprice5&carprice="+$("#search_key").val(),{}, function(jsonmsg){
+			if (jsonmsg.status==0){
+				var sResult="";
+				$("#clentprice").empty();
+				sResult="<tr style='background-color:#B1C9FF;height:50px;'><td width='80'>极优</td><td width='80'>优</td><td width='80'>中</td><td>说明</td></tr>";
+				sResult+="<tr style='background-color:#FE6E47;height:50px;'><td>"+ jsonmsg.priceplan1+"元/月</td><td>"+jsonmsg.priceplan2+"元/月</td><td>"+jsonmsg.priceplan3+"元/月</td><td></td></tr>";
+				$('#clentprice').append(sResult);
+					
+				$("#wait").hide();
+				$('#clentprice').show();
+			}else{
+				alert("查询失败，车辆价格不对！");
+				$("#wait").hide();
+			}
+		},"json");
+		
+	});
+});
+</script>
+</head>
+
+<body>
+<div class="so_main" style="width:1003px;">
+	<div class="page_tit">长期企业用车报价方案</div>
+	<div class="list">
+	<input type="text" id="search_key" size="16" placeholder="请输入车辆价格" />
+	    &nbsp;&nbsp;&nbsp;&nbsp;<input type="button" id="btnSearch" value="查询" />
+	</div>
+	<div class="list" style="margin:15px 0 30px 5px;display: inline-block;">
+		<table id="wait" width="585px" border="0" cellspacing="0" cellpadding="0" align="left" style="display: none;">
+		  <tr>
+		  	<td><img src="../../../images/wait.gif" /></td>
+		  </tr>
+		</table>
+		<table id="clentprice" width="585px" border="0" cellspacing="0" cellpadding="0" align="left" style="display: none;">
+		  
+		</table>
+	</div>
+	
+	
+	
+	
+	
+</div>
+
+
+<script>
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,242 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<title>管理后台</title>
+	<!-- <link href="../../../css/style.css" rel="stylesheet" type="text/css"> -->
+	<link href="../../../css/flbao.css" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" href="../../../../../crm/css/style.min862f.css">
+	<link href="../../../js/jbox/jBox/Skins/GreyBlue/jbox.css" rel="stylesheet" />
+	<link href="../../../crm1/css/bootstrap.min.css?v=3.3.6" rel="stylesheet">
+	<script type="text/javascript" src="../../../js/jquery.js"></script>
+	<script type="text/javascript" src="../../../js/common.js"></script>
+	<script type="text/javascript" src="../../../js/calendar.js"></script>
+	<script type="text/javascript" src="../../../js/fancybox/jquery.mousewheel-3.0.4.pack.js"></script>
+	<script type="text/javascript" src="../../../js/fancybox/jquery.fancybox-1.3.4.pack.js"></script>
+	<script type="text/javascript" src="../../../js/jbox/jBox/jquery.jBox-2.3.min.js"></script>
+	<script type="text/javascript" src="../../../js/jbox/jBox/i18n/jquery.jBox-zh-CN.js"></script>
+
+	<link rel="shortcut icon" href="favicon.ico">
+	<link href="../../../crm1/css/bootstrap.min.css?v=3.3.6" rel="stylesheet">
+	<link href="../../../crm1/css/font-awesome.css?v=4.4.0" rel="stylesheet">
+
+	<link href="../../../crm1/css/animate.css" rel="stylesheet">
+	<link href="../../../crm1/css/style.css?v=4.1.0" rel="stylesheet">
+	<script type="text/javascript" src="../../../js/laydate/laydate.js"></script>
+
+</head>
+
+<body class="gray-bg">
+	<!-- <div class="so_main">
+		<div class="page_tit ibox-title" ">车辆变动情况一览表
+			<span style=" float: right;">{if $car_status!=3}<button
+				onclick="window.location.href='javascript:price({$row.car_id});'"
+				class="btn btn-default"><span>添加</span></button>{/if}</span>
+		</div>
+		<div class="Toolbar_inbox">
+			<div class="page right">共{$total}条记录&nbsp;&nbsp;&nbsp;{$PAGINATION}</div>
+			{if $car_status!=3}<a href="javascript:price({$row.car_id});" class="btn_a"><span>添加</span></a>{/if}
+		</div>
+		<div class="list ibox-content_a">
+			<div class="row row-lg">
+				<div class="col-sm-12">
+					<div class="example-wrap">
+						<div class="example">
+
+							{if ($list)}
+							<table width="100%" border="0" cellspacing="0" cellpadding="0"
+								class="table table-bordered table-hover">
+								<tr>
+									<th>序号</th>
+									<th>变化日期</th>
+									<th>增减变动</th>
+									<th>实时数量</th>
+								</tr>
+								{foreach from=$list item=row name=foo}
+								<tr overstyle='on' id="badge_$smarty.foreach.foo.index+1}">
+									<td>{$smarty.foreach.foo.index+1}</td>
+									<td>{$row.change_time}</td>
+									<td>{$row.change_remark}</td>
+									<td>{$row.change_number}</td>
+								</tr>
+								{/foreach}
+							</table>
+							{/if}
+						</div>
+
+						<div class="Toolbar_inbox">
+							<div class="page right">共{$total}条记录&nbsp;&nbsp;&nbsp;{$PAGINATION}</div>
+							&nbsp;
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div> -->
+
+	<div class="wrapper wrapper-content animated fadeInRight">
+
+		<div class="ibox float-e-margins">
+
+			<div class="ibox-title" style="padding-top: 5px">
+				<h5 style="padding-top: 10px">车辆变动状况</h5>
+				<span style=" float: right;">{if $car_status!=3}<button
+						onclick="window.location.href='javascript:price({$row.car_id});'"
+						class="btn btn-default"><span>添加</span></button>{/if}</span>
+			</div>
+
+			<!-- <div class="Toolbar_inbox">
+				<div class="page right">共{$total}条记录&nbsp;&nbsp;&nbsp;{$PAGINATION}</div>
+				{if $car_status!=3}<a href="javascript:price({$row.car_id});" class="btn_a"><span>添加</span></a>{/if}
+			</div> -->
+			<div class="">
+				<div class="page right">共{$total}条记录&nbsp;&nbsp;&nbsp;{$PAGINATION}</div>
+				{if $car_status!=3}<a href="javascript:price({$row.car_id});" class="btn_a"><span>添加</span></a>{/if}
+			</div>
+
+			<div class="ibox-content_a">
+				<div class="row row-lg">
+					<div class="col-sm-12">
+						<div class="ibox float-e-margins">
+							<div class="ibox-title">
+								<h5>车辆变动情况一览表</h5>
+							</div>
+							<div class="ibox-content">
+
+								{if ($list)}
+								<table class="table table-bordered table-hover" data-height="400"
+									style="margin-bottom:0px" data-mobile-responsive="true">
+									<thead>
+										<tr>
+											<th style="text-align: center;">序号</th>
+											<th style="text-align: center;">变化日期</th>
+											<th style="text-align: center;">增减变动</th>
+											<th style="text-align: center;">实时数量</th>
+										</tr>
+									</thead>
+
+									<tbody>
+										{foreach from=$list item=row name=foo}
+										<tr overstyle='on' id="badge_$smarty.foreach.foo.index+1}">
+											<td style="text-align: center;">{$smarty.foreach.foo.index+1}</td>
+											<td style="text-align: center;">{$row.change_time}</td>
+											<td style="text-align: center;">{$row.change_remark}</td>
+											<td style="text-align: center;">{$row.change_number}</td>
+										</tr>
+										{/foreach}
+									</tbody>
+								</table>
+								{/if}
+							</div>
+
+							<!-- <div class="Toolbar_inbox">
+								<div class="page right">共{$total}条记录&nbsp;&nbsp;&nbsp;{$PAGINATION}</div>
+								&nbsp;
+							</div> -->
+
+							<div class="">
+								<div class="page right">共{$total}条记录&nbsp;&nbsp;&nbsp;{$PAGINATION}</div>
+								{if $car_status!=3}<a href="javascript:price({$row.car_id});"
+									class="btn_a"><span>添加</span></a>{/if}
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+		</div>
+
+	</div>
+
+	<!-- 全局js -->
+	<!-- <script src="../../../crm1/js/jquery.min.js?v=2.1.4"></script>
+	<script src="../../../crm1/js/bootstrap.min.js?v=3.3.6"></script> -->
+
+	<!-- ECharts -->
+	<!-- <script src="../../../crm1/js/plugins/echarts/echarts-all.js"></script> -->
+
+	<!-- 自定义js -->
+	<!-- <script type="text/javascript">
+		$("#up").click(function () {
+			var content = $("#content").css('display');
+			if (content == "none") {
+
+				$("#content").css('display', 'block');
+				$('#up').removeClass("fa-chevron-down");
+				$('#up').addClass("fa-chevron-up");
+			} else {
+				$("#content").css('display', 'none');
+				$('#up').removeClass("fa-chevron-up");
+				$('#up').addClass("fa-chevron-down");
+			}
+		});
+	</script> -->
+
+	<!-{literal}->
+		<script>
+			var now_car_id = 0;
+			//鼠标移动表格效果
+			$(document).ready(function () {
+				$("a.zoomIn").fancybox({
+					'overlayShow': false,
+					'transitionIn': 'elastic',
+					'transitionOut': 'elastic'
+				});
+
+				$("tr[overstyle='on']").hover(
+					function () {
+						$(this).addClass("bg_hover");
+					},
+					function () {
+						$(this).removeClass("bg_hover");
+					}
+				);
+
+			});
+
+			function checkon(o) {
+				if (o.checked == true) {
+					$(o).parents('tr').addClass('bg_on');
+				} else {
+					$(o).parents('tr').removeClass('bg_on');
+				}
+			}
+
+			function checkAll(o) {
+				if (o.checked == true) {
+					$('input[name="checkbox"]').attr('checked', 'true');
+					$('tr[overstyle="on"]').addClass("bg_on");
+				} else {
+					$('input[name="checkbox"]').removeAttr('checked');
+					$('tr[overstyle="on"]').removeClass("bg_on");
+				}
+			}
+
+			var isSearchHidden = 1;
+
+			function searchNews() {
+				if (isSearchHidden == 1) {
+					$("#searchTopic_div").slideDown("fast");
+					isSearchHidden = 0;
+				} else {
+					$("#searchTopic_div").slideUp("fast");
+					isSearchHidden = 1;
+				}
+			}
+
+			function folder(type, _this) {
+				$('#search_' + type).slideToggle('fast');
+				if ($(_this).html() == '展开') {
+					$(_this).html('收起');
+				} else {
+					$(_this).html('展开');
+				}
+
+			}
+
+			function price(carid) {
+				demo_iframe('list.php?task=changecreate', '添加', 780, 420, 'login_js');
+			}
+		</script>
+		<!-{/literal}-> </body> </html>

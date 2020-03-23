@@ -1,0 +1,117 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>管理后台</title>
+<link href="../../../../css/style.css" rel="stylesheet" type="text/css">
+<link rel="stylesheet" type="text/css" href="../../../../css/webuploader.css">
+<link rel="stylesheet" type="text/css" href="../../../../css/diyUpload.css">
+<script src="../../../../jquery.js"></script>
+<script type="text/javascript" src="../../../../js/common.js"></script>
+<script type="text/javascript" src="../../../../js/calendar.js"></script>
+<script type="text/javascript" src="../../../../js/check_form.js"></script>
+<script type="text/javascript" src="../../../../js/diyUpload/webuploader.html5only.min.js"></script>
+<script type="text/javascript" src="../../../../js/diyUpload/diyUpload.js"></script>
+<style>
+/*{literal}*/
+
+	.navi_name{font-size:14px;font-weight:bold;}
+	.indent{padding-left:40px;}
+#box{width:840px; min-height:200px; background:#FF9}
+/*{/literal}*/
+</style>
+</head>
+<body>
+<div class="so_main">
+  <div class="page_tit">其他收入修改&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="delete_baoxiao.php?baoxiao_id={$data.baoxiao_id}">删除此单</a></div>  
+  <form method="post" action="update_baoxiao_a.php" onsubmit="return other_check(this)" name="form1" enctype="multipart/form-data">
+  <div class="form2">
+
+  		<dl class="lineD">
+	      <dt>报销人:</dt>
+	      <dd>
+	        <select name="baoxiao_emp" >
+	        	<option value="0" {if $data.baoxiao_emp==0}selected{/if}>请选择</option>
+			{foreach from=$emplist key=i item=rows}
+				<option {if $rows.emp_id==$data.baoxiao_emp}selected{/if} value="{$rows.emp_id}">{$rows.emp_name}
+				</option>	
+			{/foreach}
+			</select>
+		  </dd>
+	    </dl>
+
+
+	    <dl class="lineD">
+	      <dt>指定审核人:</dt>
+	      <dd>
+	        <select name="baoxiao_auditor" >
+	        	<option value="0" {if $data.baoxiao_auditor==0}selected{/if}>请选择</option>
+			{foreach from=$emplist key=i item=rows}
+				<option {if $rows.emp_id==$data.baoxiao_auditor}selected{/if} value="{$rows.emp_id}">{$rows.emp_name}
+				</option>	
+			{/foreach}
+			</select>
+		  </dd>
+	    </dl>
+
+
+	  	<dl class="lineD">
+		  <dt><span class="redstar">*</span>报销内容:</dt>
+		  <dd><textarea name="baoxiao_content" id="baoxiao_content" cols="90" rows="8" >{$data.baoxiao_content}</textarea></dd>
+		</dl>
+
+
+
+
+	  	<dl class="lineD">
+		  <dt><span class="redstar">*</span>报销金额:</dt>
+		  <dd><input type="text" name="baoxiao_money" id="baoxiao_money" size="10" value="{$data.baoxiao_money}"=/></dd>
+		</dl>
+
+
+
+		<dl class="lineD">
+		  <dt>费用类型：</dt>
+		  <dd>
+		  {foreach from=$typeliat key=i item=rows}
+		  	
+		  <input type="radio" name="baoxiao_type" id="baoxiao_type"  value="{$rows.typename}" {if $data.baoxiao_type==$rows.typename}checked{/if} />{$rows.typename}&nbsp;&nbsp;
+		  {/foreach}
+		  </dd>
+
+
+
+		</dl>
+		<dl class="lineD">
+	      <dt>选择店铺：</dt>
+	      <dd>
+	        <select name="shop_id" >
+	        	<option value="0" selected>请选择</option>
+			{foreach from=$shoplist key=i item=rows}
+				<option {if $rows.shop_id==$data.shop_id}selected{/if} value="{$rows.shop_id}">{$rows.shop_name}
+				</option>	
+			{/foreach}
+			</select>
+		  </dd>
+	    </dl>
+	   
+	   <dl class="lineD">
+		  <dt><span class="redstar">*</span>报销备注:</dt>
+		  <dd><textarea name="baoxiao_remarks" id="baoxiao_remarks" cols="90" rows="8" >{$data.baoxiao_remarks}</textarea></dd>
+		</dl>
+
+		
+		
+		
+    <div class="page_btm">
+      <input type="submit" class="btn_b" value="确定" /><b> 注：<span class="red">*</span>为必填项</b>
+    </div>
+     <input type="hidden" name="baoxiao_id" id="aid" value="{$data.baoxiao_id}" />
+     <input type="hidden" name="baoxiao_code" id="baoxiao_code" value="{$data.baoxiao_code}" />
+  </div>
+  </form>
+</div>
+
+</body>
+</html>

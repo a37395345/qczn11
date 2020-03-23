@@ -1,0 +1,53 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>管理后台</title>
+<link href="../../../../css/style.css" rel="stylesheet" type="text/css">
+<style>
+/*{literal}*/
+	.navi_name{font-size:14px;font-weight:bold;}
+	.indent{padding-left:40px;}
+/*{/literal}*/
+</style>
+</head>
+<body>
+<div class="so_main">
+  <div class="page_tit">明细</div>
+  <div class="form2">
+		<dl class="lineD">
+		  <dt>借款人：</dt>
+		  <dd>{$list.emp_name}</dd>
+		</dl>
+		<dl class="lineD">
+		  <dt>借款日期：</dt>
+		  <dd>{$list.borrow_date}</dd>
+		</dl>
+	  	<dl class="lineD">
+		  <dt>借款金额：</dt>
+		  <dd>{$list.borrow_money}</dd>
+		</dl>
+		<dl class="lineD">
+		  <dt>备注：</dt>
+		  <dd>{$list.borrow_remarks}</dd>
+		</dl>
+		<dl class="lineD">
+		  <dt>审核人：</dt>
+		  <dd>{$list.borrow_isAgreeMan}</dd>
+		</dl>
+		<dl class="lineD">
+		  <dt>审核意见：</dt>
+		  <dd>{$list.borrow_isAgreeRemarks}</dd>
+		</dl>
+		<dl class="lineD">
+		  <dt>还款金额：</dt>
+		  <dd>{$list.borrow_Returnmoney}</dd>
+		</dl>
+    <div class="page_btm">
+      <input type="button" class="btn_b" value="关闭" onclick="window.close();"/>
+    </div>
+  </div>
+</div>
+</body>
+</html>

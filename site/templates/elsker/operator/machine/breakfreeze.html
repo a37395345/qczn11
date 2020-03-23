@@ -1,0 +1,138 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<title>Insert title here</title>
+	<link href="../../../css/style.css" rel="stylesheet" type="text/css">
+	<link href="../../../js/jbox/jBox/Skins/GreyBlue/jbox.css" rel="stylesheet" />
+	<link rel="stylesheet" href="../../../../../crm/css/bootstrap.min14ed.css">
+	<link rel="stylesheet" href="../../../../../crm/css/style.min862f.css">
+	<script type="text/javascript" src="../../../js/jquery.js"></script>
+	<script type="text/javascript" src="../../../js/common.js"></script>
+	<script type="text/javascript" src="../../../js/My97DatePicker/WdatePicker.js"></script>
+	<script type="text/javascript" src="../../../js/jbox/jBox/jquery.jBox-2.3.min.js"></script>
+	<script type="text/javascript" src="../../../js/jbox/jBox/i18n/jquery.jBox-zh-CN.js"></script>
+</head>
+
+<body class="gray-bg">
+	<div class="wrapper wrapper-content animated fadeInRight">
+		<!-- Panel Other -->
+		<div class="ibox float-e-margins">
+			<div class="ibox-title">
+				<h5>车辆违章冻结</h5>
+			</div>
+			<form method="post" action="insert.php" name="form1" id="form1">
+				<div class="wrapper wrapper-content animated fadeInRight" style=" margin: 0; padding: 0;">
+					<div class="ibox float-e-margins" style="margin:0">
+						<input type="hidden" name="task" value="breakfreeze_acc" />
+						<input type="hidden" name="bid" id="bid" value="{$bid}" />
+						<div class="ibox-content" id="content" style=" margin: 0px; padding: 0px;">
+							<div class="row row-lg">
+								<div class="col-sm-12">
+									<!-- Example Events -->
+									<div class="example-wrap">
+										<div class="example">
+											<div class="form2">
+												<table class="table table-bordered">
+
+													<tr>
+														<th width="15%" style="background-color:#F5F5F6">
+															<span style="color:#000;">违章车辆：</span>
+														</th>
+														<td width="35%">苏D{$list.car_num}</td>
+														<th width="15%" style="background-color:#F5F5F6">
+															<span style="color:#000;">合计金额：</span>
+														</th>
+														<td width="35%">
+															{$list.breakrules_money}<input type="hidden" name="total"
+																value="{$list.breakrules_money}" /> </td>
+													</tr>
+													<tr>
+														<th width="15%" style="background-color:#F5F5F6">
+															<span style="color:#000;">违章项目：</span>
+														</th>
+														<td width="35%">{$list.breakrules_item}
+														</td>
+													
+														<th width="15%" style="background-color:#F5F5F6">
+															<span style="color:#000;">违章金额：</span>
+														</th>
+														<td width="35%">
+															<input type="text" name="total1" id="total1" class="form-control input-sm"
+																value="{$list.breakrules_money1}" size="5" readonly />
+														</td>
+													</tr>
+													<tr>
+														<th width="15%" style="background-color:#F5F5F6">
+															<span style="color:#000;">违章手续费：</span>
+														</th>
+														<td width="35%">
+															<input type="text" name="total2" id="total2"class="form-control input-sm"
+																value="{$list.breakrules_money2}" size="5" readonly />
+														</td>
+													
+														<th width="15%" style="background-color:#F5F5F6">
+															<span style="color:#000;">违章扣分：</span>
+														</th>
+														<td width="35%">
+															<input type="text" name="total3" id="total3"class="form-control input-sm"
+																value="{$list.breakrules_money3}" size="5" readonly />
+														</td>
+													</tr>
+													<tr>
+														<th width="15%" style="background-color:#F5F5F6">
+															<span style="color:#000;">金额抵扣分：</span>
+														</th>
+														<td width="35%">
+															<input type="text" name="total4" id="total4"class="form-control input-sm"
+																value="{$list.breakrules_money4}" size="5" readonly />
+														</td>
+													
+														<th width="15%" style="background-color:#F5F5F6">
+															<span style="color:#000;">派车单号：</span>
+														</th>
+														<td width="35%">
+															<input type="text" name="breakrules_paiche"class="form-control input-sm"
+																id="breakrules_paiche" size="16" placeholder="必填" /> </td>
+													</tr>
+													</table>
+											</div>
+											
+											<div >
+												<a href="javascript:void(0);" class="btn btn-outline btn-default" style="margin-left:5%;width: 10%"
+													onclick="ok();"><span>确定</span></a>
+												<a href="javascript:void(0);" class="btn btn-outline btn-default" style="margin-left:20%;width: 10%"
+													onclick="closebox();"><span>关闭</span></a>
+											</div>
+										</div>
+			</form>
+
+			<!-{literal}->
+				<script>
+
+					function ok() {
+
+						if (!$('#breakrules_paiche').val()) {
+							alert("请填写派车单号！");
+							$('#breakrules_paiche').focus();
+							return false;
+						}
+
+						if (!confirm('请仔细核对，一旦提交就无法修改了，确定提交吗？')) {
+							return false;
+						}
+
+						$("#form1").submit();
+
+						//window.parent.window.location.reload();
+						//window.parent.window.jBox.close();
+					}
+
+
+					function closebox() {
+						window.parent.window.jBox.close();
+					}
+
+				</script>
+				<!-{/literal}-> </body> </html>

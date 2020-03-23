@@ -1,0 +1,295 @@
+* {
+	margin: 0;
+	padding: 0
+}
+
+html {
+	font-size: 16px
+}
+
+ul,ol,li {
+	list-style: none
+}
+
+a {
+	text-decoration: none;
+	color: #333
+}
+
+h1,h2,h3,h4,h5,h6 {
+	font-weight: 400;
+	color: #333;
+	font-size: 16px
+}
+
+.clear:after {
+	content: '';
+	display: block;
+	clear: both
+}
+
+.week_content {
+	/* width: 1200px; */
+	/*min-height: 500px;*/
+	margin: 10px auto;
+	/* background: #f2f2f2; */
+	/*padding-bottom: 30px;*/
+	/* padding: 120px; */
+}
+
+.week_title {
+	width: 100%;
+	text-align: center;
+	padding: 20px 0
+}
+
+.week_title a,.week_title h1 {
+	display: inline-block;
+	vertical-align: middle
+}
+
+.week_title a {
+	width: 20px;
+	height: 20px;
+	/*border: 1px solid #1e90ff;
+	border-radius: 50%;*/
+	position: relative;
+	font-size: 20px;
+}
+
+.week_title a:before {
+	/*content: '';
+	display: block;
+	width: 10px;
+	height: 10px;
+	border-top: 1px solid #1e90ff;
+	border-right: 1px solid #1e90ff;
+	transform: rotate(-135deg);
+	position: absolute;
+	right: 2px;
+	top: 5px*/
+}
+
+
+.glyphicon-chevron-left{
+	background: url(../../../images/leftm.png) no-repeat;
+    width: 24px!important;
+    height: 24px!important;
+    background-size: 100% 100%;
+}
+.glyphicon-chevron-right{
+	background: url(../../../images/rightm.png) no-repeat;
+	width: 24px!important;
+    height: 24px!important;
+    background-size: 100% 100%;
+}
+.week_title a.nextWeek:before {
+	/*transform: rotate(45deg);
+	right: 7px*/
+}
+
+.week_title h1 {
+	margin: 0 10px
+}
+
+.week_box {
+	/*background: #f2f2f2;*/
+}
+
+.week_box ul li {
+	width: 12.285%;
+	float: left;
+	text-align: center;
+	line-height: 50px
+}
+
+.calendarContent {
+	width: 100%;
+	overflow: hidden
+}
+
+.calendarAll {
+	width: 100%;
+	overflow-y: auto
+}
+
+
+
+.calendar_box section h2 {
+	text-align: center;
+	/* border: 1px solid #ddd;  */
+}
+
+.calendar_box section h2 a {
+	border-radius: 50%;
+	display: inline-block;
+	/*width: 41px;*/
+	line-height: 30px;
+	border: 1px solid transparent;
+	cursor: default;
+}
+
+.calendar_box section h2.current a {
+	/*background: #1e90ff;
+	color: #fff*/
+
+}
+.calendar_box section h2.current{
+	background: #cecece;
+}
+.calendar_box section h2.current a{
+	color: #2d2b2b;
+	font-weight: 500;
+}
+.calendar_box section h2.select a {
+	border: 1px solid #1e90ff
+}
+
+.calendar_box section h2.active {
+	/*background: #1e90ff*/
+}
+
+.calendar_box section h2.active a {
+	color: #000;
+}
+
+.calendar_box section ul td {
+	text-align: center;
+	font-size: 14px;
+	min-height: 60px;
+	background: #1e90ff;
+	/*margin-top: 10px;*/
+	position: relative
+}
+
+.calendar_box section ul td p{
+	color: #fff;
+	padding-top: 6px;
+}
+
+.calendar_box section ul td:hover article {
+/*display:block*/
+}
+
+.calendar_box section ul td article {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background: rgba(0,0,0,.5);
+	display: none;
+}
+
+.calendar_box section ul td article a {
+	display: block;
+	padding: 10px 0 0;
+	color: #fff
+}
+
+.down_list {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background: rgba(0,0,0,.7);
+	display: none;
+	z-index: 999
+}
+
+.down_list_c {
+	overflow: hidden;
+	width: 500px;
+	min-height: 500px;
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	margin-left: -250px;
+	margin-top: -250px;
+	background: #fff;
+	border-radius: 5px;
+	color: #333
+}
+
+.down_list_c h1 {
+	font-size: 16px;
+	line-height: 40px;
+	background: #f2f2f2
+}
+
+.down_list_c .jy_list {
+	padding: 0 20px
+}
+
+.down_list_c .jy_list p {
+	text-align: left;
+	line-height: 30px;
+	margin: 10px 0
+}
+
+.down_list_c .jy_list p a {
+	float: right;
+	color: #333!important;
+	width: 40px
+}
+
+.down_list_c h5 {
+	position: absolute;
+	top: 10px;
+	right: 10px;
+	width: 20px;
+	height: 20px;
+	cursor: pointer
+}
+
+.down_list_c h5:before {
+	content: '';
+	display: block;
+	width: 20px;
+	height: 2px;
+	transform: rotate(-45deg);
+	background: #666;
+	position: absolute;
+	right: 0;
+	top: 10px
+}
+
+.down_list_c h5:after {
+	content: '';
+	display: block;
+	width: 20px;
+	height: 2px;
+	transform: rotate(45deg);
+	background: #666;
+	position: absolute;
+	right: 0;
+	top: 10px
+}
+
+.optionsUl li{
+	margin-bottom: 10px;
+}
+.optionsUl li:last-child{
+	margin-bottom: 0;
+}
+.changeBg{
+	background: #f2f2f2!important;
+}
+#carDetails table tr td {
+	position: relative;
+	/*overflow: hidden;*/
+	width: 94%;
+
+	
+}
+#carDetails table tr th{
+	    padding: 0;
+}
+#carDetails table tr td span{
+	position: absolute;
+	background-color: pink;
+	height: 50%;
+	display: inline-block;
+	top:0px;
+}

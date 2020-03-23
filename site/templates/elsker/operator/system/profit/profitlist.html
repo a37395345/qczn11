@@ -1,0 +1,66 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>管理后台</title>
+<link href="../../../../css/style.css" rel="stylesheet" type="text/css">
+<script type="text/javascript" src="../../../../js/jquery.js"></script>
+<script type="text/javascript" src="../../../../js/common.js"></script>
+</head>
+<body>
+<div class="so_main">
+  <div class="page_tit">员工收益明细</div>
+  <div class="list">
+  <table width="100%" border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <th class="line_l">月份</th>
+	<th class="line_l">比率</th>
+    <th class="line_l">收益</th>
+  </tr>
+  {foreach from=$profitlist key=i item=row}
+  {$total=$total+$row.profit}
+  <tr overstyle='on' id="profit_{$row.id}">
+		<td>{$row.month}</td>
+		<td>{$row.percent}</td>
+	  	<td>{if $row.profit==0}待计算...{else}{$row.profit}{/if}</td>
+ </tr>
+ {/foreach}
+ <tr style="background-color:#FE6E47;">
+    <td>合计</td>
+	<td colspan="1">&nbsp;</td>
+	<td>{if $total==0}待计算...{else}{$total}{/if}</td>
+  </tr>
+ </table>
+ </div>
+
+</div>
+
+<!-{literal}->
+<script>
+	//鼠标移动表格效果
+	$(document).ready(function(){
+		$("tr[overstyle='on']").hover(
+		  function () {
+		    $(this).addClass("bg_hover");
+		  },
+		  function () {
+		    $(this).removeClass("bg_hover");
+		  }
+		);
+	});
+	
+	function folder(type, _this) {
+		$('#search_'+type).slideToggle('fast');
+		if ($(_this).html() == '展开') {
+			$(_this).html('收起');
+		}else {
+			$(_this).html('展开');
+		}
+		
+	}
+</script>
+<!-{/literal}->
+
+</body>
+</html>

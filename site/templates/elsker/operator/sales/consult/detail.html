@@ -1,0 +1,114 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>管理后台</title>
+<link href="../../../../css/style.css" rel="stylesheet" type="text/css">
+<script type="text/javascript" src="../../../../js/jquery.js"></script>
+<script type="text/javascript" src="../../../../js/common.js"></script>
+<style>
+/*{literal}*/
+	.navi_name{font-size:14px;font-weight:bold;}
+	.indent{padding-left:40px;}
+/*{/literal}*/
+</style>
+</head>
+<body>
+<div class="so_main">
+  <div class="page_tit">详细</div>  
+  <div class="form2">  	
+	  	<dl class="lineD">
+	      <dt>咨询时间：</dt>
+	      <dd>{$list.consult_addtime}</dd>
+	    </dl>
+	    <dl class="lineD">
+		  <dt>咨询单位：</dt>
+		  <dd>{$list.consult_linker}</dd>
+		</dl>
+	  	<dl class="lineD">
+		  <dt>咨询人：</dt>
+		  <dd>{$list.consult_linkerMan}    联系电话：{$list.consult_linkerPhone}</dd>
+		</dl>
+		<dl class="lineD">
+		    <dt>用车类型：</dt>
+		    <dd>{$list.item_name}</dd>
+		</dl>
+		<dl class="lineD">
+	    	<dt>需求车型：</dt>
+	    	<dd>{if $list.consult_requestCar==1}商务车{elseif $list.consult_requestCar==2}客车{else}小车{/if}</dd>
+	  	</dl>
+	  	<dl class="lineD">
+		    <dt>路程：</dt>
+		    <dd>{$list.consult_route}</dd>
+		</dl>
+	  	<dl class="lineD">
+		    <dt>开车线路：</dt>
+		    <dd>{$list.consult_line}</dd>
+		</dl>
+		<dl class="lineD">
+	      <dt>预计用车时间：</dt>
+	      <dd>{$list.consult_times}</dd>
+	    </dl>
+		<dl class="lineD">
+		  <dt>报价情况：</dt>
+		  <dd>{$list.consult_price}</dd>
+		</dl>
+		<dl class="lineD">
+		    <dt>接待人：</dt>
+		    <dd>{$list.yewuyuan}</dd>
+		</dl>
+	    <dl class="lineD">
+		  <dt>备注：</dt>
+		  <dd>{$list.consult_Remarks}</dd>
+		</dl>
+		<dl class="lineD">
+	      <dt>相关附件：</dt>
+	      <dd>
+	      <div>
+	        <ul>
+	        {foreach from=$list.consulting_imglist key=i item=rows name=foo}
+	         <li style="float:left;text-align:center;">
+	         {if $rows.atttype=='picture'}
+	         <a href="../consult/picture.php?consult_id={$list.consult_id}&nowserial={$smarty.foreach.foo.index+1}" title="点击查看原图" target="_blank"><img src="../../../../thumb/{$rows.images}" width="100" height="100" /></a><br />{$smarty.foreach.foo.index+1}</li>
+	        {else}
+	        <a href="../../../../thumb/{$rows.images}" title="点击查看" target="_blank"><img src="../../../../images/filebg/{$rows.filetype}.png" width="100" height="100" /></a><br />{$smarty.foreach.foo.index+1}</li>
+	        {/if}
+	        {/foreach}
+	        </ul>
+	        </div>
+	      </dd>
+	   </dl>
+  </div>
+  {if $list.negotiate_list}
+  <div class="list">
+	<table width="100%" border="0" cellspacing="0" cellpadding="0">
+		<tr><th colspan="6" style="text-align:left;">历次洽谈情况</th></tr>
+		<tr>
+			<th style="width:30px;">序号	</th>
+			<th>日期</th>
+			<th>接洽人</th>
+			<th>洽谈方式</th>
+			<th>洽谈内容</th>
+			<th>结果判断</th>
+		</tr>
+		{foreach from=$list.negotiate_list key=i item=row1}
+		<tr>
+			<td>{$smarty.foreach.foo.index+1} </td>
+			<td>{$row1.negotiate_Date}</td>
+			<td>{$row1.negotiate_linker}</td>
+			<td>{$row1.negotiate_type}</td>
+			<td style="text-align:left;">{$row1.negotiate_Remarks}</td>
+			<td>{if $row1.negotiate_result==3}用户已放弃{elseif $row1.negotiate_result==2}已选择其他租车公司{elseif $row1.negotiate_result==1}已决定租车{else}需要继续跟进{/if}</td>
+		</tr>
+		{/foreach}
+	</table>
+  </div>
+  {/if}
+  <div class="page_btm">
+      <a href="javascript:window.close();">关闭</a>
+  </div>
+</div>
+
+</body>
+</html>

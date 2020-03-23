@@ -1,0 +1,170 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>出车单打印</title>
+<!-- {literal} -->
+<script language="javascript">
+
+function printme()
+{   document.body.innerHTML=document.getElementById('iepage1').innerHTML+'<br/>'+document.getElementById('iepage2').innerHTML+'<br/>'+document.getElementById('iepage3').innerHTML+'<br/>'+document.getElementById('iepage4').innerHTML;
+    window.print();
+}
+</script>
+<style type="text/css">
+body {margin:0;padding:0;font:normal 0.7em "微软雅黑",Arial,Times;}
+tr {line-height:22px;}
+</style>
+</head>
+<!-- {/literal} -->
+<body>
+
+<table cellpadding="0" cellspacing="0" style="text-align:center;">
+  <tr>
+    <td colspan="2"><div style=" margin:5px 0 0 25px;"><iframe src="BCGcode39.php?text={$list.paiche_contractNum}" width="100%" height="80" frameborder="0" scrolling="no"></iframe></div></td>
+  </tr>
+  <tr style="line-height:6px;">
+    <td colspan="2"><h1>运河租车&nbsp;&nbsp;出车单</h1></td>
+  </tr>
+  {if $list.client_name !=''}
+  <tr>
+    <td align="right" width="35%">用车单位：</td>
+    <td align="left" >{$list.client_name}</td>
+  </tr>
+  {else}
+  {if $list.bro_name !=''}
+  <tr>
+    <td align="right" width="35%">调车公司：</td>
+    <td align="left" >{$list.bro_name}</td>
+  </tr>
+  {/if}
+  
+  {/if}
+   <tr>
+    <td align="right" width="35%">联系人：</td>
+    <td align="left">{$list.paiche_linker}&nbsp;手机：{$list.paiche_linkerPhone}</td>
+  </tr>
+  <tr>
+    <td align="right" >业务员：</td>
+    <td align="left">{$list.yewuyuan}&nbsp;电话：{$list.yewuyuan_phone}</td>
+  </tr>
+  <tr>
+    <td align="right" >调度员：</td>
+    <td align="left">{$list.paicheDispatchMan}&nbsp;电话：{$list.paicheDispatchManPhone}</td>
+  </tr>
+  <tr>
+    <td align="right" >司机：</td>
+    <td align="left">{$list.siji}&nbsp;车辆：苏D{$list.car_num}</td>
+  </tr>
+  <tr>
+    <td align="right" >起始日期：</td>
+    <td align="left">{$list.paiche_startDate_All}</td>
+  </tr>
+  <tr>
+    <td align="right" >截止日期：</td>
+    <td align="left">{$list.paiche_endDate_All}</td>
+  </tr>
+  {foreach from=$itemlist item=row name=foo}
+  <tr>
+    <td align="right" >{$row.item_name}：</td>
+    <td align="left">{$row.conv_result}</td>
+  </tr>
+  {/foreach}
+  <tr>
+    <td align="right" >工作时间：</td>
+    <td align="left">{$list.paiche_workTime}小时&nbsp;超时费：{if $list.paiche_unlimitTime!="Y"}{$list.paiche_overTime}元/小时{else}不限时{/if}</td>
+  </tr>
+  <tr>
+    <td align="right" >限制公里数：</td>
+    <td align="left">{if $list.paiche_unlimitKm!="Y"}{$list.paiche_limitKm}公里 ，超公里按{$list.paiche_overKm}元/公里{else}不限公里{/if}</td>
+  </tr>
+  <tr>
+    <td align="right" >合同租金：</td>
+    <td align="left">{$paiche_rent}元&nbsp;已交定金：{$paiche_rented}元</td>
+  </tr>
+  <tr>
+    <td align="right" >还需收尾款：</td>
+    <td align="left">租金{if $paiche_rented>0}{$paiche_rent-$paiche_rented}{else}{$paiche_rent-$paiche_front}{/if}元
+    			{if $list.paiche_unlimitKm!="Y"}、超公里费{/if}{if $list.paiche_unlimitTime!="Y"}、超时费{/if}
+    			{foreach from=$itemlist item=row}
+    			{if $row.conv_result=="否"}、{$row.item_costname}{/if}
+    			{/foreach}
+    			</td>
+  </tr>
+  {if $list.paiche_line !=''}
+  <tr>
+    <td align="right" >线路说明：</td>
+    <td align="left">{$list.paiche_route}程。{$list.paiche_line}</td>
+  </tr>
+  {/if}
+  {if $list.paiche_specialRemarks != ''}
+  <tr>
+    <td align="right" >特殊备注：</td>
+    <td align="left">{$list.paiche_specialRemarks}</td>
+  </tr>
+  {/if}
+  <tr>
+    <td align="right" >客户意见：</td>
+    <td align="left">_________________________________</td>
+  </tr>
+  <tr>
+    <td align="right" height="45">&nbsp;</td>
+    <td align="left">_________________________________</td>
+  </tr>
+  <tr>
+    <td align="right" >&nbsp;</td>
+    <td align="left">&nbsp;</td>
+  </tr>
+  <tr>
+    <td align="right" colspan="2">客户确认签字：___________&nbsp;&nbsp;&nbsp;</td>
+  </tr>
+  <tr>
+    <td align="center" colspan="2">***********************************************</td>
+  </tr>
+</table>
+<table cellpadding="0" cellspacing="0" style="text-align:center;">
+  <tr>
+	  <td width="7%">&nbsp;</td>
+	  <td align="left" width="50%">过桥过路费：_______元</td>
+	  <td align="right" >停车费：_______元</td>
+  </tr>
+  <tr>
+    <td>&nbsp;</td>
+    <td align="left" >餐费：_______元</td>
+    <td align="right" >住宿费：_______元</td>
+  </tr>
+  <tr>
+    <td>&nbsp;</td>
+    <td align="left" >收取现金：_______元</td>
+    <td align="right" >现金加油：_______元</td>
+  </tr>
+  
+  <tr>
+    <td>&nbsp;</td>
+    <td align="left" >*开始公里：__________</td>
+    <td align="right" >*结束公里：__________</td>
+  </tr>
+  <tr>
+    <td>&nbsp;</td>
+    <td align="left" >*总共行驶：______公里</td>
+    <td>*实际结算：______公里</td>
+  </tr>
+  <tr>
+    <td>&nbsp;</td>
+    <td align="left" >用车时间：___________</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <td>&nbsp;</td>
+    <td align="left" colspan="2">备注说明：____________________________________</td>
+  </tr>
+</table>
+<table cellpadding="0" cellspacing="0" style="text-align:center;">
+  <tr>
+    <td width="7%">&nbsp;</td>
+    <td >司机：________</td>
+    <td >审核：________</td>
+    <td >财务：________</td>
+  </tr>
+</table>
+</body>

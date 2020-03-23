@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>部门管理</title>
+    
+
+    <link rel="shortcut icon" href="favicon.ico"> <link href="../../../crm1/css/bootstrap.min.css?v=3.3.6" rel="stylesheet">
+    <link href="../../../crm1/css/font-awesome.css?v=4.4.0" rel="stylesheet">
+
+    <link href="../../../crm1/css/animate.css" rel="stylesheet">
+    <link href="../../../crm1/css/style.css?v=4.1.0" rel="stylesheet">
+    <link href="../../../crm1/css/plugins/treeview/bootstrap-treeview.css" rel="stylesheet">
+
+    <link href="../../../crm/css/plugins/sweetalert/sweetalert.css" rel="stylesheet">
+    <link href="../../../css/conmone.css" rel="stylesheet">
+    <script src="../../../crm/js/plugins/sweetalert/sweetalert.min.js"></script>
+
+    <script type="text/javascript" src="../../../js/jquery.js">
+</script>
+    <link href="../../../js/jbox/jBox/Skins/GreyBlue/jbox.css?a=2" rel="stylesheet">
+    <script type="text/javascript" src="../../../js/jbox/jBox/jquery.jBox-2.3.min.js?a=5"></script>
+    <script type="text/javascript" src="../../../js/jbox/jBox/i18n/jquery.jBox-zh-CN1.js?a=101"></script>
+</head>
+
+<body class="gray-bg">
+    <div class="row wrapper wrapper-content animated fadeInRight">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins" >
+                 <div class="ibox-title" style="    padding-top: 5px">
+                <h5 style="padding-top: 10px">部门管理</h5>
+                {if $department_add==1}
+               <div class="ibox-tools" style="float: left;margin-left: 40px">
+                    <a class="btn btn-outline btn-default" href="javascript:;" onclick="add();return false" target="_blank">
+                        <i class="glyphicon glyphicon-plus" aria-hidden="true"></i>
+                        添加部门
+                    </a>
+                     
+                </div>
+                {/if}
+                {if $department_delete==1}
+                <div class="ibox-tools">
+                    <a class="btn btn-outline btn-default" href="javascript:;" onclick="delete_a();return false" target="_blank">
+                        <i class="fa fa-close" style="color: red"></i>
+                        清理未启用部门
+                    </a>
+                </div>
+                {/if}
+               
+            </div>
+            <table class="table table-bordered table-hover" data-height="400" style="margin-bottom:0px" data-mobile-responsive="true">
+                            <thead>
+                            <tr>
+                                <th style="text-align: center;width: 25%">
+                                    部门名称
+                                </th>
+                               
+                                <th style="text-align: center;width: 10%">
+                                    排序
+                                </th>
+                                <th style="text-align: center;width: 10%">
+                                    是否启用
+                                </th>
+                                <th style="text-align: center;width: 10%">
+                                    操作
+                                </th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {foreach from=$list key=i item=rows}
+                            <tr>
+                                <td>
+                                    <span class="icon"><i class="glyphicon glyphicon-stop"></i></span>{$rows.name}
+                                </td>
+
+                                
+                                <td style="text-align: center;">
+                                    {$rows.department_order}
+                                </td>
+                                <td style="text-align: center;">
+                                    {if $department_setStatus==1}
+                                    <a  onclick="setStatus({$rows.id});return false" target="_blank">
+                                    {/if}
+                                        {if $rows.status==0}
+                                            <i class="fa fa-check" style="color:green"></i>
+                                        {else} 
+                                            <i class="fa fa-close" style="color:red"></i>
+                                        {/if}
+                                         {if $department_setStatus==1}
+                                    </a>
+                                    {/if}
+                                </td>
+                                <td style="text-align: center;">
+                                    {if $department_edit==1}
+                                    <a  href="javascript:;" onclick="edit({$rows.id});return false" target="_blank">
+                                            修改</a>&nbsp;&nbsp;&nbsp;
+                                            {/if}
+                                    {if $department_setRule==1}
+                                    <a  href="javascript:;" onclick="setRule({$rows.id});return false" target="_blank">
+                                            权限</a>
+                                            {/if}
+                                </td>
+                            </tr>
+                            {if count($rows['son'])>0}
+
+                                {foreach from=$rows["son"] key=i item=rows_a}
+                                <tr>
+                                    <td>
+                                        +
+                                        <span class="icon"><i class="glyphicon glyphicon-stop"></i></span>{$rows_a.name}
+                                    </td>
+                                    
+                                    <td style="text-align: center;">
+                                        {$rows_a.department_order}
+                                    </td>
+                                    <td style="text-align: center;">
+                                         {if $department_setStatus==1}
+                                        <a  onclick="setStatus({$rows_a.id});return false" target="_blank">
+                                            {/if}
+                                        {if $rows_a.status==0}<i class="fa fa-check" style="color:green"></i>{else} <i class="fa fa-close" style="color:red"></i></i>{/if}
+                                         {if $department_setStatus==1}
+                                        </a>
+                                        {/if}
+                                    </td>
+                                    <td style="text-align: center;">
+                                         {if $department_edit==1}
+                                        <a  href="javascript:;" onclick="edit({$rows_a.id});return false" target="_blank">
+                                            修改</a>&nbsp;&nbsp;&nbsp;
+                                            {/if}
+                                             {if $department_setRule==1}
+                                        <a  href="javascript:;" onclick="setRule({$rows_a.id});return false" target="_blank">
+                                            权限</a>
+                                            {/if}
+                                    </td>
+                                </tr>
+                                {if count($rows_a['son'])>0}
+                                    {foreach from=$rows_a["son"] key=i item=rows_b}
+                                    <tr>
+                                        <td>
+                                            ++
+                                            <span class="icon"><i class="glyphicon glyphicon-stop"></i></span>{$rows_b.name}
+                                        </td>
+                                       
+                    
+                                        <td style="text-align: center;">
+                                            {$rows_b.department_order}
+                                        </td>
+                                        <td style="text-align: center;">
+                                            {if $department_setStatus==1}
+                                            <a   onclick="setStatus({$rows_b.id});return false" target="_blank">
+                                                {/if}
+                                            {if $rows_b.status==0}<i class="fa fa-check" style="color:green"></i>{else} <i class="fa fa-close" style="color:red"></i></i>{/if}
+                                            {if $department_setStatus==1}
+                                            </a>
+                                            {/if}
+                                        </td>
+
+                                        <td style="text-align: center;">
+                                            {if $department_edit==1}
+                                            <a  href="javascript:;" onclick="edit({$rows_b.id});return false" target="_blank">
+                                            修改</a>&nbsp;&nbsp;&nbsp;
+                                            {/if}
+                                            {if $department_setRule==1}
+                                            <a  href="javascript:;" onclick="setRule({$rows_b.id});return false" target="_blank">
+                                            权限</a>
+                                            {/if}
+                                        </td>
+                                    </tr>
+                                   
+                                    {/foreach}
+                                {/if}
+                                {/foreach}
+                            {/if}
+                            {/foreach}
+                        </tbody>
+                    </table>
+                </div>
+        </div> 
+    </div>
+    </div>
+    <!-- 全局js -->
+    
+    <script src="../../../crm1/js/bootstrap.min.js?v=3.3.6"></script>
+    <!-- Bootstrap-Treeview plugin javascript -->
+    <script src="../../../crm1/js/plugins/treeview/bootstrap-treeview.js"></script>
+
+<script>
+    var body_W = $("body").width();
+    function setBody_W(){
+        body_W = $("body").width();
+    }
+    function add(){
+        setBody_W();
+        demo_iframe('index.php?task=add','添加部门',body_W,500,'login_js');
+    }
+    function edit(id){
+        setBody_W();
+        demo_iframe('index.php?task=edit&id='+id,'修改部门',body_W,500,'login_js');
+    }
+    function setRule(id){
+        setBody_W();
+        demo_iframe('index.php?task=setRule&id='+id,'部门权限管理',body_W,500,'login_js');
+    }
+</script>
+<script type="text/javascript">
+        function setStatus(id) {
+            swal(
+                {ldelim}title:"您确定切换启用？",
+                      text:"",
+                      type:"warning",
+                      showCancelButton:true,
+                      confirmButtonColor:"#DD6B55",
+                      confirmButtonText:"确定",
+                      cancelButtonText:"取消",
+                      closeOnConfirm:false,
+                      closeOnCancel:false{rdelim},
+                      function(isConfirm){
+                        if(isConfirm){
+                            window.location.href = "index.php?task=setStatus&id="+id;
+                        }else{
+                            swal("已取消",
+                                 "您取消了切换操作！","error"
+                            )
+                        }
+                    }
+                )
+        };
+    </script>
+    <script type="text/javascript">
+        function delete_a() {
+            swal(
+                {ldelim}title:"您确定清除禁用的部门？",
+                      text:"删除后将无法恢复，请谨慎操作！",
+                      type:"warning",
+                      showCancelButton:true,
+                      confirmButtonColor:"#DD6B55",
+                      confirmButtonText:"确定",
+                      cancelButtonText:"取消",
+                      closeOnConfirm:false,
+                      closeOnCancel:false{rdelim},
+                      function(isConfirm){
+                        if(isConfirm){
+                            window.location.href = "index.php?task=delete";
+                        }else{
+                            swal("已取消",
+                                 "您取消了清除操作！","error"
+                            )
+                        }
+                    }
+                )
+        };
+    </script>
+
+</body>
+
+</html>

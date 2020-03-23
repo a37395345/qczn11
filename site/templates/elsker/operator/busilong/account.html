@@ -1,0 +1,355 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Insert title here</title>
+<link href="../../../css/style.css" rel="stylesheet" type="text/css">
+<link href="../../../js/jbox/jBox/Skins/GreyBlue/jbox.css" rel="stylesheet"  />
+<script type="text/javascript" src="../../../js/jquery.js"></script>
+<script type="text/javascript" src="../../../js/common.js"></script>
+<script type="text/javascript" src="../../../js/date_select.js"></script>
+<script type="text/javascript" src="../../../js/calendar.js"></script>
+<script type="text/javascript" src="../../../js/fancybox/jquery.mousewheel-3.0.4.pack.js"></script>
+
+<script type="text/javascript" src="../../../js/fancybox/jquery.fancybox-1.3.4.pack.js"></script>
+<script type="text/javascript" src="../../../js/jbox/jBox/jquery.jBox-2.3.min.js"></script>
+<script type="text/javascript" src="../../../js/jbox/jBox/i18n/jquery.jBox-zh-CN.js"></script>
+
+
+</head>
+<body>
+
+<form method="post" action="list.php" name="form1" id="form1">
+<input type="hidden" id="op" name="op" value="{$op}" />
+<input type="hidden" name="pid" value="{$pid}" />
+<input type="hidden" name="pids" value="{$pids}" />
+<div class="so_main">
+  <div class="page_tit_1">{$PAGETITLE}</div>
+  {if $op=="returncar" || $op=="givecar"}
+  <div class="page_tit_2">车辆：{$list.car_num}-{$list.car_color}-{$list.car_brand}-{$list.car_type}&nbsp;&nbsp;{if $op=="givecar"}驾驶员：{$list.siji}{/if}{if $list.paiche_brother>0}(调车公司用车:{$list.bro_name}){/if}</div>
+  {/if}
+
+
+{if $op=="returncar" || $op=="givecar"}
+<input type="hidden" name="task" value="{$op}_accept" />
+<input type="hidden" name="b_id" id="b_id" value="{$busitype}" />
+<input type="hidden" name="paicheCar" id="paicheCar" value="{$list.paicheCar}" />
+<input type="hidden" name="paicheDriver" id="paicheDriver" value="{$list.paicheDriver}" />
+<input type="hidden" name="paiche_shunt" id="paiche_shunt" value="{$list.paiche_shunt}" />
+<input type="hidden" name="paiche_unlimitKm" id="paiche_unlimitKm" value="{$list.paiche_unlimitKm}" />
+<input type="hidden" name="youfei" id="youfei" value="{$list.youfei}" />
+<input type="hidden" name="paiche_limitKm" id="paiche_limitKm" value="{$list.paiche_limitKm}" />
+<input type="hidden" name="paiche_unlimitTime" id="paiche_unlimitTime" value="{$list.paiche_unlimitTime}" />
+<input type="hidden" name="totalChangeCarKilo" id="totalChangeCarKilo" value="{$totalChangeCarKilo}" />
+<input type="hidden" name="paiche_name2" id="paiche_name2" value="{$list.paicheCom}" />
+
+<div class="form2">
+	<dl class="lineD">
+	    <dt>单位名称：</dt>
+	    <dd>{$list.client_name}</dd>
+   </dl>
+   <dl class="lineD">
+          <dt>开始日期：</dt>
+          <dd>{$list.paiche_startDate_format}<input type="hidden" name="startdate" value="{$list.paiche_startDate_format}" /></dd>
+   </dl>
+   <dl class="lineD">
+          <dt>截止日期：</dt>
+          <dd>{$list.paiche_endDate_format}<input type="hidden" name="enddate" value="{$list.paiche_endDate_format}" /></dd>
+   </dl>
+	{if $list.paiche_shunt==0}
+	<dl class="lineD">
+		<dt><span class="redstar">*</span>开始公里数：</dt>
+		<dd><input type="text" name="settle_startKm" id="settle_startKm" {if $changecar_kiloBNow!=0} value="{$changecar_kiloBNow}" readonly class="grey" {/if} size="18" />公里
+		</dd>
+	</dl>
+	<dl class="lineD">
+		<dt><span class="redstar">*</span>结束公里数：</dt>
+		<dd><input type="text" name="settle_endKm" id="settle_endKm" size="18" />公里{if $changecar_kiloBNow!=0}(注：换车一共行驶了{$totalChangeCarKilo}公里) {/if}
+		</dd>
+	</dl>
+	<dl class="lineD">
+		<dt>共计行驶：</dt>
+		<dd><input type="text" name="settle_totalKm" id="settle_totalKm" value="" size="4" onFocus="this.blur()"/>公里&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="redstar" id="showerr" style="display:none;">行驶公里数异常</span></dd>
+	</dl>
+
+	{if $list.paiche_unlimitKm!="Y"}
+	<dl class="lineD">
+	    <dt>前月累计行驶：</dt>
+	    <dd><input type="text" name="settle_qianMonth" id="settle_qianMonth" size="6"  value="{$list.settle_qianMonth}" />公里
+	    </dd>
+	</dl>
+	<dl class="lineD">
+		<dt>超公里数：</dt>
+		<dd><input type="text" name="overKm" id="overKm" size="18" onFocus="this.blur()" class="grey noborder" />公里×<input type="text" name="paiche_overKm" id="paiche_overKm" value="{$list.paiche_overKm}" size="3" />元&nbsp;&nbsp;
+		超公里费用：<input type="text" name="overKmMoney" id="overKmMoney" size="8" value="" onFocus="this.blur()" class="grey noborder" />元
+		</dd>
+	</dl>
+	{/if}
+
+	{if $list.youfei!="Y"}
+	<dl class="lineD">
+		<dt>油费：</dt>
+		<dd>
+			每100公里<input style="width: 40px" type="text" name="youfei_shen" id="youfei_shen" size="18" value="{$list.youfei_shen}"  />升&nbsp;&nbsp;
+
+			油价：<input type="text" name="youfei_danjia" id="youfei_danjia" value="{$list.youfei_danjia}" size="3" />元/升&nbsp;&nbsp;&nbsp;&nbsp;
+
+			总计：<input type="text" name="youfei_zongji" id="youfei_zongji" size="18"  class="grey noborder" readonly="readonly"/>元
+	
+		</dd>
+	</dl>
+	{/if}
+
+	
+	{else}
+	<dl class="lineD">
+	    <dt>支付给调车公司的租金：</dt>
+	    <dd>{$list.shunt_rent}元</dd>
+	</dl>
+	<dl class="lineD">
+	    <dt>调车公司收客户金额：</dt>
+	    <dd>{$list.shunt_rented}元</dd>
+	</dl>
+	{/if}
+
+	{foreach from=$itemlist item=row}
+	<dl class="lineD">
+		<dt>{$row.item_name}</dt>
+		<dd>{if $row.item_calcu=="1"}<input type="hidden" name="item_id[]" value="{$row.item_id}"><input type="hidden" name="item_calcu[]" id="item_calcu_{$row.item_id}" value="{$row.item_calcu}">
+		<input type="hidden" name="item_caltype[]" id="item_caltype_{$row.item_id}" value="{$row.item_caltype}">
+		&nbsp;&nbsp;
+
+		{if $row.item_caltype==0}
+		<input type="text" name="item_money[]" id="item_money_{$row.item_id}" size="4" value="{$row.conv_result}" />元
+
+		<input type="hidden" name="item_price[]" id="item_price_{$row.item_id}" size="4" value="{$row.conv_result}"/>
+
+		<input type="hidden" name="item_number[]" id="item_number_{$row.item_id}" size="2" value="0" />
+		
+		{else}
+
+
+		<input type="hidden" name="item_price[]" id="item_price_{$row.item_id}" size="4" value="{$row.conv_result}"/>
+
+		<input type="text" name="item_number[]" id="item_number_{$row.item_id}" size="2" value="" />*{$row.conv_result}元/{$row.item_unit}=
+		<input type="text" name="item_money[]" id="item_money_{$row.item_id}" size="4" value="" onFocus="this.blur()"/>元
+		{/if}
+		{else}
+		{$row.conv_result}
+		{/if}
+		
+		</dd>
+	</dl>
+	{/foreach}
+	{foreach from=$chargelist item=row name=foo}
+	<dl class="lineD">
+		<dt>{$row.charge_name}：</dt>
+		<dd>{$row.conv_money}元<input type="hidden" name="charge_id[]" value="{$row.id}">
+		<input type="hidden" name="charge_money[]" id="charge_money_{$row.id}" value="{$row.conv_money-$row.have_in_money-$list.shunt_rented}" />
+		<input type="hidden" name="paiche_rent" value="{$row.conv_money}">
+		</dd>
+	</dl>
+	{/foreach}
+	<dl class="lineD" >
+	    <dt>其他费用：</dt>
+	    <dd>
+	    <div id="divcharges">
+	    <ul>
+          <li>编号</li><li>收费项目</li><li>约定金额</li><li></li><li>删除</li>
+        </ul>
+        
+	    </div><div style="padding:5px 0 0 342px;"><a href="javascript:select_charges();"><img src="../../../css/list.gif" height="15" class="peoplePic" /></a></div>
+	    </dd>
+	</dl>
+ 	{if $list.paiche_shunt==0}
+	<dl class="lineD">
+		<dt>合计金额：</dt>
+		<dd><input type="text" name="total" id="total" value="{$total}" size="5" readonly/></dd>
+	</dl>
+	<dl class="lineD">
+		<dt>优惠金额：</dt>
+		<dd><input type="text" name="favor" id="favor" value="0" size="5" /></dd>
+	</dl>
+	<dl class="lineD">
+		<dt>实际开票金额：</dt>
+		<dd><input type="text" name="settle_billMoney" id="settle_billMoney" value="{$total}" size="6"/></dd>
+	</dl>
+	<dl class="lineD">
+		<dt>发票号码：</dt>
+		<dd><input type="text" name="settle_billNum" size="15"/></dd>
+	</dl>
+	<dl class="lineD">
+		<dt>开票日期：</dt>
+		<dd><input type="text" name="settle_billDate" size="16" onClick="calendar.show(this);" readonly="readonly" /></dd>
+	</dl>
+	
+	{/if}
+</div>
+{/if}
+  <div class="Toolbar_inbox">
+    <a href="javascript:void(0);" class="btn_a" name="btn_save" id="btn_save" onclick="ok();"><span>确定</span></a>
+    <a href="javascript:void(0);" class="btn_a" onclick="closebox();"><span>关闭</span></a>   	
+  </div> 
+</div>
+</form>
+<!-{literal}->
+<script>
+$(document).ready(function(){
+    $("#settle_startKm,#settle_endKm,#settle_qianMonth,#paiche_overKm,#paiche_overTime,#favor").live('input propertychange',function(){
+		compute();
+	});
+	$("input[name=money[]]").live('input propertychange',function(){
+		compute();
+	});
+	$("input[name=item_number[]]").live('input propertychange',function(){
+			compute();
+	});
+	$("input[name=item_money[]]").live('input propertychange',function(){
+			compute();
+	});
+});
+function select_charges(strsource){
+	demo_iframe('../business/selectcharge.php?busi_type='+$("#b_id").val()+'&s='+strsource,'选择收费项目',700,400,'login_js');
+}
+function del(id){
+	if ($("#D"+id).val()==0){//删除
+		$("#U"+id).find("li").css("text-decoration","line-through");
+		$("#D"+id).val(1);
+	}else{//恢复
+		$("#U"+id).find("li").css("text-decoration","none");
+		$("#D"+id).val(0);
+	}
+	compute();
+}
+function compute(){//还车计算结果
+	var nTotal_ar=0;
+	
+	if ($("#paiche_shunt").val()==0){
+
+
+
+
+		var paiche_unlimitKm=$("#paiche_unlimitKm").val();//是否限制公里数
+		var settle_startKm=0;//开始公里数
+		var settle_endKm=0;//结束公里数
+		if ($("#settle_startKm").val()!=""){
+			settle_startKm=parseFloat(textTrim($("#settle_startKm").val()),10);//开始公里数
+		}
+		if ($("#settle_endKm").val()!=""){
+			settle_endKm=parseFloat(textTrim($("#settle_endKm").val()),10);//结束公里数
+		}
+		var totalChangeCarKilo=0;//换车累计公里
+		if ($("#totalChangeCarKilo").val()!=""){
+			totalChangeCarKilo=parseFloat(textTrim($("#totalChangeCarKilo").val()),10);
+		}
+		$("#settle_totalKm").val(settle_endKm-settle_startKm+totalChangeCarKilo);//总计公里数
+
+		if (settle_endKm-settle_startKm+totalChangeCarKilo<0 || settle_endKm-settle_startKm+totalChangeCarKilo>15000){
+		    $("#showerr").css("display","inline-table");
+		}else{
+		    $("#showerr").css("display","none");
+		}
+		if (paiche_unlimitKm!="Y"){
+		    var settle_qianMonth=parseFloat(textTrim($("#settle_qianMonth").val()),10);//前月累计行驶
+			var limitKm=parseFloat(textTrim($("#paiche_limitKm").val()),10); //限制公里数
+			var overKmPrice=parseFloat(textTrim($("#paiche_overKm").val()),10);//超公里每公里金额
+			
+			overKm=settle_endKm-settle_startKm+settle_qianMonth+totalChangeCarKilo-limitKm;
+			if (overKm<0) overKm=0;
+			$("#overKm").val(overKm);//超公里数
+			$("#overKmMoney").val(overKm*overKmPrice);//超公里费用
+			nTotal_ar+=overKm*overKmPrice;
+		}
+		var youfei=$("#youfei").val();
+		if(youfei!='Y'){
+			
+			var youfei_shen=parseFloat(textTrim($("#youfei_shen").val()),10);
+			var youfei_danjia=parseFloat(textTrim($("#youfei_danjia").val()),10);
+			var youfei_zongji=((settle_endKm-settle_startKm+totalChangeCarKilo)*youfei_shen*youfei_danjia)/100;
+			$('#youfei_zongji').val(youfei_zongji);
+			
+
+		}
+	}
+	
+	var nTotal_item=0;
+	var ncal=0;
+	$.each($('input[name=item_id[]]'), function(i, n){
+		if ($(n).val()>0){
+			nid=$(n).val();
+			if ($('#item_calcu_'+nid).val()=="1"){//需要计算的
+				if ($('#item_caltype_'+nid).val()=="0"){//固定值
+					nTotal_item+= $('#item_money_'+nid).val()=="" ? 0 : parseFloat($('#item_money_'+nid).val());
+				}else{
+					ncal=$('#item_number_'+nid).val()=="" ? 0 : parseFloat($('#item_number_'+nid).val())*parseFloat($('#item_price_'+nid).val());
+					$('#item_money_'+nid).val(ncal);
+					nTotal_item+= ncal;
+				}
+			}
+		}
+	});
+	
+	var nTotal_charge=0;
+	$.each($('input[name=charge_id[]]'), function(i, n){
+		if ($(n).val()>0){
+			nid=$(n).val();
+			nTotal_charge+= $('#charge_money_'+nid).val()=="" ? 0 : parseFloat($('#charge_money_'+nid).val());
+		}
+	});
+	
+	var nTotal_newcharge=0;
+	$.each($('input[name=Cid[]]'), function(i, n){
+		if ($(n).val()>0){
+			nid=$(n).val();
+			if ($('#D'+nid).val()==0){//未删除
+				nTotal_newcharge+= $('#money_'+nid).val()=="" ? 0 : parseFloat($('#money_'+nid).val());
+			}				
+		}
+	});
+		
+	nTotal_ar+=nTotal_item+nTotal_charge+nTotal_newcharge;
+	$("#total").val(nTotal_ar);
+	
+	if ($("#favor").val()=="") $("#favor").val(0);
+	nTotal_ar -= parseFloat(textTrim($("#favor").val()),10);
+	$("#settle_billMoney").val(nTotal_ar);
+	
+}
+function ok(){
+    $("#btn_save").attr("disabled", true);
+	var op=$("#op").val();
+	
+	if (op=="returncar" || op=="givecar"){
+		if ($("#paiche_shunt").val()==0){
+			if ($("#settle_startKm").val()==""){
+				alert("请输入开始公里数！");
+				$('#settle_startKm').focus();
+				$("#btn_save").removeAttr("disabled");
+				return false;
+			}
+			if ($("#settle_endKm").val()==""){
+				alert("请输入结束公里数！");
+				$('#settle_endKm').focus();
+				$("#btn_save").removeAttr("disabled");
+				return false;
+			}
+		}
+		
+		if(!confirm('请仔细核对，一旦提交就无法修改了，确定提交吗？')){
+		    $("#btn_save").removeAttr("disabled");
+		    return false;
+		}
+	}
+	
+	
+	
+	
+	$("#form1").submit();
+	
+	//window.parent.window.location.reload();
+//window.parent.window.jBox.close();
+}
+</script>
+<!-{/literal}->
+</body>
+</html>

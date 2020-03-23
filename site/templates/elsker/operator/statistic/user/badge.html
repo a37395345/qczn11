@@ -1,0 +1,114 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>管理后台</title>
+<link href="/admincp/css/style.css" rel="stylesheet" type="text/css">
+<link href="/admincp/css/box.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="/admincp/js/jquery.js"></script>
+<script type="text/javascript" src="/admincp/js/common.js"></script>
+<script type="text/javascript" src="/admincp/js/box.js"></script>
+<script type="text/javascript" src="/admincp/js/date_select.js"></script>
+</head>
+<body>
+<div class="so_main">
+  <div class="page_tit">信息列表</div>
+   <div class="tit_tab">
+		<ul>
+		   <li><a  href="list.php?task=month" >本月注册</a></li>
+		   <li><a href="list.php?task=birthday" >本月生日</a></li>
+		   <li><a href="list.php?task=comment" >评论</a></li>
+		   <li><a href="list.php?task=share" >转发</a></li>
+		   <li><a href="list.php?task=sinashare" >新浪微博转发</a></li>
+		   <li><a href="list.php?task=followers" >粉丝</a></li>
+		   <li><a href="list.php?task=thread" >文章</a></li>
+		   <li><a class="on" href="list.php?task=badge" >徽章</a></li>
+		   <li><a href="list.php?task=apply" >参加活动/中奖</a></li>
+		</ul>
+   </div>
+  <!-------- 信息列表 -------->
+  <div class="Toolbar_inbox">
+  	<div class="page right">共{$total}条记录&nbsp;&nbsp;&nbsp;{$PAGINATION}</div>	
+	<!--<a href="javascript:void(0);" class="btn_a" onclick="searchUser();" id="searchUser_action"><span>搜索信息</span></a>-->
+  </div>
+  <div class="list">
+  <table width="100%" border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <th class="line_l">ID</th>
+    <th class="line_l">头像</th>
+    <th class="line_l">昵称</th>
+    <th class="line_l">达人</th>
+    <th class="line_l">性别</th>
+	<th class="line_l">年龄</th>
+	<th class="line_l">电子邮件</th>
+	<th class="line_l">移动电话</th>
+	<th class="line_l">城市</th>
+	<th class="line_l">注册时间</th>
+	<th class="line_l">徽章数</th>
+  </tr>
+  {foreach from=$userList key=i item=row}
+  <tr overstyle='on'>
+	  	<td>{$row.user_id}</td>
+		<td><a href="/user/show/uid/{$row.user_id}" target="_blank"><img src="/thumb/{$row.head}"></a></td>
+		<td><a href="/user/show/uid/{$row.user_id}" target="_blank">{$row.nickname}</a></td>
+	    <td>{if $row.daren==1}是{else}否{/if}</td>
+		<td>{if $row.gender==M}男{else}女{/if}</td>
+		<td>
+		<script type="text/javascript">
+		 var today = new Date(); //新建一个Date对象		
+		 var year = today.getFullYear();//查询年份
+		 var age=0;
+		 age = year - {$row.birthdayyear}
+		 document.write(age);
+		</script>
+		</td>
+		<td>{$row.email}</td>
+		<td>{$row.mobile}</td>
+		<td>{$row.city}</td>
+		<td>{$row.time}</td>	
+		<td>{$row.badges_count}</td>
+ </tr>
+ {/foreach}
+ </table>
+ </div>
+
+  <div class="Toolbar_inbox">
+	<div class="page right">共{$total}条记录&nbsp;&nbsp;&nbsp;{$PAGINATION}</div>
+	<!--<a href="javascript:void(0);" class="btn_a" onclick="searchUser();" id="searchUser_actions"><span>搜索信息</span></a>-->
+	
+  </div> 
+</div>
+<!-{literal}->
+<script>
+	//鼠标移动表格效果
+	$(document).ready(function(){
+		$("tr[overstyle='on']").hover(
+		  function () {
+		    $(this).addClass("bg_hover");
+		  },
+		  function () {
+		    $(this).removeClass("bg_hover");
+		  }
+		);
+	});
+
+	function checkSearch(_form){
+		if(_form.start_date.value==""){
+			alert("请选择起始时间！");
+			_form.start_date.focus();
+			return false;
+		}
+ 		if(_form.end_date.value==""){
+			alert("请选择截止时间！");
+			_form.end_date.focus();
+			return false;
+		}
+			return true;
+	
+	}
+</script>
+<!-{/literal}->
+
+</body>
+</html>

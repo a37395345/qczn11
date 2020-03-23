@@ -1,0 +1,140 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>管理后台</title>
+<link href="../../../../crm/css/bootstrap.min14ed.css?v=3.3.6" rel="stylesheet">
+<link href="../../../../crm/css/font-awesome.min93e3.css?v=4.4.0" rel="stylesheet">
+<link href="../../../../crm/css/plugins/bootstrap-table/bootstrap-table.min.css" rel="stylesheet">
+<link href="../../../../crm/css/animate.min.css" rel="stylesheet">
+<link href="../../../../crm/css/style.min862f.css?v=4.1.0" rel="stylesheet">
+<script type="text/javascript" src="../../../../js/jquery.js"></script>
+<script type="text/javascript" src="../../../../js/common.js"></script>
+<script type="text/javascript" src="../../../../js/box.js"></script>
+<script type="text/javascript" src="../../../../js/jbox/jBox/jquery.jBox-2.3.min.js"></script>
+<script type="text/javascript" src="../../../../js/jbox/jBox/i18n/jquery.jBox-zh-CN.js"></script>
+<style>
+/*{literal}*/
+	.navi_name{font-size:14px;font-weight:bold;}
+	.indent{padding-left:40px;}
+	.table td{
+		background: #fff;
+	}
+	.table td input{
+		/*width: 100%;*/
+		border:1px solid #ddd;
+		height: 30px;
+	}
+/*{/literal}*/
+</style>
+</head>
+<body class="gray-bg">
+<div class="wrapper wrapper-content animated fadeInRight">
+<div class="ibox float-e-margins">
+  <form method="post" action="create.php" onsubmit="return check(this)">
+    
+  <table class="table table-bordered">
+	<tr>
+		<th style="background-color:#F5F5F6" width="15%">
+			<span style="color:#000">姓名：</span>
+		</th>
+		<td width="35%"> 
+			<input style="width: 100%;" type="text" name="paicheDriver" id="paicheDriver" size="6" onFocus="this.blur()" value="{$emp.emp_name}" />
+		</td>
+		<th style="background-color:#F5F5F6" width="15%"></th>
+		<td>
+			关键字：<input type="text" style="width: 66%;" name="paicheDriverKey" id="paicheDriverKey" size="6" />
+			    <input type="hidden" name="paicheDriver2" id="paicheDriver2" value="{$emp.emp_id}" />
+			    <a href="javascript:select_driver();"><img src="../../../../css/driver.gif" height="15" class="peoplePic" /></a>
+		</td>
+	</tr>
+	<tr>
+		<th style="background-color:#F5F5F6" width="15%">
+			<span style="color:#000">开始时间：</span>
+		</th>
+		<td width="35%">
+			<input type="text" name="startyear" value="{$emp.startyear}" size="4" onFocus="this.blur()"/>年&nbsp;&nbsp;<input type="text" name="startmonth" value="{$emp.startmonth}" size="1"/>月
+		</td>
+		<th style="background-color:#F5F5F6" width="15%">
+			<span style="color:#000">结束时间：</span>
+		</th>
+		<td>
+			<input type="text" name="startyear" value="{$emp.startyear}" size="4" onFocus="this.blur()"/>年&nbsp;&nbsp;<input type="text" name="startmonth" value="{$emp.startmonth}" size="1"/>月
+		</td>
+	</tr>
+	<tr>
+		<th style="background-color:#F5F5F6" width="15%">
+			<span style="color:#000">比例：(%)</span>
+		</th>
+		<td width="35%">
+			<input style="width: 100%;" type="text" name="percent" value="{$emp.percent}" size="2"/>
+		</td>
+	</tr>
+	<div style="clear: both;"></div>
+  </table>
+  <div class="page_btm">
+      <input type="submit" id="submit" class="btn btn-outline btn-default" value="提交" style="width: 10%;margin-left: 45%;display: block;">
+    </div>
+  </div>
+  <input type="hidden" name="uid" value="{$emp.id}" />
+  <input type="hidden" name="task" value="{$task}" /></form>
+</div>
+
+<script type="text/javascript">
+	function selectAll(){
+		$("input[type='checkbox']").attr("checked",true);
+	}
+	function unselectAll(){
+		$("input[type='checkbox']").attr("checked",false);
+	}
+	$(document).ready(function(){
+		$(".subnavi").click(function(){
+			var checked = false;
+			$(this).parent().parent().find(".subnavi").each(function(){
+				if($(this).attr("checked")){
+					checked = true;
+				}
+			});
+			var navi = $(this).parent().parent().parent().find(".navi");
+			if(checked){
+				navi.attr("checked",true);
+			}else{
+				navi.attr("checked",false);
+			}
+		});
+		$(".navi").click(function(){
+			$(this).parent().find(".subnavi").attr("checked",$(this).attr("checked"));
+		});
+	});
+	function check(_form){
+		if(_form.paicheDriver.value==""){
+			alert("请选择员工！");
+			_form.paicheDriver.focus();
+			return false;
+		}
+		if(_form.percent.value==""){
+			alert("请输入比例！");
+			_form.percent.focus();
+			return false;
+		}
+		if(_form.startyear.value=="" || _form.startmonth.value=="" || _form.endyear.value=="" || _form.endmonth.value==""){
+			alert("开始年月和结束年月必须填写！");
+			_form.startyear.focus();
+			return false;
+		}
+		if(_form.startyear.value != _form.endyear.value){
+			alert("开始年份和结束年份必须一致！");
+			_form.startyear.focus();
+			return false;
+		}
+		return true;
+	}
+	function select_driver(){
+	var key=$("#paicheDriverKey").val();
+	demo_iframe('../../business/selectemp.php?sel_type=d&item=2&key='+key,'选择员工',650,380,'login_js');
+}
+</script>
+
+</body>
+</html>

@@ -1,0 +1,93 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>管理后台</title>
+<link href="../../../css/style.css" rel="stylesheet" type="text/css">
+<style>
+/*{literal}*/
+	.navi_name{font-size:14px;font-weight:bold;}
+	.indent{padding-left:40px;}
+/*{/literal}*/
+</style>
+</head>
+<body>
+<div class="so_main">
+  <div class="page_tit">明细</div>  
+  <div class="form2">
+	  <dl class="lineD">
+	    <dt>投保车辆：</dt>
+	    <dd>{$list.car_num}</dd>
+	  </dl>
+	  <dl class="lineD">
+	    <dt>保险类型：</dt>
+	    <dd>{$list.insurance_type}</dd>
+	  </dl>
+	  <dl class="lineD">
+	    <dt>起始日期：</dt>
+	    <dd>{$list.insurance_start}</dd>
+	  </dl>
+	  <dl class="lineD">
+	    <dt>截止日期：</dt>
+	    <dd>{$list.insurance_end}</dd>
+	  </dl>
+	  <dl class="lineD">
+	    <dt>投保公司：</dt>
+	    <dd>{$list.insurance_company}</dd>
+	  </dl>
+	  {if $list.insurance_type=="商业险"}
+	  <dl class="lineD">
+	    <dt>车损险(保额)：</dt>
+	    <dd>{$list.insurance_loss}元</dd>
+	  </dl>
+	  <dl class="lineD">
+	    <dt>三责险(保额)：</dt>
+	    <dd>{$list.insurance_respons}元</dd>
+	  </dl>
+	  <dl class="lineD">
+	    <dt>保费合计：</dt>
+	    <dd>{$list.insurance_money}元</dd>
+	  </dl>
+	  <dl class="lineD">
+	    <dt>优惠折扣：</dt>
+	    <dd>{$list.insurance_discount}%</dd>
+	  </dl>
+	  <dl class="lineD">
+	    <dt>返利：</dt>
+	    <dd>{$list.insurance_return}元</dd>
+	  </dl>
+	  <dl class="lineD">
+	    <dt>投保险种：</dt>
+	    <dd>{$list.insurance_item}</dd>
+	  </dl>
+	  {/if}
+	  {if $list.insurance_type=="交强险"}
+	  <dl class="lineD">
+	    <dt>交强险金额：</dt>
+	    <dd>{$list.insurance_mandatory}元</dd>
+	  </dl>
+	  <dl class="lineD">
+	    <dt>浮动比率：</dt>
+	    <dd>{$list.insurance_float}%</dd>
+	  </dl>
+	  <dl class="lineD">
+	    <dt>车船税金额：</dt>
+	    <dd>{$list.insurance_cartax}元</dd>
+	  </dl>
+	  <dl class="lineD">
+	    <dt>总金额：</dt>
+	    <dd>{$list.insurance_money2}元</dd>
+	  </dl>
+	  {/if}
+	  <dl class="lineD">
+	    <dt>备注：</dt>
+	    <dd>{$list.insurance_remark}</dd>
+	  </dl>
+    <div class="page_btm">
+      <input type="button" class="btn_b" value="关闭" onclick="window.close();" />
+    </div>
+  </div>
+</div>
+</body>
+</html>

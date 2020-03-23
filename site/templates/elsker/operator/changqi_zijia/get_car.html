@@ -1,0 +1,167 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Insert title here</title>
+<link rel="shortcut icon" href="favicon.ico">
+<link href="../../../css/box.css" rel="stylesheet" type="text/css" />
+<link href="../../../js/jbox/jBox/Skins/GreyBlue/jbox.css" rel="stylesheet"  />
+<link href="../../../css/jquery.editable-select.min.css" rel="stylesheet" type="text/css" />
+<link href="../../../crm/css/bootstrap.min14ed.css?v=3.3.6" rel="stylesheet">
+<link href="../../../crm/css/font-awesome.min93e3.css?v=4.4.0" rel="stylesheet">
+<link href="../../../crm/css/plugins/bootstrap-table/bootstrap-table.min.css" rel="stylesheet">
+<link href="../../../crm/css/animate.min.css" rel="stylesheet">
+<link href="../../../crm/css/style.min862f.css?v=4.1.0" rel="stylesheet">
+<script type="text/javascript" src="../../../js/jquery.js"></script>
+<script type="text/javascript" src="../../../js/laydate/laydate.js?a={$list.change_time}"></script>
+<script type="text/javascript" src="../../../js/common.js"></script>
+<script type="text/javascript" src="../../../js/calendar.js"></script>
+<script type="text/javascript" src="../../../js/check_form.js"></script>
+<script type="text/javascript" src="../../../js/jbox/jBox/jquery.jBox-2.3.min.js"></script>
+<script type="text/javascript" src="../../../js/jbox/jBox/i18n/jquery.jBox-zh-CN.js?a=3"></script>
+<script type="text/javascript" src="../../../js/jquery.editable-select.min.js"></script>
+<script type="text/javascript" src="../../../js/jquery.js"></script>
+
+<style>
+	body{
+		background-color: #F5F5F6;
+	}
+	.newwindowcar li{
+		padding: 0;margin: 0;
+		padding-top: 10px;padding-bottom: 10px;
+		margin-left:8%;padding-left:2%;width: 40%;
+	}
+	.newwindowcar li a{
+		font-size: 13px;font-weight: 500;color:#5e6157;text-decoration:none;
+	}
+	.newwindowcar li a:hover{
+		color: #b38532;
+	}
+
+	
+</style>
+</head>
+<body>
+	<div class="wrapper wrapper-content animated fadeInRight">
+	<!-- Panel Other -->
+	<div class="ibox float-e-margins">
+		
+		<form method="post" action="zijia_youhuiaccept.php" name="form1">
+			<div class="ibox-content"  id="tian">
+				<div class="row row-lg">
+					<div class="col-sm-12">
+						<!-- Example Events -->
+						<div class="example-wrap">
+							<div class="example">
+								<div class="btn-group hidden-xs pull-right" id="exampleTableEventsToolbar" role="group">
+								</div>
+								<input type="hidden" value="{$pid}" id="pid" name="pid">
+								<input type="hidden" value="{$nengyouhui}" id="nengyouhui" name="nengyouhui">
+								
+								<div class="shiji">
+									<table class="table table-bordered" class="shiji">
+									<tr>
+										<td width="20%" style="text-align: center;">图片</td>
+										<td width="20%" style="text-align: center;">车牌号码</td>
+										<td width="20%" style="text-align: center;">颜色</td>
+										<td width="20%" style="text-align: center;">车型</td>
+										<td width="20%" style="text-align: center;">操作</td>
+									</tr>
+									{$index=1}
+										{foreach from=$car_list key=i item=row}
+
+									<tr>
+										<td style="background-color:#F5F5F6;text-align: center;padding:0;"  >
+											<img src="../../../thumb/{$row.car_image}" width="100%">
+										</td>
+										<td style="background-color:#F5F5F6;text-align: center;" >
+											苏D{$row.car_num}
+										</td>
+										<td style="background-color:#F5F5F6;text-align: center;" >
+											{$row.car_color}
+										</td>
+										<td style="background-color:#F5F5F6;text-align: center;" >
+											{$row.car_model}
+										</td>
+										<td style="background-color:#F5F5F6;text-align: center;" >
+											<a  href="javascript:changeCar('{$row.car_id}','{$row.car_num}','{$row.car_color}','{$row.car_brand}','{$row.car_types}','{$row.car_motor}','{$row.car_frame}');">选择</a>
+										</td>
+										
+										
+										{$index=$index+1}
+										
+									</tr>
+									{/foreach}
+							
+									</table>
+								</div>
+							</div>
+						</div>
+						<!-- End Example Events -->
+					</div>
+				</div>
+				
+			</div>
+			
+		</form>
+	</div>
+	<!-- End Panel Other -->
+</div>
+<script src="js/jquery.min.js?v=2.1.4"></script>
+<script src="js/bootstrap.min.js?v=3.3.6"></script>
+<script src="js/content.min.js?v=1.0.0"></script>
+<script src="js/plugins/bootstrap-table/bootstrap-table.min.js"></script>
+<script src="js/plugins/bootstrap-table/bootstrap-table-mobile.min.js"></script>
+<script src="js/plugins/bootstrap-table/locale/bootstrap-table-zh-CN.min.js"></script>
+<script src="js/demo/bootstrap-table-demo.min.js"></script>
+<script type="text/javascript" src="http://tajs.qq.com/stats?sId=9051096" charset="UTF-8"></script>
+
+
+
+
+<script language="javascript">
+
+
+
+function changeCar(car_id,car_num,car_color,car_brand,car_types,car_motor,car_frame){
+		window.parent.window.document.getElementById("car_num").value="苏D"+car_num;
+		window.parent.window.document.getElementById("car_color").value=car_color;
+		window.parent.window.document.getElementById("car_brand").value=car_brand;
+		var text="小轿车";
+		if(car_types==0){
+			text="小轿车";
+		}else if(car_types==1){
+			text="普通跑车";
+		}
+		else if(car_types==2){
+			text="超级跑车";
+		}
+		else if(car_types==3){
+			text="越野车";
+		}
+		else if(car_types==4){
+			text="商务车";
+		}
+		else if(car_types==5){
+			text="中型客车";
+		}
+		else if(car_types==6){
+			text="大型客车";
+		}
+		window.parent.window.document.getElementById("car_types").value=text;
+		window.parent.window.document.getElementById("car_motor").value=car_motor;
+		window.parent.window.document.getElementById("car_frame").value=car_frame;
+		window.parent.window.document.getElementById("paicheCar").value=car_id;
+		
+		
+		
+	
+	window.parent.window.jBox.close();
+
+}
+
+</script>
+</body>
+</html>

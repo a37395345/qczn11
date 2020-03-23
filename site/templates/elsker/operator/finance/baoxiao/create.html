@@ -1,0 +1,486 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>管理后台</title>
+<link href="../../../../css/style.css" rel="stylesheet" type="text/css">
+<link href="../../../../js/jbox/jBox/Skins/GreyBlue/jbox.css" rel="stylesheet"  />
+<link rel="stylesheet" type="text/css" href="../../../../css/webuploader.css">
+<link rel="stylesheet" type="text/css" href="../../../../css/diyUpload.css">
+<script src="../../../../jquery.js"></script>
+<script type="text/javascript" src="../../../../js/common.js"></script>
+<script type="text/javascript" src="../../../../js/calendar.js"></script>
+<script type="text/javascript" src="../../../../js/check_form.js"></script>
+<script type="text/javascript" src="../../../../js/jbox/jBox/jquery.jBox-2.3.min.js"></script>
+<script type="text/javascript" src="../../../../js/jbox/jBox/i18n/jquery.jBox-zh-CN.js"></script>
+<script type="text/javascript" src="../../../../js/diyUpload/webuploader.html5only.min.js"></script>
+<script type="text/javascript" src="../../../../js/diyUpload/diyUpload.js"></script>
+<style>
+/*{literal}*/
+	.navi_name{font-size:14px;font-weight:bold;}
+	.indent{padding-left:40px;}
+#box{width:840px; min-height:200px; background:#FF9}
+/*{/literal}*/
+</style>
+</head>
+
+<body>
+<div class="so_main">
+  <div class="page_tit">{if $task=="insert"}添加{elseif $task=="update"}编辑{elseif $task=="bao_accept"}报销{elseif $task=="lead_accept"}领导审批{else}受理{/if}</div>  
+  <form method="post" action="insert.php" onsubmit="return baoxiao_check(this)" name="form1" enctype="multipart/form-data">
+  <div class="form2">
+	  	{if $task=="bao_accept"}
+	  	<dl class="lineD">
+		  <dt>报销人：</dt>
+		  <dd>{$list.emp_name}<input type="hidden" name="paicheDriver2" id="paicheDriver2" value="{$list.baoxiao_emp}" /></dd>
+		</dl>
+		<dl class="lineD">
+		  <dt>报销日期：</dt>
+		  <dd>{$list.baoxiao_date}</dd>
+		</dl>
+		{if $list.baoxiao_item==1}
+	  	<dl class="lineD">
+		  <dt>金额：</dt>
+		  <dd><input type="text" name="baoxiao_money" id="baoxiao_money" size="10" value="{$list.baoxiao_oil+$list.baoxiao_roadQiao+$list.baoxiao_stopCar+$list.baoxiao_room+$list.baoxiao_meal}" onFocus="this.blur()"/></dd>
+		</dl>
+		{/if}
+		{if $list.baoxiao_item==2}
+		<dl class="lineD">
+		  <dt>金额：</dt>
+		  <dd><input type="text" name="baoxiao_money" id="baoxiao_money" size="10" value="{$list.baoxiao_money}" onFocus="this.blur()"/></dd>
+		</dl>
+		<dl class="lineD">
+		  <dt>费用类别：</dt>
+		  <dd>{$list.baoxiao_type}</dd>
+		</dl>
+		<dl class="lineD">
+		  <dt>店铺：</dt>
+		  <dd>{$list.shop_name}</dd>
+		</dl>
+		{/if}
+		<dl class="lineD">
+		  <dt>审核意见：</dt>
+		  <dd>{$list.baoxiao_isAgreeRemarks}</dd>
+		</dl>
+		<dl class="lineD">
+		  <dt>说明：</dt>
+		  <dd>审核人：{$list.baoxiao_isAgreeMan}&nbsp;&nbsp;审核时间：{$list.baoxiao_isAgreeTime}</dd>
+		</dl>
+		<dl class="lineD">
+		  <dt>审批意见：</dt>
+		  <dd>{$list.baoxiao_checkRemarks}</dd>
+		</dl>
+		<dl class="lineD">
+		  <dt>说明：</dt>
+		  <dd>审批人：{$list.baoxiao_isCheckMan}&nbsp;&nbsp;审批时间：{$list.baoxiao_isCheckTime}</dd>
+		</dl>
+		<dl class="lineD">
+			<dt><span class="redstar">*</span>付款方式：</dt>
+			<dd><select name="payments" id="payments">
+		                  <option value="">请选择</option>
+		                  {foreach from=$paymentslist key=i item=rows}
+		                  <option value="{$rows.payment_id}" rel="{$rows.payment_fee}" {if $list.payments_id==$rows.payment_id}selected{/if}>{$rows.payment_name}</option>
+		                  {/foreach}
+		              </select>
+			</dd>
+		</dl>
+		<dl class="lineD">
+			<dt>付款 账户：</dt>
+			<dd><select name="bank" id="bank">
+		                  <option value="">请选择</option>
+		                  {foreach from=$banklist key=i item=rows}
+		                  <option value="{$rows.bank_id}" {if $list.bank_id==$rows.bank_id}selected{/if}>{$rows.bank_name}</option>
+		                  {/foreach}
+		              </select>
+			</dd>
+		</dl>
+		{elseif $task=="check_accept"}
+		<dl class="lineD">
+		  <dt>报销人：</dt>
+		  <dd>{$list.emp_name}</dd>
+		</dl>
+		<dl class="lineD">
+		  <dt>报销日期：</dt>
+		  <dd>{$list.baoxiao_date}</dd>
+		</dl>
+	  	<dl class="lineD">
+		  <dt>金额：</dt>
+		  <dd>{$list.baoxiao_money+$list.baoxiao_oil+$list.baoxiao_roadQiao+$list.baoxiao_stopCar+$list.baoxiao_room+$list.baoxiao_meal}</dd>
+		</dl>
+		{if $list.baoxiao_item==2}
+		<dl class="lineD">
+		  <dt>费用类别：</dt>
+		  <dd>{$list.baoxiao_type}</dd>
+		</dl>
+		<dl class="lineD">
+		  <dt>店铺：</dt>
+		  <dd>{$list.shop_name}</dd>
+		</dl>
+		{if $list.bill_id}
+		<dl class="lineD">
+	    <dt>违章车辆：</dt>
+	    <dd>苏D{$list.baoxiao_breakinfo.car_num}</dd>
+	    </dl>
+		<dl class="lineD">
+	    <dt>违章时间：</dt>
+	    <dd>{$list.baoxiao_breakinfo.breakrules_date}</dd>
+	    </dl>
+	    <dl class="lineD">
+		<dt>违章项目：</dt>
+		<dd>{$list.baoxiao_breakinfo.breakrules_item}
+		</dd>
+		</dl>
+		<dl class="lineD">
+			<dt>违章处罚：</dt>
+			<dd>违章款：{$list.baoxiao_breakinfo.breakrules_money1}元&nbsp;&nbsp;&nbsp;&nbsp;手续费：{$list.baoxiao_breakinfo.breakrules_money2}元&nbsp;&nbsp;&nbsp;&nbsp;
+			扣分：{$list.baoxiao_breakinfo.breakrules_money3}分={$list.baoxiao_breakinfo.breakrules_money4}元
+			</dd>
+		</dl>
+		<dl class="lineD">
+			<dt>违章总金额：</dt>
+			<dd>{$list.baoxiao_breakinfo.breakrules_money}元</dd>
+		</dl>
+		<dl class="lineD">
+			<dt>实际违章处理：</dt>
+			<dd>实际违章款：{$list.baoxiao_breakinfo.breakrules_money1_infact}元&nbsp;&nbsp;&nbsp;&nbsp;实际手续费：{$list.baoxiao_breakinfo.breakrules_money2_infact}元&nbsp;&nbsp;&nbsp;&nbsp;
+			实际扣分：{$list.baoxiao_breakinfo.breakrules_money3_infact}分={$list.baoxiao_breakinfo.breakrules_money4_infact}元
+			</dd>
+		</dl>
+		<dl class="lineD">
+			<dt>相关单据：</dt>
+			<dd>
+			<table width="100%" border="0" cellspacing="0" cellpadding="0">
+			{foreach from=$bill_list item=row name=foo}
+			   <tr overstyle='on' >
+					<td>{$row.bill_type}</td>
+					<td>{$row.out_money}元</td>
+					<td>{$row.in_money}元</td>
+					<td>{$row.change_class}</td>
+			  </tr>
+			{/foreach}
+			</table>
+			</dd>
+		</dl>
+		<dl class="lineD">
+			<dt>实际违章总金额：</dt>
+			<dd>{$list.baoxiao_breakinfo.breakrules_money_infact}元</dd>
+		</dl>
+		{if $list.baoxiao_breakinfo.breakrulesPaicheId!=0}
+		<dl class="lineD">
+			<dt>派车单号：</dt>
+			<dd><a href="../../business/detail.php?uid={$list.baoxiao_breakinfo.breakrulesPaicheId}" target="blank">{$list.baoxiao_breakinfo.paiche_contractNum}</a></dd>
+		</dl>
+		{/if}
+		{/if}
+		{/if}
+		<dl class="lineD">
+		  <dt>报销备注：</dt>
+		  <dd>{$list.baoxiao_remarks}</dd>
+		</dl>
+		<dl class="lineD">
+		  <dt>审核结果：</dt>
+		  <dd><input type="radio" value="1" name="baoxiao_isAgree" checked/>通过 <input type="radio" value="-1" name="baoxiao_isAgree"/>退回</dd>
+		</dl>
+		<dl class="lineD">
+		  <dt>审核备注：</dt>
+		  <dd><textarea name="baoxiao_isAgreeRemarks" id="baoxiao_isAgreeRemarks" cols="40" rows="4"></textarea></dd>
+		</dl>
+		{elseif $task=="lead_accept"}
+		<dl class="lineD">
+		  <dt>单号：</dt>
+		  <dd><a href="detail.php?uid={$list.baoxiao_id}" target="_blank">{$list.baoxiao_code}</a>&nbsp;&nbsp;&nbsp;&nbsp;
+		  报销人：{$list.emp_name}&nbsp;&nbsp;&nbsp;&nbsp;报销日期：{$list.baoxiao_date}</dd>
+		</dl>
+		{if $list.baoxiao_item==1}
+	  	<dl class="lineD">
+		  <dt>合同号：</dt>
+		  <dd><a href="../../business/detail.php?uid={$list.baoxiaoPaicheId}" target="_blank">{$list.baoxiaoPaicheContractNum}</a></dd>
+		</dl>
+		<dl class="lineD">
+		  <dt>报销金额：</dt>
+		  <dd>
+		  {if $list.baoxiao_oil!=0}现金加油：{$list.baoxiao_oil}元({$list.baoxiao_oil_number}升)&nbsp;&nbsp;{/if}
+		  {if $list.baoxiao_roadQiao!=0}过桥过路费：{$list.baoxiao_roadQiao}&nbsp;&nbsp;{/if}
+		  {if $list.baoxiao_stopCar!=0}停车费：{$list.baoxiao_stopCar}&nbsp;&nbsp;{/if}
+		  {if $list.baoxiao_room!=0}住宿费：{$list.baoxiao_room}&nbsp;&nbsp;{/if}
+		  {if $list.baoxiao_meal!=0}餐费：{$list.baoxiao_meal}&nbsp;&nbsp;{/if}
+		     合计：{$list.baoxiao_oil+$list.baoxiao_roadQiao+$list.baoxiao_stopCar+$list.baoxiao_room+$list.baoxiao_meal}元
+		  </dd>
+		</dl>
+		<dl class="lineD">
+		  <dt>付款方式：</dt>
+		  <dd>{$list.payment_name}&nbsp;&nbsp;&nbsp;&nbsp;付款账户：{$list.bank_name}</dd>
+		</dl>
+		{/if}
+		{if $list.baoxiao_item==2}
+		<dl class="lineD">
+		  <dt>报销内容：</dt>
+		  <dd>{$list.baoxiao_content}</dd>
+		</dl>
+		<dl class="lineD">
+		  <dt>报销金额：</dt>
+		  <dd>{$list.baoxiao_money}&nbsp;&nbsp;&nbsp;&nbsp;付款方式：{$list.payment_name}&nbsp;&nbsp;&nbsp;&nbsp;付款账户：{$list.bank_name}</dd>
+		</dl>
+		<dl class="lineD">
+		  <dt>费用类别：</dt>
+		  <dd>{$list.baoxiao_type}</dd>
+		</dl>
+		<dl class="lineD">
+		  <dt>店铺：</dt>
+		  <dd>{$list.shop_name}</dd>
+		</dl>
+		{if $list.bill_id}
+		<dl class="lineD">
+	    <dt>违章车辆：</dt>
+	    <dd>苏D{$list.baoxiao_breakinfo.car_num}</dd>
+	    </dl>
+		<dl class="lineD">
+	    <dt>违章时间：</dt>
+	    <dd>{$list.baoxiao_breakinfo.breakrules_date}</dd>
+	    </dl>
+	    <dl class="lineD">
+		<dt>违章项目：</dt>
+		<dd>{$list.baoxiao_breakinfo.breakrules_item}
+		</dd>
+		</dl>
+		<dl class="lineD">
+			<dt>违章处罚：</dt>
+			<dd>违章款：{$list.baoxiao_breakinfo.breakrules_money1}元&nbsp;&nbsp;&nbsp;&nbsp;手续费：{$list.baoxiao_breakinfo.breakrules_money2}元&nbsp;&nbsp;&nbsp;&nbsp;
+			扣分：{$list.baoxiao_breakinfo.breakrules_money3}分={$list.baoxiao_breakinfo.breakrules_money4}元
+			</dd>
+		</dl>
+		<dl class="lineD">
+			<dt>违章总金额：</dt>
+			<dd>{$list.baoxiao_breakinfo.breakrules_money}元</dd>
+		</dl>
+		<dl class="lineD">
+			<dt>实际违章处理：</dt>
+			<dd>实际违章款：{$list.baoxiao_breakinfo.breakrules_money1_infact}元&nbsp;&nbsp;&nbsp;&nbsp;实际手续费：{$list.baoxiao_breakinfo.breakrules_money2_infact}元&nbsp;&nbsp;&nbsp;&nbsp;
+			实际扣分：{$list.baoxiao_breakinfo.breakrules_money3_infact}分={$list.baoxiao_breakinfo.breakrules_money4_infact}元
+			</dd>
+		</dl>
+		<dl class="lineD">
+			<dt>相关单据：</dt>
+			<dd>
+			<table width="100%" border="0" cellspacing="0" cellpadding="0">
+			{foreach from=$bill_list item=row name=foo}
+			   <tr overstyle='on' >
+					<td>{$row.bill_type}</td>
+					<td>{$row.out_money}元</td>
+					<td>{$row.in_money}元</td>
+					<td>{$row.change_class}</td>
+			  </tr>
+			{/foreach}
+			</table>
+			</dd>
+		</dl>
+		<dl class="lineD">
+			<dt>实际违章总金额：</dt>
+			<dd>{$list.baoxiao_breakinfo.breakrules_money_infact}元</dd>
+		</dl>
+		{if $list.baoxiao_breakinfo.breakrulesPaicheId!=0}
+		<dl class="lineD">
+			<dt>派车单号：</dt>
+			<dd><a href="../../business/detail.php?uid={$list.baoxiao_breakinfo.breakrulesPaicheId}" target="blank">{$list.baoxiao_breakinfo.paiche_contractNum}</a></dd>
+		</dl>
+		{/if}
+		{/if}
+		{/if}
+		{if $list.baoxiao_remarks!=""}
+		<dl class="lineD">
+		  <dt>备注说明：</dt>
+		  <dd>{$list.baoxiao_remarks}</dd>
+		</dl>
+		{/if}
+		<dl class="lineD">
+		  <dt>审核意见：</dt>
+		  <dd>{$list.baoxiao_isAgreeRemarks}</dd>
+		</dl>
+		<dl class="lineD">
+		  <dt>说明：</dt>
+		  <dd>审核人：{$list.baoxiao_isAgreeMan}&nbsp;&nbsp;审核时间：{$list.baoxiao_isAgreeTime}</dd>
+		</dl>
+		<dl class="lineD">
+		  <dt>审批结果：</dt>
+		  <dd><input type="radio" value="1" name="baoxiao_isCheck" checked/>通过 <input type="radio" value="-1" name="baoxiao_isCheck"/>退回
+		  <input type="checkbox" value="1" name="chktracking" id="chktracking"/>需要进一步跟踪</dd>
+		</dl>
+		<dl class="lineD">
+		  <dt>审批意见：</dt>
+		  <dd><textarea name="checkNote" id="checkNote" cols="60" rows="3"></textarea></dd>
+		</dl>
+		<dl class="lineD" style="display:none;">
+		  <dt>审批转交：</dt>
+		  <dd>{if $nowuser==24}<input type="checkbox" value="26" name="chktrans" id="chktrans"/>转给何艳阳{/if}
+		  {if $nowuser==26}<input type="checkbox" value="24" name="chktrans" id="chktrans"/>转给蒋政{/if}</dd>
+		</dl>
+		
+	  	{else}
+	  	<dl class="lineD">
+		  <dt><span class="redstar">*</span>报销人：</dt>
+		  <dd><input type="text" name="paicheDriver" id="paicheDriver" size="18" onFocus="this.blur()" value="{$list.emp_name}" />
+			         关键字：<input type="text" name="paicheDriverKey" id="paicheDriverKey" size="10" />
+			    <input type="hidden" name="paicheDriver2" id="paicheDriver2" value="{$list.baoxiao_emp}" />
+			    <a href="javascript:select_driver();"><img src="../../../../css/driver.gif" height="15" class="peoplePic" /></a>
+		  </dd>
+		</dl>
+		<dl class="lineD">
+	        <dt><span class="redstar">*</span>指定审核人</dt>
+	        <dd><input type="text" name="driveDriver_9" id="driveDriver_9" size="18" onFocus="this.blur()" value="{$list.auditor_empname}" />
+			         关键字：<input type="text" name="searchKey" id="searchKey" size="10" />
+			    <input type="hidden" name="driveDriver2_9" id="driveDriver2_9" value="{$list.baoxiao_auditor}" />
+			    <a href="javascript:select_auditor();"><img src="../../../../css/driver.gif" height="15" class="peoplePic" /></a></dd>
+         </dl>
+		{if $item==1}
+	  	<dl class="lineD">
+		  <dt>出车日期：</dt>
+		  <dd><input id="paiche_date" type="text" value="{$list.paiche_startDate}" name="paiche_date" size="16" onClick="calendar.show(this);" /></dd>
+		</dl>
+	  	<dl class="lineD">
+		  <dt><span class="redstar">*</span>合同号：</dt>
+		  <dd><input type="text" name="baoxiaoPaicheContractNum" id="baoxiaoPaicheContractNum" size="18" onFocus="this.blur()" value="{$list.baoxiaoPaicheContractNum}" />
+		  <input type="hidden" name="baoxiaoPaicheContractId" id="baoxiaoPaicheContractId" value="{$list.baoxiaoPaicheId}" />&nbsp;<input type="button" value="选择派车单" name="seluser" onClick="select_user();"></dd>
+		</dl>
+		<dl class="lineD">
+		  <dt>现金加油费：</dt>
+		  <dd><input type="text" name="baoxiao_oil" id="baoxiao_oil" size="16" value="{$list.baoxiao_oil}" />加油量：<input type="text" name="baoxiao_oil_number" id="baoxiao_oil_number" size="6" value="{$list.baoxiao_oil_number}" />升&nbsp;&nbsp;
+		  加油日期<input id="baoxiao_oil_date" type="text" value="{$list.baoxiao_oil_date}" name="baoxiao_oil_date" size="16" onClick="calendar.show(this);" readonly="readonly" /></dd>
+		</dl>
+		<dl class="lineD">
+		  <dt>过桥过路费：</dt>
+		  <dd><input type="text" name="baoxiao_roadQiao" id="baoxiao_roadQiao" size="16" value="{$list.baoxiao_roadQiao}" /></dd>
+		</dl>
+		<dl class="lineD">
+		  <dt>停车费：</dt>
+		  <dd><input type="text" name="baoxiao_stop" id="baoxiao_stop" size="16" value="{$list.baoxiao_stopCar}" /></dd>
+		</dl>
+		<dl class="lineD">
+		  <dt>住宿费：</dt>
+		  <dd><input type="text" name="baoxiao_room" id="baoxiao_room" size="16" value="{$list.baoxiao_room}" /></dd>
+		</dl>
+		<dl class="lineD">
+		  <dt>餐费：</dt>
+		  <dd><input type="text" name="baoxiao_meal" id="baoxiao_meal" size="16" value="{$list.baoxiao_meal}" /></dd>
+		</dl>
+		{/if}
+		{if $item==2}
+		<dl class="lineD">
+		  <dt><span class="redstar">*</span>报销内容：</dt>
+		  <dd><textarea name="baoxiao_content" id="baoxiao_content" cols="90" rows="8">{$list.baoxiao_content}</textarea></dd>
+		</dl>
+		<dl class="lineD">
+		  <dt><span class="redstar">*</span>报销金额：</dt>
+		  <dd><input type="text" name="baoxiao_money" id="baoxiao_money" size="16" value="{$list.baoxiao_money}" /></dd>
+		</dl>
+		<dl class="lineD">
+		  <dt>费用类型：</dt>
+		  <dd>
+		  {foreach from=$baoxiaotypelist key=i item=rows name=foo}
+		  {if $class!=$rows.typeclass}{$class=$rows.typeclass}<br/>{else}{if $rows.typename=="电话费"}<br/>{/if}{/if}
+		  <input type="radio" name="baoxiao_type" id="baoxiao_type" value="{$rows.typename}" {if $list.baoxiao_type==$rows.typename}checked{/if} />{$rows.typename}&nbsp;&nbsp;
+		  
+		  {/foreach}
+		  </dd>
+		</dl>
+		
+		<dl class="lineD">
+	      <dt><span class="redstar">*</span>选择店铺：</dt>
+	      <dd>
+	        <select name="shop_id" >
+	        	<option value="0" selected>请选择</option>
+			{foreach from=$shop key=i item=rows}
+				<option value="{$rows.shop_id}" {if $rows.shop_id == $list.shop_id}selected{else}{/if}>{$rows.shop_name}</option>	
+			{/foreach}
+			</select>
+		  </dd>
+	    </dl>
+		{/if}
+		<dl class="lineD">
+		  <dt><span class="redstar">*</span>报销日期：</dt>
+		  <dd><input id="baoxiao_date" type="text" value="{$list.baoxiao_date}" name="baoxiao_date" size="16" readonly="readonly" /></dd>
+		</dl>
+		<dl class="lineD" style="display:none;">
+	        <dt>指定审核人</dt>
+	        <dd><input type="radio" name="baoxiao_setCheckMan" value="24" {if $list.baoxiao_setCheckMan=="24"}checked{/if}>蒋政&nbsp;&nbsp;
+		    <input type="radio" name="baoxiao_setCheckMan" value="26" {if $list.baoxiao_setCheckMan=="26"}checked{/if}>何艳阳</dd>
+         </dl>
+		<dl class="lineD">
+		  <dt>报销备注：</dt>
+		  <dd><textarea name="baoxiao_remarks" id="baoxiao_remarks" cols="90" rows="8">{$list.baoxiao_remarks}</textarea></dd>
+		</dl>
+		<dl class="lineD">
+	      <dt>发票扫描件：</dt>
+	      <dd>
+	      	<div id="box">
+				<div id="test" ></div>
+			</div>
+	     
+	        {if $task=='update' && $list.baoxiao_imglist}
+	        <br />
+	        <div>
+	        <ul>
+	        {foreach from=$list.baoxiao_imglist key=i item=rows name=foo}
+	         <li style="float:left;text-align:center;"><a href="picture.php?baoxiao_id={$list.baoxiao_id}&nowserial={$smarty.foreach.foo.index+1}" title="点击查看原图" target="_blank"><img src="../../../../thumb/{$rows.images}" width="100" height="100" /></a><br />{$smarty.foreach.foo.index+1}</li>
+	        {/foreach}
+	        </ul>
+	        </div>
+	        {/if} 
+	      </dd>
+	   </dl>
+	    {/if}
+    <div class="page_btm">
+      <input type="submit" class="btn_b" name="btn_save" value="确定" /><b> 注：<span class="red">*</span>为必填项</b>
+    </div>
+  </div>
+  <input type="hidden" name="uid" id="uid" value="{$list.baoxiao_id}" />
+  <input type="hidden" name="uids" value="{$uids}" />
+  <input type="hidden" name="task" value="{$task}" />
+  <input type="hidden" name="item" id="item" value="{$item}" />
+  <input type="hidden" name="baoxiaoPaicheId" id="baoxiaoPaicheId" value="{$list.baoxiaoPaicheId}" />
+  <input type="hidden" name="breakrulesid" id="breakrulesid" value="{$list.bill_id}" />
+  </form>
+</div>
+<!-{literal}->
+<script>
+var cid=$("#uid").val();
+
+$('#test').diyUpload({
+	url:'../../../../site/includes/fileupload.php?id=9999',
+	success:function( data ) {
+	    //alert(data.jsonrpc);
+		console.info( data );
+	},
+	error:function( err ) {
+		console.info( err );
+	},
+	formData:{
+	    contractid:0,baoxiaoid:cid
+	}
+});
+
+function select_driver(){
+	var key=$("#paicheDriverKey").val();
+	var item=$("#item").val();
+	var stitle=item==1 ? "驾驶员" : "报销人";
+	demo_iframe('../../business/selectemp.php?sel_type=d&item='+item+'&key='+key,'选择'+stitle,650,380,'login_js');
+}
+function select_auditor(){
+	var key=$("#searchKey").val();
+	var item=$("#item").val();
+	var stitle="报销审核人";
+	demo_iframe('../../business/selectemp.php?sel_type=g&item=3&target_id=9&key='+key,'选择'+stitle,650,380,'login_js');
+}
+function select_user(){
+	if ($("#paicheDriver2").val()==""){
+		alert("请先选择报销费用的驾驶员！");
+		$("#paicheDriverKey").focus();
+		return false;
+	}
+	
+	demo_iframe('../../business/selectemp.php?sel_type=h&key='+$("#paicheDriver2").val()+'&sdate='+$("#paiche_date").val(),'选择租车合同',950,480,'login_js');
+}
+</script>
+<!-{/literal}->
+</body>
+</html>

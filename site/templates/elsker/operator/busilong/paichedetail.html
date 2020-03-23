@@ -1,0 +1,290 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>管理后台</title>
+<link href="../../../css/style.css" rel="stylesheet" type="text/css">
+<script type="text/javascript" src="../../../js/jquery.js"></script>
+<script type="text/javascript" src="../../../js/common.js"></script>
+<script type="text/javascript" src="../../../js/calendar.js"></script>
+<script type="text/javascript" src="../../../js/check_form.js"></script>
+<style>
+/*{literal}*/
+	.navi_name{font-size:14px;font-weight:bold;}
+	.indent{padding-left:40px;}
+/*{/literal}*/
+</style>
+</head>
+<body>
+
+<form action="month_accept.php" method="post" onsubmit="return month_check(this)" name="form1">
+<div class="so_main">
+  <div class="page_tit">{$busi.client_name}{$month.month_year}年{$month.month_month}月用车结账情况</div>  
+  <div class="list">
+  <table width="100%" border="0" cellspacing="0" cellpadding="0">
+    <tr><td colspan="3">
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+	{if $busi.paiche_type == '4'}
+	<tr>
+	<th rowspan="2">日期</th>
+	<th rowspan="2">车号</th>
+	<th colspan="2">开始信息</th>
+	<th colspan="2">截止信息</th>
+	<th rowspan="2">公里数</th>
+	<th rowspan="2">工作时间</th>
+	<th rowspan="2">扣除时间</th>
+	<th rowspan="2">周末<br />节假日</th>
+	<th rowspan="2">是否<br />出差</th>
+	<th rowspan="2">带宿<br />出差</th>
+	<th rowspan="2">省外<br />出差</th>
+	<th rowspan="2">出差备注</th>
+	<th rowspan="2">食宿费<br />过路桥</th>
+	<th rowspan="2">司机</th>
+	<th rowspan="2" width="5%">备注</th>
+	</tr>
+	<tr>
+	  <th>开始公里</th>
+	  <th>开始时间</th>
+	  <th>截止公里</th>
+	  <th>截止时间</th>
+	</tr>
+	{else}
+	<tr>
+	<th>日期</th>
+	<th>车号</th>
+	<th>时间</th>
+	<th>周末/节假日</th>
+	<th>用途</th>
+	<th>起止地点</th>
+	<th>趟数</th>
+	<th>总费用</th>
+	<th>开始公里</th>
+	<th>截止公里</th>
+	<th>行驶公里数</th>
+	<th>司机</th>
+	<th>备注</th>
+	</tr>
+	{/if}
+	{foreach from=$outlist key=i item=list}
+	{if $busi.paiche_type == '4'}
+	{$totalKM=$totalKM+$list.drive_endKilo-$list.drive_startKilo}
+	{/if}
+	{if $busi.paiche_type == '5'}
+	{$totalTP=$totalTP+$list.drive_trips}
+	{$total=$total+$list.drive_money}
+	{/if}
+	<tr bgcolor="{$list.bgcolor}">
+	  <td><input type="hidden" name="id[]" value="{$list.drive_id}"/>{$list.drive_date}</td>
+	  <td>苏D{if $list.driveCarNum==''}{$busi.car_num}{else}{$list.driveCarNum}{/if}</td>
+	  {if $busi.paiche_type == '4'}
+	  <td>{$list.drive_startKilo}</td>
+	  {/if}
+	  {if $busi.paiche_type == '4' || $busi.paiche_type == '5'}
+	  <td>{$list.drive_startHour}点&nbsp;{$list.drive_startMinute}分</td>
+	  {/if}
+	  {if $busi.paiche_type == '4'}
+	  <td>{$list.drive_endKilo}</td>
+	  <td>{$list.drive_endHour}点&nbsp;{$list.drive_endMinute}分</td>
+	  <td>{$list.drive_endKilo-$list.drive_startKilo}</td>
+	  <td>{($list.drive_endTime_O-$list.drive_startTime_O)/3600}</td>
+	  <td>{$list.drive_deductTime/60}</td>
+	  {/if}
+	  <td>{$list.drive_hol}</td>
+	  {if $busi.paiche_type == '4'}
+	  <td>{if $list.drive_travel==1}是{else}否{/if}</td>
+	  <td>{if $list.drive_travelRoom==1}是{else}否{/if}</td>
+	  <td>{if $list.drive_travelout==1}是{else}否{/if}</td>
+	  <td>{$list.drive_travelRemarks}</td>
+	  <td style="text-align:left;">火食:{$list.drive_mealsTimes}次
+	  住宿:{if $list.drive_roomTimes==1}是{else}否{/if}
+	  路费:{$list.drive_ioll}元</td>
+	  {/if}
+	  {if $busi.paiche_type == '5'}
+	  <td>{$list.drive_travelRemarks}</td>
+	  <td>{$list.drive_specialRemarks}</td>
+	  <td>{$list.drive_trips}趟</td>
+	  <td>{$list.drive_money}元</td>
+	  <td>{$list.drive_startKilo}</td>
+	  <td>{$list.drive_endKilo}</td>
+	  <td>{$list.drive_endKilo-$list.drive_startKilo}</td>
+	  {/if}
+	  {if $busi.paiche_type == '4' || $busi.paiche_type == '5'}
+	  <td>{$list.driveDriverName}</td>
+	  {/if}
+	  <td>{$list.drive_remarks}</td>
+	</tr>
+	{/foreach}
+	</table></td></tr>
+	<tr><td width="50%">
+	<table width="100%" border="0" cellspacing="0" cellpadding="3" align="left">
+		<tr>
+			<th>条款</th><th style="text-align:right;">约定</th><th style="text-align:right;">实际</th><th style="text-align:right;">金额</th>
+		</tr>
+		{if $busi.paiche_type == '4'}
+		<tr>
+			<td width="35%">本月行驶总公里数:</td><td width="15%">&nbsp;</td><td style="text-align:right;" width="25%">{$month.settle_totalKm}</td><td style="text-align:right;" width="25%">&nbsp;</td>
+		</tr>
+		<tr>
+			<td>基础公里数:</td><td style="text-align:right;">{$busi.paiche_limitKm}</td><td>&nbsp;</td><td style="text-align:right;">{$month.settle_rent}</td>
+		</tr>
+		{if $month.settle_overKm>0}
+		<tr>
+			<td>超公里数:</td><td style="text-align:right;">{$busi.paiche_overKm}</td><td style="text-align:right;">{$month.settle_overKm}</td><td style="text-align:right;">{round($month.settle_overKm*$busi.paiche_overKm,2)}</td>
+		</tr>
+		{/if}
+
+		{if $busi.youfei!='Y'}
+		<tr>
+			<td width="35%">油费:</td>
+			<td width="15%" style="text-align:right;"></td>
+			<td width="25%" style="text-align:right;"></td>
+			<td width="25%" style="text-align:right;">{$busi.youfei_zongji}</td>
+		</tr>
+		{/if}
+
+		{foreach from=$itemlist item=row1 name=foo}
+		<tr>
+			{if $row1.item_caltype==0}
+			{if is_numeric($row1.conv_result)}
+			<td>{$row1.item_name}:</td><td style="text-align:right;">{$row1.conv_result}</td><td style="text-align:right;">&nbsp;</td><td style="text-align:right;">{$row1.conv_result}</td>
+			{else}
+			<td>{$row1.item_name}:</td><td style="text-align:right;">{$row1.conv_result}</td><td>&nbsp;</td><td style="text-align:right;">&nbsp;</td>
+			{/if}
+			{else}
+			<td>{$row1.item_name}:</td><td style="text-align:right;">{$row1.conv_result}</td><td style="text-align:right;">{$row1.item_fact}</td><td style="text-align:right;">{$row1.conv_money}</td>
+			{/if}
+		</tr>
+		{/foreach}
+		{foreach from=$chargelist item=row1 name=foo}
+		<tr>
+			<td><input type="hidden" name="Iid[]" value="{$row1.charge_id}"/>{$row1.charge_name}:</td><td style="text-align:right;">&nbsp;</td><td style="text-align:right;">&nbsp;</td><td style="text-align:right;">{$row1.conv_money}</td>
+		</tr>
+		{/foreach}
+		<tr>
+			<th colspan="3" style="text-align:left;">合计</th><th style="text-align:right;">{$month.settle_total}</th>
+		</tr>
+		{/if}
+		{if $busi.paiche_type == '5'}
+		<tr>
+			<td width="35%">本月行驶总公里数:</td><td width="15%">&nbsp;</td><td style="text-align:right;" width="25%">{$month.settle_totalKm}</td><td style="text-align:right;" width="25%">&nbsp;</td>
+		</tr>
+		<tr>
+			<td>总趟数:</td><td style="text-align:right;">{$month.settle_rent}</td><td style="text-align:right;">{$month.settle_trips}</td><td style="text-align:right;">{$month.settle_total}</td>
+		</tr>
+		{/if}
+	</table></td>
+	<td width="4%">&nbsp;</td>
+	<td style="text-align:left;vertical-align:middle;">
+		<div id="searchTopic_div" >
+		    <div class="page_tit">结算</div>
+		    <div class="form2">
+		        <input type="hidden" name="accountmonth" value="{$month}" />
+		        <input type="hidden" name="needcaltotal" value="{$needcaltotal}" />
+		        <input type="hidden" name="pid" value="{$busi.paiche_id}" />
+		            <dl class="lineD">
+			            <dt>开始日期：</dt>
+			            <dd>{$busi.paiche_startDate_format}</dd>
+		            </dl>
+		            <dl class="lineD">
+			            <dt>截止日期：</dt>
+			            <dd>{$busi.paiche_endDate_format}</dd>
+		            </dl>
+		            {if $month.settle_favor>0}
+		            <dl class="lineD">
+			            <dt>优惠金额：</dt>
+			            <dd>{$month.settle_favor}</dd>
+		            </dl>
+		            {/if}
+		            <dl class="lineD">
+			            <dt>实际开票金额：</dt>
+			            <dd>{$month.settle_billMoney}</dd>
+		            </dl>
+		            <dl class="lineD">
+			            <dt>发票号码：</dt>
+			            <dd>{$month.settle_billNum}</dd>
+		            </dl>
+		            <dl class="lineD">
+			            <dt>开票日期：</dt>
+			            <dd>{$month.settle_billDate}</dd>
+		            </dl>
+		            <dl class="lineD">
+			            <dt>已结算金额：</dt>
+			            <dd>{$month.settle_billMoney_have}</dd>
+		            </dl>
+		    </div>
+		    {if $accountlist}
+		    <div class="page_tit">结账</div>
+		    <div class="list">
+		    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+			<tr>
+			<th>时间</th>
+			<th>名称</th>
+			<th>金额</th>
+			<th>方式</th>
+			<th>账户</th>
+			</tr>
+			
+			{foreach from=$accountlist key=i item=row}
+			<tr>
+			  	<td>{$row.add_time}</td>
+				<td>{$row.name}</td>
+				<td>{$row.money}</td>
+				<td>{$row.payment_name}</td>
+				<td>{$row.bank_name}</td>
+			</tr>
+			{/foreach}
+			</table>
+		    </div>
+		    {/if}
+	    </div>
+	</td>
+	</tr>
+    {if $changelist}
+	<tr>
+		<td colspan="3">
+			<table width="100%" border="0" cellspacing="0" cellpadding="0">
+			  	<tr>
+			    <th style="width:30px;">序号	</th>
+				<th>时间</th>
+				<th>车辆</th>
+				<th>被换车起始的公里数</th>
+				<th>被换车结束的公里数</th>
+				<th>更换过来的车当前公里数</th>
+				<th>原租金</th>
+				<th>更换后租金</th>
+				<th>换车备注</th>
+				<th>调度人</th>
+			  </tr>
+			  {foreach from=$changelist item=row name=foo}
+			  <tr >
+			    	<td>{$smarty.foreach.foo.index+1} </td>
+				  	<td>{$row.changecar_times_all}</td>
+				  	<td>苏D{$row.carA}&nbsp;->&nbsp;苏D{$row.carB}</td>
+					<td>{$row.changecar_carAStartKilo}</td>
+					<td>{$row.changecar_carAEndKilo}</td>
+					
+					<td>{$row.changecar_kiloBNow}</td>
+					<td>{$row.changecar_rentA}</td>
+					<td>{$row.changecar_rentB}</td>
+					<td>{$row.changecar_rentRemarks}</td>
+					<td>{$row.changecarMan}</td>
+			 </tr>
+			 {/foreach}
+			</table>
+		</td>
+	</tr>
+	{/if}
+  </table>
+  </div>
+  <div class="Toolbar_inbox">
+	<a href="exportoutcar.php?pid={$busi.paiche_id}" class="btn_a" ><span>导出</span></a>
+  </div>
+</div>
+</form>
+<!-{literal}->
+<script>
+</script>
+<!-{/literal}->
+</body>
+</html>

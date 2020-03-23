@@ -1,0 +1,15 @@
+@import "main.css";
+
+/*--------------------------------------------------------------------*/
+body{ margin:0 30px; line-height:20px; font-size:14px;}
+h2{ text-align:center; margin-bottom:8px;}
+
+.iepage1{height:907px; display:block}
+.iepage2{height:974px; display:block}
+.iepage3{height:974px; display:block}
+.iepage4{height:917px; display:block}
+
+.ffpage1{height:975px; display:block}
+.ffpage2{height:976px; display:block}
+.ffpage3{height:975px; display:block}
+.ffpage4{height:975px; display:block}

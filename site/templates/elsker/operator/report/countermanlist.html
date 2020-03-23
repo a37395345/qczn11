@@ -1,0 +1,140 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>管理后台</title>
+<link href="../../../../css/style.css" rel="stylesheet" type="text/css">
+<link href="../../../../js/jbox/jBox/Skins/GreyBlue/jbox.css" rel="stylesheet"  />
+<script type="text/javascript" src="../../../../js/jquery.js"></script>
+<script type="text/javascript" src="../../../../js/common.js"></script>
+<script type="text/javascript" src="../../../../js/calendar.js"></script>
+<script type="text/javascript" src="../../../../js/fancybox/jquery.mousewheel-3.0.4.pack.js"></script>
+<script type="text/javascript" src="../../../../js/fancybox/jquery.fancybox-1.3.4.pack.js"></script>
+<script type="text/javascript" src="../../../../js/jbox/jBox/jquery.jBox-2.3.min.js"></script>
+<script type="text/javascript" src="../../../../js/jbox/jBox/i18n/jquery.jBox-zh-CN.js"></script>
+</head>
+<body>
+<div class="so_main">
+  <div class="page_tit">业务员业绩统计</div>
+  <div id="searchTopic_div" style="display:none;">
+    <div class="page_tit">
+    搜索 [<a onclick="searchNews();" href="javascript:void(0);">隐藏</a>]
+    </div>
+    <div class="form2">
+        <form action="list.php" method="get">
+            <dl class="lineD">
+	            <dt>开始日期：</dt>
+	            <dd><input type="text" name="startdate" size="16" value="{$startdate}" onClick="calendar.show(this);" readonly="readonly" /></dd>
+            </dl>
+            <dl class="lineD">
+	            <dt>截止日期：</dt>
+	            <dd><input type="text" name="enddate" size="16" value="{$enddate}" onClick="calendar.show(this);" readonly="readonly" /></dd>
+            </dl>
+            <dl class="lineD">
+            <dt>业务员：</dt>
+            <dd>
+            	<input type="text" name="paicheCounterMan" id="paicheCounterMan" size="16" onFocus="this.blur()" />
+	    		<input type="hidden" name="paicheCounterMan2" id="paicheCounterMan2" size="16" />
+	    		<a href="javascript:select_emp();" id="selywy"><img src="../../../../css/driver.gif" width="16" height="15" class="peoplePic" /></a>
+            </dd>
+            </dl>
+            <div class="page_btm">
+            	<input class="btn_b" type="submit" value="确定">
+            </div>
+        </form>
+    </div>
+  </div>
+  <div class="Toolbar_inbox">
+    <a href="javascript:void(0);" class="btn_a" onclick="searchNews();" id="searchTopic_action"><span>条件</span></a>
+<!-- 	<a href="list.php?task=exportoutcar&paicheDriver2={$driveid}&startdate={$startdate}&enddate={$enddate}" class="btn_a"  id="exportUser_action"><span>导出</span></a> -->
+  </div>
+  <div class="list">
+  <table width="100%" border="0" cellspacing="0" cellpadding="0">
+  <tr>
+	<th>序号</th>
+	<th>业务员</th>
+	<th>临时自驾</th>
+	<th>临时带驾</th>
+	<th>调车结算</th>
+	<th>长期自驾</th>
+	<th>长期带驾</th>
+	<th>长期大客</th>
+	<th>合计</th>
+	<th>&nbsp;</th>
+  </tr>
+  {foreach from=$list item=row name=foo}
+  {$all_money[0]=$all_money[0]+$row.total_money}
+  {$all_money[1]=$all_money[1]+$row.total_money1}
+  {$all_money[2]=$all_money[2]+$row.total_money2}
+  {$all_money[6]=$all_money[6]+$row.total_money21}
+  {$all_money[3]=$all_money[3]+$row.total_money3}
+  {$all_money[4]=$all_money[4]+$row.total_money4}
+  {$all_money[5]=$all_money[5]+$row.total_money5}
+  <tr overstyle='on' id="badge_{$row.emp_id}" {if ($smarty.foreach.foo.index+1) mod 2 ==0}style="background-color:#EAF2D3;"{/if}>
+	  	<td>{$smarty.foreach.foo.index+1}</td>
+	  	<td>{$row.emp_name}</td>
+	    <td>{$row.total_money1}</td>
+	    <td>{$row.total_money2}</td>
+	    <td>{$row.total_money21}</td>
+	    <td>{$row.total_money3}</td>
+	    <td>{$row.total_money4}</td>
+	    <td>{$row.total_money5}</td>
+	    <td>{$row.total_money}</td>
+	    <td><a href="detail.php?emp_id={$row.emp_id}&startdate={$startdate}&enddate={$enddate}" target="blank">明细</a></td>
+ </tr>
+ 
+ {/foreach}
+ <tr style="background-color:#FE6E47;">
+    <td>&nbsp;</td>
+    <td>合计</td>
+    <td>{$all_money[1]}</td>
+    <td>{$all_money[2]}</td>
+    <td>{$all_money[6]}</td>
+    <td>{$all_money[3]}</td>
+    <td>{$all_money[4]}</td>
+    <td>{$all_money[5]}</td>
+    <td>{$all_money[0]}</td>
+    <td>&nbsp;</td>
+  </tr>
+ </table>
+ </div>
+</div>
+<!-{literal}->
+<script>
+	//鼠标移动表格效果
+	$(document).ready(function(){
+        $("a.zoomIn").fancybox({
+            'overlayShow'   : false,
+            'transitionIn'  : 'elastic',
+            'transitionOut' : 'elastic'
+        });         
+        
+		$("tr[overstyle='on']").hover(
+		  function () {
+		    $(this).addClass("bg_hover");
+		  },
+		  function () {
+		    $(this).removeClass("bg_hover");
+		  }
+		);
+	});	
+	var isSearchHidden = 1;
+    function searchNews() {
+      if(isSearchHidden == 1) {
+        $("#searchTopic_div").slideDown("fast");
+        isSearchHidden = 0;
+      }else {
+        $("#searchTopic_div").slideUp("fast");
+        isSearchHidden = 1;
+      }
+    }
+    function select_emp(){
+    	demo_iframe('../../business/selectemp.php?sel_type=e','选择业务员',650,380,'login_js');
+    }
+
+</script>
+<!-{/literal}->
+
+</body>
+</html>

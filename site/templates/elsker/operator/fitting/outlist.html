@@ -1,0 +1,105 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>管理后台</title>
+<link href="../../../css/style.css" rel="stylesheet" type="text/css">
+<script type="text/javascript" src="../../../js/jquery.js"></script>
+<script type="text/javascript" src="../../../js/common.js"></script>
+<script type="text/javascript" src="../../../js/fancybox/jquery.mousewheel-3.0.4.pack.js"></script>
+<script type="text/javascript" src="../../../js/fancybox/jquery.fancybox-1.3.4.pack.js"></script>
+</head>
+<body>
+<div class="so_main">
+  <div class="page_tit">配件领用记录</div>
+  <div class="Toolbar_inbox">
+  	<div class="page right">共{$total}条记录&nbsp;&nbsp;&nbsp;{$PAGINATION}</div>
+    <a href="list.php" class="btn_a"><span>返回</span></a>
+  </div>
+  <div class="list">
+  <table width="100%" border="0" cellspacing="0" cellpadding="0">
+  <tr>
+	<th>领用日期</th>
+	<th>领用人</th>
+	<th style="text-align:left;">详细</th>
+  </tr>
+  {foreach from=$list item=row name=foo}
+  <tr overstyle='on' >
+	    <td>{$row.fitting_outdate}</td>
+	    <td>{$row.fitting_outman}</td>
+	    <td style="text-align:left;">
+	    <table align="left">
+	    <tr>
+		    <th>配件名称</th>
+			<th>品牌</th>
+			<th>型号规格</th>
+			<th>数量</th>
+			<th>单位</th>
+			<th>用途</th>
+	    </tr>
+	    {foreach from=$row.fitting_list item=row1}
+	    <tr>
+		    <td>{$row1.fitting_name}</td>
+			<td>{$row1.fitting_brand}</td>
+			<td>{$row1.fitting_model}</td>
+			<td>{$row1.fitting_outnum}</td>
+			<td>{$row1.fitting_unit}</td>
+			<td>{$row1.fitting_remark}</td>
+ 		</tr>
+	    {/foreach}
+	    </table>
+	    </td>
+ </tr>
+ {/foreach}
+ </table>
+ </div>
+
+  <div class="Toolbar_inbox">
+	<div class="page right">共{$total}条记录&nbsp;&nbsp;&nbsp;{$PAGINATION}</div>
+	<a href="list.php" class="btn_a"><span>返回</span></a>
+  </div> 
+</div>
+<!-{literal}->
+<script>
+	//鼠标移动表格效果
+	$(document).ready(function(){
+        $("a.zoomIn").fancybox({
+            'overlayShow'   : false,
+            'transitionIn'  : 'elastic',
+            'transitionOut' : 'elastic'
+        });         
+        
+		$("tr[overstyle='on']").hover(
+		  function () {
+		    $(this).addClass("bg_hover");
+		  },
+		  function () {
+		    $(this).removeClass("bg_hover");
+		  }
+		);
+	});
+	
+	function checkon(o){
+		if( o.checked == true ){
+			$(o).parents('tr').addClass('bg_on') ;
+		}else{
+			$(o).parents('tr').removeClass('bg_on') ;
+		}
+	}
+	
+	function checkAll(o){
+		if( o.checked == true ){
+			$('input[name="checkbox"]').attr('checked','true');
+			$('tr[overstyle="on"]').addClass("bg_on");
+		}else{
+			$('input[name="checkbox"]').removeAttr('checked');
+			$('tr[overstyle="on"]').removeClass("bg_on");
+		}
+	}
+		
+</script>
+<!-{/literal}->
+
+</body>
+</html>

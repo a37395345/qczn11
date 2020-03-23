@@ -1,0 +1,129 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>管理后台</title>
+<link href="../../../css/style.css" rel="stylesheet" type="text/css">
+<link href="../../../css/box.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="../../../js/jquery.js"></script>
+<script type="text/javascript" src="../../../js/laydate/laydate.js"></script>
+
+
+</head>
+<body>
+	
+		<br/><br/><br/>
+		<form action="update_b.php" method="post">
+			<input type="hidden" name="uid" value="{$uid}">
+			<input type="hidden" name="table" value="{$table}">
+			<input type="hidden" name="name" value="{$name}">
+			<input type="hidden" name="type" value="{$type}">
+			{$heading}:
+			{if $type=='time'}
+				<input name="val" id="change_time" placeholder="请输入日期" value="{$val}" class="laydate-icon" onClick="laydate({ldelim}istime: true, format: 'YYYY-MM-DD hh:mm:ss'{rdelim})">
+			
+			{elseif $type=='emp'}
+				<select name="val">
+					{foreach from=$emplist key=i item=row}
+  						<option   value ="{$row.emp_id}" 
+  						{if $val==$row.emp_name}selected {/if} >{$row.emp_name}
+  						</option>
+					{/foreach}
+				</select>
+			{elseif $type=='brothers'}
+				<select name="val">
+				{foreach from=$brotherslist key=i item=row}
+  					<option   value ="{$row.bro_id}" 
+  					{if $val==$row.bro_name}selected {/if} >{$row.bro_name}
+  					</option>
+				{/foreach}
+				</select>
+			{elseif $type=='items'}
+				<select name="val">
+				{foreach from=$itemslist key=i item=row}
+  					<option   value ="{$row.item_id}" 
+  					{if $val==$row.item_name}selected {/if} >{$row.item_name}
+  					</option>
+				{/foreach}
+				</select>
+			{elseif $type=='charges'}
+				<select name="val">
+				{foreach from=$chargeslist key=i item=row}
+  					<option   value ="{$row.charge_id}" 
+  					{if $val==$row.charge_name}selected {/if} >{$row.charge_name}
+  					</option>
+				{/foreach}
+				</select>
+			{elseif $type=='payments'}
+				<select name="val">
+				{foreach from=$paymentslist key=i item=row}
+  					<option   value ="{$row.payment_id}" 
+  					{if $val==$row.payment_name}selected {/if} >{$row.payment_name}
+  					</option>
+				{/foreach}
+				</select>
+			{elseif $type=='banks'}
+				<select name="val">
+				{foreach from=$bankslist key=i item=row}
+  					<option   value ="{$row.bank_id}" 
+  					{if $val==$row.bank_name}selected {/if} >{$row.bank_name}
+  					</option>
+				{/foreach}
+				</select>
+			{elseif $type=='shenhe'}
+				<select name="val">
+  					<option   value ="1" 
+  						{if $val==1}selected {/if} >审核通过
+  					</option>
+  					<option   value ="0" 
+  						{if $val==0}selected {/if} >未审核
+  					</option>
+  					<option   value ="-1" 
+  						{if $val==-1}selected {/if} >审核未通过
+  					</option>
+
+  					
+				</select>
+			{elseif $type=='zhuangtai'}
+				<select name="val">
+  					<option   value ="1" 
+  						{if $val==1}selected {/if} >已处理
+  					</option>
+  					<option   value ="0" 
+  						{if $val==0}selected {/if} >未处理
+  					</option>
+  					
+  					
+				</select>
+			{elseif $type=='zhuangtai2'}
+				<select name="val">
+  					<option   value ="1" 
+  						{if $val==1}selected {/if} >已结账
+  					</option>
+  					<option   value ="0" 
+  						{if $val==0}selected {/if} >未结账
+  					</option>
+  					
+  					
+				</select>
+				
+			{elseif $type=='car'}
+				<select name="val">
+				{foreach from=$carlist key=i item=row}
+  					<option   value ="{$row.car_id}" 
+  					{if $val==$row.car_num}selected {/if} >{$row.car_num}
+  					</option>
+				{/foreach}
+				</select>
+			
+			{else}
+				<input type="text" name="val" value="{$val}">
+			{/if}
+				<br/><br/><br/>
+				<input type="submit" value="修改">
+		</form>
+		
+	
+</body>
+</html>

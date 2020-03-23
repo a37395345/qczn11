@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+    <title>部门权限管理</title>
+    <link rel="shortcut icon" href="favicon.ico">
+<link href="../../../crm/fonts1/iconfont.css?a=2" rel="stylesheet">
+    <link rel="shortcut icon" href="favicon.ico"> <link href="../../../crm1/css/bootstrap.min.css?v=3.3.6" rel="stylesheet">
+    <link href="../../../crm1/css/font-awesome.css?v=4.4.0" rel="stylesheet">
+
+    <link href="../../../crm1/css/animate.css" rel="stylesheet">
+    <link href="../../../crm1/css/style.css?v=4.1.0" rel="stylesheet">
+    <link href="../../../crm1/css/plugins/treeview/bootstrap-treeview.css" rel="stylesheet">
+
+    <link href="../../../crm/css/plugins/sweetalert/sweetalert.css" rel="stylesheet">
+    <script src="../../../crm/js/plugins/sweetalert/sweetalert.min.js"></script>
+
+
+
+    <script type="text/javascript" src="../../../js/jquery.js">
+</script>
+    <link href="../../../js/jbox/jBox/Skins/GreyBlue/jbox.css?a=2" rel="stylesheet">
+    <script type="text/javascript" src="../../../js/jbox/jBox/jquery.jBox-2.3.min.js?a=5"></script>
+    <script type="text/javascript" src="../../../js/jbox/jBox/i18n/jquery.jBox-zh-CN.js?a=1"></script>
+</head>
+
+<body class="gray-bg">
+    <div class="row wrapper wrapper-content animated fadeInRight">
+        
+       
+            <div class="ibox float-e-margins" >
+                 <div class="ibox-title">
+                <h5>{if $type=="zijia_linshi"}自驾平台单{else if $type=="daijia_linshi"}临时代驾企业结账{else if $type=="diaoche"}临时代驾调车结账{/if} </br>
+                    
+                </h5>
+               </div>
+               
+            </div>
+             
+            <form method="post" action="index.php?task=pinlian_action" name="form1">
+                <div class="ibox-content">
+                <div class="row row-lg">
+                    <div class="col-sm-12">
+                        <!-- Example Events -->
+                        <div class="example-wrap">
+                            <div class="example">
+                            <input type="hidden" name="type" id="type" value="{$type}">
+            <table class="table table-bordered table-hover" data-height="400" style="margin-bottom:20px" data-mobile-responsive="true">
+                            <thead>
+                            <tr>
+                               
+                               
+                                <th style="text-align: center;width: 10%">
+                                    合同号
+                                </th>
+                                {if $type=="zijia_linshi"}
+                                <th style="text-align: center;width: 15%">
+                                    平台单号
+                                </th>
+                                
+                                <th style="text-align: center;width: 10%">
+                                    承租人
+                                </th>
+                                {/if}
+                                <th style="text-align: center;width: 25%">
+                                    用车时间
+                                </th>
+                                <th style="text-align: center;width: 15%">
+                                    结账收款
+                                </th>
+                                <th style="text-align: center;width: 15%">
+                                    本次收款
+                                </th>
+                                <th style="width: 15%">
+                                    <div align="center">
+                                        详细
+                                    </div>
+                                </th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                                
+                            {foreach from=$list key=i item=rows}
+                            <tr>
+                               <input type="hidden" class="form-control input-sm" name="pid[]" value="{$rows.paiche_id}"   />
+                                <td style="text-align: center;">
+                                   {$rows.paiche_contractNum}
+                                </td>
+                                 {if $type=="zijia_linshi"}
+                                <td style="text-align: center;">
+                                   {$rows.paiche_pintainum}
+                                </td>
+                               
+                                <td style="text-align: center;">
+                                   {$rows.paiche_linker}
+                                </td>
+                                {/if}
+                                <td style="text-align: center;">
+                                   {$rows.paiche_startDate}~~ {$rows.paiche_startDate}
+                                </td>
+                                <td style="text-align: center;">
+                                    <input type="text" class="form-control input-sm" name="money_a[]" value="{$rows.money}" readonly="readonly" unselectable="on"  />
+                                   
+                                </td>
+                                <td style="text-align: center;">
+                                   <input type="text" class="form-control input-sm" name="moneys[]" value="{$rows.money}" onchange="jisuan()"  />
+                                </td>
+                                <td style="text-align: center;">
+                                    {if $type=="zijia_linshi"}
+                                  <a href="../zijia_linshi/zijia_detail.php?uid={$rows.paiche_id}" title="明细" style="color:#CC6600" target="_blank">
+                                          <i class="iconfont icon-mingxi1" aria-hidden="true"></i>
+                                   </a>
+                                   {else if $type=="daijia_linshi"}
+                                    <a href="../daijia_linshi/index.php?task=mingxi&pid={$rows.paiche_id}" title="明细" style="color:#CC6600" target="_blank">
+                                          <i class="iconfont icon-mingxi1" aria-hidden="true"></i>
+                                   </a>
+                                   {else if $type=="diaoche"}
+                                    <a href="../daijia_linshi/index.php?task=mingxi&pid={$rows.paiche_id}" title="明细" style="color:#CC6600" target="_blank">
+                                          <i class="iconfont icon-mingxi1" aria-hidden="true"></i>
+                                   </a>
+                                   {/if}
+                                </td>
+                                
+                            </tr>
+                            
+                            {/foreach}
+
+                        </tbody>
+                         
+                    </table>
+
+                    <table class="table table-bordered" class="shiji">
+                                    <tr>
+                                        
+                                        <th style="background-color:#F5F5F6" width="15%">
+                                            <span style="color:#000">总金额：</span>
+                                        </th>
+                                        <td width="35%">
+                                            <input type="text" class="form-control input-sm" name="money" id="money" value="{$money}" readonly="readonly" unselectable="on">
+                                        </td>
+
+                                        <th style="background-color:#F5F5F6" width="15%">
+                                            
+                                        </th>
+                                        <td width="35%">
+                                            
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <th style="background-color:#F5F5F6" width="15%">
+                                            <span style="color:#000">付款方式：</span>
+                                        </th>
+                                        <td width="35%">
+                                            <select class="form-control input-sm" id="payment_id" name="payment_id" onchange="xdd()">
+                                            <option  value="0">请选择</option>
+
+                                            </option>
+                                                {foreach from=$payments_list key=i item=rows}
+                                                    <option  value="{$rows.payment_id}">
+                                                        {$rows.payment_name}
+                                                    </option>
+                                                {/foreach}
+                                            </select>
+                                        </td>
+                                        <th style="background-color:#F5F5F6" width="15%">
+                                            <span style="color:#000">账户：</span>
+                                        </th>
+                                        <td width="35%">
+                                            <select class="form-control input-sm" id="bank_id" name="bank_id">
+                                                
+                                            </select>
+                                        </td>
+                                    </tr>
+                                    </table>
+                    <input type="submit" id="submit" class="btn btn-outline btn-default" value="提交" style="width: 10%;margin-left: 45%;display: block;">
+                
+            
+            </div>
+            </div>
+            </div>
+
+        </div>
+        </div> 
+        </form>
+    </div>
+    </div>
+    <!-- 全局js -->
+    
+    <script src="../../../crm1/js/bootstrap.min.js?v=3.3.6"></script>
+    <!-- Bootstrap-Treeview plugin javascript -->
+    <script src="../../../crm1/js/plugins/treeview/bootstrap-treeview.js"></script>
+
+
+</body>
+<script type="text/javascript">
+    
+    $('#form1').submit(function(){
+        $('#submit').attr('disabled','disabled');
+        $('#submit').val('正在提交');
+
+    });
+    $('#submit').click(function(){
+        var payment_id=parseInt($("#payment_id").val());
+        var bank_id=parseInt($("#bank_id").val());
+        if(!payment_id>0){
+            alert('请选择收款方式！');
+            return false;
+        }
+        if(!bank_id>0){
+            alert('请选择收款账户！');
+            return false;
+        }
+    });
+
+   
+    jisuan();
+    
+    function jisuan(){
+        
+        var money=0;
+        var moneys =  $("input[name='moneys[]']");
+        var money_a=$("input[name='money_a[]']");
+       
+        
+        for(var i=0;i<moneys.length;i++){
+            if(parseFloat(money_a.eq(i).val())>0){
+                if(parseFloat(moneys.eq(i).val())>parseFloat(money_a.eq(i).val())||parseFloat(moneys.eq(i).val())<0){
+                    alert("收入金额不能大于应收的总金额或小于0！");
+                    moneys.eq(i).val(money_a.eq(i).val());
+                }
+            }else{
+                if(parseFloat(moneys.eq(i).val())<parseFloat(money_a.eq(i).val())||parseFloat(moneys.eq(i).val())>0){
+                    alert("支出金额不能小于支出的总金额或大于0！");
+                    moneys.eq(i).val(money_a.eq(i).val());
+                }
+            }
+            
+            money=money+parseFloat(moneys.eq(i).val());
+            
+        }
+         $("#money").val(money);
+    }
+    function xdd(){
+        var paymentsVal = $("#payment_id option:selected").val();
+        var html
+        //console.log(paymentsVal);
+        if(paymentsVal==1){
+            html += "<option value='1'>现金账</option>";
+        }else if(paymentsVal==2){
+            html += "<option value='5'>农行都市桃源支行-运河租车</option><option value='15'>农行金色新城支行-兰博租车</option><option value='18'>常州市运河汽车租赁有限公司无锡分公司</option>"
+        }else if(paymentsVal==3){
+            html += "<option value='12'>中国建设银行——蒋政</option><option value='13'>中国农业银行——蒋政</option><option value='10'>中国工商银行——蒋政</option><option value='11'>中国银行——蒋政</option><option value='16'>中国建设银行(提现)——蒋政</option><option value='6'>蒋政——建行</option><option value='8'>押金账</option><option value='17'>备用金账</option>"
+        }
+        $("#bank_id").html(html);
+    }
+   
+    
+       
+    
+   
+    
+
+</script>
+</html>

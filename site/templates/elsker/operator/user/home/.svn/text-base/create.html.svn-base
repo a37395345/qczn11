@@ -1,0 +1,151 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>管理后台</title>
+<link href="/admincp/css/style.css" rel="stylesheet" type="text/css">
+<link href="/admincp/css/box.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="/admincp/js/jquery.js"></script>
+<script type="text/javascript" src="/admincp/js/common.js"></script>
+<script type="text/javascript" src="/admincp/js/box.js"></script>
+<style>
+/*{literal}*/
+	.navi_name{font-size:14px;font-weight:bold;}
+	.indent{padding-left:40px;}
+/*{/literal}*/
+</style>
+</head>
+<body>
+<div class="so_main">
+  <div class="page_tit">编辑</div>
+  
+  <form method="post" action="insert.php" enctype="multipart/form-data" onsubmit="return check(this)">
+    
+  <div class="form2">
+    <dl class="lineD">
+      <dt>名称：</dt>
+      <dd>
+        <input type="text" name="title" value="{$badge.title}" /> *
+	  </dd>
+    </dl>
+	
+    <dl class="lineD">
+      <dt>描述：</dt>
+      <dd>
+        <input type="text" name="description" value="{$badge.description}"/>
+	  </dd>
+    </dl>
+
+	 <dl class="lineD">
+      <dt>大图：</dt>
+      <dd>
+        <input type="file" name="big_image" value="{$badge.big_image}"/><a href="/admincp/upload/{$badge.big_image}" target="_blank">{$badge.big_image}</a>
+	  </dd>
+    </dl>
+
+	 <dl class="lineD">
+      <dt>小图：</dt>
+      <dd>
+        <input type="file" name="small_image" value="{$badge.small_image}"/><a href="/admincp/upload/{$badge.small_image}" target="_blank">{$badge.small_image}</a>
+	  </dd>
+    </dl>
+
+	 <dl class="lineD">
+      <dt>类别：</dt>
+      <dd>
+		<select name="badge_category_id" >
+			<option value="-请选择-">-请选择-</option>
+		{foreach from=$category key=i item=rows}
+			<option value="{$rows.badge_category_id}" {if $rows.badge_category_id==$badge.badge_category_id}selected{else}{/if}>{$rows.title}</option>	
+		{/foreach}
+		</select>
+	  </dd>
+    </dl>
+
+	 <dl class="lineD">
+      <dt>程序路径：</dt>
+      <dd>
+        <input type="text" name="program_path" value="{$badge.program_path}"/>
+	  </dd>
+    </dl>
+
+	 <dl class="lineD">
+      <dt>状态：</dt>
+      <dd>
+        <!--<input type="text" name="status" value="{$badge.status}"/>-->
+		<input type="radio" name="status"  value="1" {if $badge.status == 1}checked{else}{/if}>激活
+	    <input type="radio" name="status"  value="0" {if $badge.status == 0}checked{else}{/if}>关闭
+	  </dd>
+    </dl>
+
+	
+    <div class="page_btm">
+      <input type="submit" class="btn_b" value="确定" />
+    </div>
+  </div>
+  <input type="hidden" name="uid" value="{$badge.badge_id}" />
+  <input type="hidden" name="task" value="{$task}" /></form>
+</div>
+
+<script type="text/javascript">
+	function selectAll(){
+		$("input[type='checkbox']").attr("checked",true);
+	}
+	function unselectAll(){
+		$("input[type='checkbox']").attr("checked",false);
+	}
+	$(document).ready(function(){
+		$(".subnavi").click(function(){
+			var checked = false;
+			$(this).parent().parent().find(".subnavi").each(function(){
+				if($(this).attr("checked")){
+					checked = true;
+				}
+			});
+			var navi = $(this).parent().parent().parent().find(".navi");
+			if(checked){
+				navi.attr("checked",true);
+			}else{
+				navi.attr("checked",false);
+			}
+		});
+		$(".navi").click(function(){
+			$(this).parent().find(".subnavi").attr("checked",$(this).attr("checked"));
+		});
+	});
+	
+	function check(_form){
+		if(_form.title.value==""){
+			alert("请输入信息名称！");
+			_form.title.focus();
+			return false;
+		}
+ 	
+		if(_form.description.value==""){
+			alert("请输入信息描述!");
+			_form.description.focus();
+			return false;
+		}
+		/*if(_form.big_image.value==""){
+			alert("请选择信息图片!");
+			_form.big_image.focus();
+			return false;
+		}
+		if(_form.badge_category_id.value=="-请选择-"){
+			alert("请选择信息类别!");
+			_form.badge_category_id.focus();
+			return false;
+		}*/
+		if(_form.program_path.value==""){
+			alert("请输入程序路径!");
+			_form.program_path.focus();
+			return false;
+		}
+		
+		return true;
+	}
+</script>
+
+</body>
+</html>

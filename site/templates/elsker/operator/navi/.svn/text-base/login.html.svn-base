@@ -1,0 +1,43 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>管理员登录</title>
+<style type="text/css">
+{literal}
+body {
+	margin:0px;
+	padding:0px;
+	font-size: 12px;
+}
+form{margin:0px;padding:0px;}
+div {
+	height:25px;line-height:25px;
+}
+input{font-size: 12px;margin-top:2px}
+.line1{color:#ffffff;background-color:#000000;}
+.line{background-color:#EFEFEF}
+.submit{margin-top:10px}
+#loginbox {
+	border:#000000 1px solid; padding:1px; width:310px;height:145px;position:absolute;top:20%;left:35%;} 
+}
+.editbox {
+	border:#000000 1px solid; padding:1px; height:15px;
+}
+{/literal}
+</style>
+</head>
+<body>
+<center>
+			<form action="{$S_LOGIN_ACTION}" method="post">
+			<div id="loginbox">
+				<div class="line1"><B>管 理 员 登 录</B></div>
+				<div>请输入用户名和密码</div>
+				<div class="line">用户名：<input class="editbox" maxLength="50" size="15" name="username"></div>
+				<div>密　码：<input class="editbox" type="password" maxLength="50" size="15" name="password"></div>
+				<div class="submit"><input type="submit" value="登录" name="login"> <input type="reset" value="清除"></div>
+			</div>
+			<input type="hidden" value="{$S_REDIRECT}" name="redirect">
+			</form>
+</center>
+</body></html>

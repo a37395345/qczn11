@@ -1,0 +1,71 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>循环执行</title>
+<script language="javascript" src="js/jquery-2.1.4.min.js"></script>
+</head>
+<body>
+<input type="button" id="btnStop" value="开始" onclick="start()"/>
+<input type="button" id="btnStop" value="停止" onclick="stop()"/>
+<input type="button" id="btnStop" value="继续" onclick="conti()"/>
+<div id="shownote">
+</div>
+
+<script language="javascript">
+var nFlag=0;
+var myDate = new Date();
+var nCount=0;
+var sNote="";
+function start()
+{
+    myDate = new Date();
+    sNote="开始  "+myDate.toLocaleString()+"<br>";
+    $("#shownote").append(sNote);
+    setTimeout(getNote,1000);
+}
+function stop()
+{
+    nFlag=1;
+}
+function conti()
+{
+    nFlag=0;
+    setTimeout(getNote,10);
+}
+
+function getNote()
+{
+    if (nFlag==1) return false;
+    
+    nCount++;
+    myDate = new Date();
+    $.ajax({
+		  type:'POST',
+		  url:'sendmsg.php',
+		  dataType:"json",
+		  cache: false,
+		  error: function(){
+		      sNote="AJAX调用错误!  "+myDate.toLocaleString()+"<br>";
+		      $("#shownote").append(sNote);
+		      setTimeout(getNote,1000);
+		  },
+		  success:function(jsonmsg){
+			  if (jsonmsg.status==0){
+			        myDate = new Date();
+					sNote="第"+nCount+"次执行成功!发送条数："+jsonmsg.totalRecords+"  "+myDate.toLocaleString()+"<br>";
+					$("#shownote").append(sNote);
+					setTimeout(getNote,1000);
+			  }else{
+				    sNote="发送错误，错误内容："+jsonmsg.note+"  "+myDate.toLocaleString()+"<br>";
+				    $("#shownote").append(sNote);
+				    setTimeout(getNote,1000);
+			  }
+		  }
+	});
+}
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,83 @@
+
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width" />
+    <meta charset="utf-8">
+    <title>公司架构图</title>
+    <script type="text/javascript" src="/js/jquery.js"></script>
+    <style>
+        html, body {
+            margin: 0px;
+            padding: 0px;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            font-family: Helvetica;
+        }
+        #tree {
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+
+</head>
+<body>
+
+<script src="/js/chart.js?a=2"></script>
+<div id="tree" style="width: auto!important;overflow-x: auto"></div>
+{foreach from=$list key=i item=row}
+<div class="emp-info" date-id="{$row.id}" date-name="{$row.name}" date-pid="{$row.pid}" date-zhiwei="{$row.zhiwei}" date-img="{$row.avatar}"></div>
+{/foreach}
+<script>
+
+
+    var chart;
+
+    window.onload = function () {
+        var info = [];
+        $(".emp-info").each(function(){
+            info.push({ id: $(this).attr('date-id'), pid: $(this).attr('date-pid'), name: $(this).attr('date-name'), title: $(this).attr('date-zhiwei'), img: $(this).attr('date-img')});
+        })
+console.log(info);
+        chart = new OrgChart(document.getElementById("tree"), {
+            template: "luba",
+            //direction: "l2r",
+            //layout: OrgChart.mixed,
+            scaleInitial: OrgChart.match.boundary,
+            nodeBinding: {
+                field_0: "name",
+                field_1: "title",
+                img_0: "img"
+            },
+            nodes: info,
+        });
+
+
+        function preview(){
+            OrgChart.pdfPrevUI.show(chart, {
+                format: 'A4'
+            });
+        }
+    };
+
+    var doc = $(".J_iframe");
+    doc.onmousewheel=function(event){
+    //alert(event.wheelDelta)
+    if(event.wheelDelta>0){
+        doc.style.transform="scale(2,2)";
+    }else if(event.wheelDelta<0){
+        doc.style.transform="scale(1,1)"
+    }
+}
+    
+    $('svg').live('click', function(event) {
+   //alert("抱歉,已停用！");
+   event.preventDefault();
+});
+</script>
+</body>
+</html>

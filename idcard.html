@@ -1,0 +1,60 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Insert title here</title>
+</head>
+<OBJECT
+	  classid="clsid:F1317711-6BDE-4658-ABAA-39E31D3704D3"                  
+	  codebase="SDRdCard.cab#version=1,3,5,0"
+	  width=330
+	  height=360
+	  align=center
+	  hspace=0
+	  vspace=0
+	  id=idcard
+	  name=rdcard		 
+>
+</OBJECT>
+<body onbeforeunload="window_onUnload()">
+
+<input type="text" id="sname" name="sname" value="" />
+<input type="button" value="开始读卡" name="beginread" onClick="beginread_onclick()">&nbsp;
+<input type="button" value="停止读卡" name="endread"   onclick="endread_onclick()"  >
+
+
+<script type="text/javascript">
+
+
+var i=1;
+setInterval("window_onload()",300);
+
+function beginread_onclick(){
+	i=0;
+	
+	rdcard.ReadCard2();
+	alert('eeee');
+	if (rdcard.bHaveCard){
+		alert('ddd');
+		document.getElementById("sname").value=rdcard.NameS;
+		rdcard.bHaveCard=false;
+	}
+}
+
+function endread_onclick(){
+	rdcard.endread();
+}
+function window_onload(){
+	if(i<1){
+		document.getElementById("sname").value=rdcard.NameS;
+		
+	}
+}
+
+function window_onUnload(){
+	  rdcard.DeleteOutputFile();
+	  rdcard.DeleteAllPicture();
+}  
+</script>
+</body>
+</html>

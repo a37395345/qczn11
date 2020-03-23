@@ -1,0 +1,190 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>管理后台</title>
+<link href="../../../css/style.css" rel="stylesheet" type="text/css">
+<link href="../../../css/box.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="../../../js/jquery.js"></script>
+<script type="text/javascript" src="../../../js/common.js"></script>
+<script type="text/javascript" src="../../../js/box.js"></script>
+</head>
+<body>
+<div class="so_main">
+  <div class="page_tit">员工列表</div>
+
+<!--搜索用户-->
+<div id="searchUser_div" style="display:none;">
+	<div class="page_tit">
+	搜索员工 [<a onclick="searchUser();" href="javascript:void(0);">隐藏</a>]
+    </div>
+	<div class="form2">
+		<form action="zemp_index.php" method="get">
+			<dl class="lineD">
+			<dt>公司电话：</dt>
+			<dd>
+			<input type="text" value="" name="phone">
+			</dd>
+			</dl>
+			<dl class="lineD">
+			<dt>姓名：</dt>
+			<dd>
+			<input id="realname" type="text" value="" name="realname">
+			<p>支持模糊查询</p>
+			</dd>
+			</dl>
+			            
+            <dl class="lineD">
+            <dt>职位：</dt>
+            <dd>
+            <select name="emp_post" >
+                  <option value="0">请选择</option>
+                  {foreach from=$list_title key=i item=rows}
+                  <option value="{$rows.id}">{$rows.title}</option>
+                  {/foreach}
+              </select>
+            </dd>
+            </dl>
+
+            <dl class="lineD">
+            <dt>工资结构：</dt>
+            <dd>
+            <select name="emp_zhiweiid" >
+                  <option value="0">请选择</option>
+                  {foreach from=$list_zhiwei key=i item=rows}
+                  <option value="{$rows.id}">{$rows.zhiwei_name}</option>
+                  {/foreach}
+              </select>
+            </dd>
+            </dl>
+
+            <dl class="lineD">
+			    <dt>部门：</dt>
+			    <dd><select name="emp_shopid" id="emp_shopid">
+			        <option value="0" >请选择部门</option>
+			        {foreach from=$list_shop key=i item=rows}
+			        	<option value="{$rows.shop_id}">{$rows.shop_name}</option>
+			        {/foreach}
+			        </select></dd>
+			</dl>
+            <dl class="lineD">
+			    <dt>状态：</dt>
+			    <dd><select name="emp_zhuangtai" id="emp_zhuangtai" >
+			    <option value="1">全部</option>
+			    <option value="2" >在职</option>
+			    <option value="3">正式期</option>
+			    <option value="4">试用期</option>
+			    <option value="5">离职</option>
+			    </select></dd>
+			</dl>
+			
+				<div class="page_btm">
+				<input class="btn_b" type="submit" value="确定">
+				</div>			
+		</form>
+	</div>
+</div>
+  <!-------- 用户列表 -------->
+  <div class="Toolbar_inbox">
+  	<div class="page right">共{$total}条记录&nbsp;&nbsp;&nbsp;{$PAGINATION}</div>	
+	<a href="zemp_add.php" class="btn_a"><span>添加员工</span></a>
+<!--	<a href="javascript:void(0);" class="btn_a" onclick="deleteUser();"><span>删除员工</span></a>-->
+	<a href="javascript:void(0);" class="btn_a" onclick="searchUser();" id="searchUser_action"><span>搜索员工</span></a>
+	<a href="export.php" class="btn_a" target="blank" ><span>导出</span></a>
+	
+  </div>
+  <div class="list">
+  <table width="100%" border="0" cellspacing="0" cellpadding="0">
+  	<tr>
+	
+   <label for="checkbox"></label></th>
+	<th>姓名(性别)</th>
+	<th>职位</th>
+	<th>工资结构</th>
+	<th>驾照类型</th>
+	<th>手机号</th>
+	<th>部门</th>
+	<th>身份证号</th>
+	<th>家庭地址</th>
+	<th>公司电话</th>
+	<th>合同开始日期</th>
+	<th>合同到期日期</th>
+	<th>离职日期</th>
+	<th>状态</th>
+	<th>操作</th>
+	</tr>
+  
+  {foreach from=$list key=i item=row}
+  <tr overstyle='on' id="user_{$row.emp_id}" style="background-color: {if $i%2==0}#dfe1e4{/if}">  
+	  	<td>{$row.emp_name}</td>
+	  	<td>{$row.title}</td>
+	  	<td><a href="/site/operator/zhiwei/index.php?task=xiangxi&id={$row.emp_zhiweiid}&emp_id={$row.emp_id}">{$row.zhiwei_name}</a></td>
+	  	<td>{$row.emp_driverlicense}</td>
+	  	<td>{$row.emp_phone}</td>
+	  	<td>{$row.shop_name}</td>
+	  	<td>{$row.emp_num}</td>
+	  	<td>{$row.emp_homeAdd}</td>
+	  	<td>{$row.emp_workTel}</td>
+	  	<td>{$row.emp_pactStartDate}</td>
+	  	<td>{$row.emp_pactEndDate}</td>
+	  	<td>{if $row.emp_quitTime==0}{else}{$row.emp_quitTime}{/if}</td>
+	  	<td>{$row.zhuangtai}</td>
+	  	
+	    <td>
+			<a href="zemp_lizhi.php?id={$row.emp_id}" onClick="return confirm('确定离职?');">离职</a>
+
+			<a href="zemp_add.php?id={$row.emp_id}&op=update">编辑</a>
+			<hr/>
+			<a href="zemp_xiangxi.php?id={$row.emp_id}" >明细</a>
+			{if $uid==70}<a  href="zemp_delete.php?id={$row.emp_id}" onClick="return confirm('确定删除?');">删除</a>{/if}
+			
+		</td>
+ </tr>
+ {/foreach}
+ </table>
+ </div>
+
+  <div class="Toolbar_inbox">
+	<div class="page right">共{$total}条记录&nbsp;&nbsp;&nbsp;{$PAGINATION}</div>
+	<a href="zemp_add.php" class="btn_a"><span>添加员工</span></a>
+<!--	<a href="javascript:void(0);" class="btn_a" onclick="deleteUser();"><span>删除员工</span></a>-->
+	<a href="javascript:void(0);" class="btn_a" onclick="searchUser();" id="searchUser_actions"><span>搜索员工</span></a>
+	<a href="export.php" class="btn_a" target="blank"><span>导出</span></a>
+  </div> 
+</div>
+<script type="text/javascript">
+	function checkAll(o){
+		if( o.checked == true ){
+			$('input[name="checkbox"]').attr('checked','true');
+			$('tr[overstyle="on"]').addClass("bg_on");
+		}else{
+			$('input[name="checkbox"]').removeAttr('checked');
+			$('tr[overstyle="on"]').removeClass("bg_on");
+		}
+	}
+	//搜索用户
+	var isSearchHidden = 1;
+	function searchUser() {
+	  if(isSearchHidden == 1) {
+		$("#searchUser_div").slideDown("fast");
+		isSearchHidden = 0;
+	  }else {
+		$("#searchUser_div").slideUp("fast");
+		isSearchHidden = 1;
+	  }
+	} 
+	
+	function folder(type, _this) {
+		$('#search_'+type).slideToggle('fast');
+		if ($(_this).html() == '展开') {
+			$(_this).html('收起');
+		}else {
+			$(_this).html('展开');
+		}
+		
+	}
+</script>
+
+</body>
+</html>

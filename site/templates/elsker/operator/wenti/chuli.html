@@ -1,0 +1,47 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>管理后台</title>
+<link href="../../../../css/style.css" rel="stylesheet" type="text/css">
+<link rel="stylesheet" type="text/css" href="../../../../css/webuploader.css">
+<link rel="stylesheet" type="text/css" href="../../../../css/diyUpload.css">
+<script src="../../../../jquery.js"></script>
+
+
+</head>
+
+<body>
+<div class="so_main">
+  <div class="page_tit">系统管理员处理</div>
+  
+  <form method="post" action="chuli_a.php">
+  <div class="form2">
+    <dl class="lineD">
+      <dl class="lineD">
+		  <dt>处理结果：</dt>
+		  <dd>
+		  <input type="radio" name="stats" id="shenhe_type" checked value="{$dealed}" />问题解决&nbsp;&nbsp;
+		  <input type="radio" name="stats" id="shenhe_type" value="{$cannot_deal}" />不能解决&nbsp;&nbsp;
+		  
+		  
+		  </dd>
+		</dl>
+	<dl class="lineD">
+      <dt><span style="color:red">*</span>理由：</dt>
+      <dd>
+      	<textarea name="deal_reason" id="wenti_liyou" cols="90" rows="8"></textarea>
+      </dd>
+    </dl>
+    
+    <div class="page_btm">
+      <input type="submit" class="btn_b" value="确定" />
+    </div>
+    <input type="hidden" name="id" id="id" value="{$id}" />
+  </div>
+</div>
+
+
+</body>
+</html>

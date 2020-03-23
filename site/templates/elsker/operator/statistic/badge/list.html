@@ -1,0 +1,84 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>管理后台</title>
+<link href="/admincp/css/style.css" rel="stylesheet" type="text/css">
+<link href="/admincp/css/box.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="/admincp/js/jquery.js"></script>
+<script type="text/javascript" src="/admincp/js/common.js"></script>
+<script type="text/javascript" src="/admincp/js/box.js"></script>
+<script type="text/javascript" src="/admincp/js/date_select.js"></script>
+</head>
+<body>
+<div class="so_main">
+  <div class="page_tit">信息列表</div> 
+  <!-------- 信息列表 -------->
+  <div class="Toolbar_inbox">
+  	<div class="page right">共{$total}条记录&nbsp;&nbsp;&nbsp;{$PAGINATION}</div>
+	<form action="" method="post" onsubmit="return checkSearch(this)">
+	从<input type="text" name="start_date" value="{$times}" onClick="HS_setDate(this)" style="width:100px;"/>
+	到<input type="text" name="end_date"  value="{$timee}" onClick="HS_setDate(this)" style="width:100px;"/>
+	<input type="submit" class="btn_b" value="筛选" />
+	</form>
+  </div>
+  <div class="list">
+  <table width="100%" border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <th class="line_l">名称</th>
+    <th class="line_l">描述</th>
+    <th class="line_l">大图</th>
+    <th class="line_l">小图</th>
+    <th class="line_l">类别</th>
+	<th class="line_l">获得人数</th>
+  </tr>
+  {foreach from=$badgeList key=i item=row}
+  <tr overstyle='on'>
+	  	<td>{$row.title}</td>	
+		<td>{$row.description}</td>
+		<td><img src="/thumb/{$row.big_image}" WIDTH="50" HEIGHT="50" BORDER="0"></td>	
+		<td><img src="/thumb/{$row.small_image}" WIDTH="25" HEIGHT="25" BORDER="0"></td>	
+		<td>{$row.type}</td>
+		<td>{$row.usercount}</td>	   
+ </tr>
+ {/foreach}
+ </table>
+ </div>
+  <div class="Toolbar_inbox">
+	<div class="page right">共{$total}条记录&nbsp;&nbsp;&nbsp;{$PAGINATION}</div>
+  </div> 
+</div>
+<!-{literal}->
+<script>
+	//鼠标移动表格效果
+	$(document).ready(function(){
+		$("tr[overstyle='on']").hover(
+		  function () {
+		    $(this).addClass("bg_hover");
+		  },
+		  function () {
+		    $(this).removeClass("bg_hover");
+		  }
+		);
+	});
+	
+	function checkSearch(_form){
+		if(_form.start_date.value==""){
+			alert("请选择起始时间！");
+			_form.start_date.focus();
+			return false;
+		}
+ 		if(_form.end_date.value==""){
+			alert("请选择截止时间！");
+			_form.end_date.focus();
+			return false;
+		}
+			return true;
+	
+	}
+</script>
+<!-{/literal}->
+
+</body>
+</html>

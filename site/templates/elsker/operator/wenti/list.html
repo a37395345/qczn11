@@ -1,0 +1,165 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>管理后台</title>
+    <link href="../../../../css/style.css" rel="stylesheet" type="text/css">
+    <link href="../../../../js/jbox/jBox/Skins/GreyBlue/jbox.css" rel="stylesheet"/>
+    <script type="text/javascript" src="../../../../js/jquery.js"></script>
+
+</head>
+<body class="gray-bg">
+<style type="text/css">
+    .a1 {
+        padding: 10px 12px;
+        background-color: #bababa;
+        border-radius: 3px;
+        color: #fff !important;
+        line-height: 40px;
+    }
+
+    .gray-bg {
+        background-color: #f3f3f4;
+        padding: 20px;
+    }
+
+    .xt_problems {
+        padding: 0 20px 20px 20px;
+        background-color: #fff;
+        border-top: 4px solid #e7eaec;
+    }
+
+    .xt_problems .so_main {
+        margin: 0;
+    }
+
+    .xt_problems .page_tit {
+        font-size: 14px;
+        margin: 0 0 7px;
+        padding: 0;
+        text-overflow: ellipsis;
+        color: #676a6c;
+        border-bottom: 1px solid #ddd;
+    }
+
+    .xt_problems .Toolbar_inbox {
+        border-bottom: none;
+        padding-bottom: 20px;
+        background-color: #fff;
+    }
+
+    .xt_problems .Toolbar_inbox a {
+        transition: all .5s;
+        -moz-transition: all .5s; /* Firefox 4 */
+        -webkit-transition: all .5s; /* Safari 和 Chrome */
+        -o-transition: all .5s; /* Opera */
+    }
+
+    .xt_problems .Toolbar_inbox a:hover {
+        text-decoration: none;
+        background-color: #a5a2a2;
+    }
+
+    .s_roblems table {
+        border-spacing: 0;
+        border-collapse: collapse;
+    }
+
+    .s_roblems table th {
+        padding: 8px;
+        line-height: 21px;
+        vertical-align: top;
+        border-top: 1px solid #ddd;
+        background-color: #F5F5F6 !important;
+        color: #000;
+        font-weight: bold;
+    }
+
+    .s_roblems table tr td {
+        border-top: 1px solid #ddd;
+        border-left: 1px solid #ddd;
+        padding: 10px 0 10px 0;
+    }
+</style>
+<div class="xt_problems">
+    <div class="so_main">
+        <div class="page_tit">系统问题</div>
+        <!-------- 用户列表 -------->
+        <div class="Toolbar_inbox">
+            <div class="page right"></div>
+            <a href="add.php" class="a1" style="">添加问题</a>
+            <a href="list.php?lsi_id=0" class="a1">全部问题</a>
+            <a href="list.php?lsi_id=1" class="a1">待审核问题</a>
+            <a href="list.php?lsi_id=2" class="a1">待修改问题</a>
+            <a href="list.php?lsi_id=3" class="a1">待处理问题</a>
+            <a href="list.php?lsi_id=4" class="a1">等待确认的问题</a>
+            <a href="list.php?lsi_id=5" class="a1">已解决问题</a>
+            <a href="list.php?lsi_id=6" class="a1">不能解决的问题</a>
+        </div>
+    </div>
+    <div class="list s_roblems">
+        <table class="table table-bordered" width="100%" border="0" cellspacing="0" cellpadding="0">
+            <tr>
+                <th class="line_l">问题排序</th>
+                <th class="line_l" style="width: 20%;">标题</th>
+                <th class="line_l">提交人</th>
+                <th class="line_l">提交时间</th>
+                <th class="line_l">审核人</th>
+                <th class="line_l">审核时间</th>
+                <th class="line_l">处理人</th>
+                <th class="line_l">处理时间</th>
+                <th class="line_l">状态</th>
+                <th class="line_l">操作</th>
+                {if $group_id==14||$group_id==15||$group_id==1}
+                <th class="line_l">删除</th>
+                {/if}
+
+            </tr>
+
+            {foreach from=$wenti key=i item=rows}
+            <tr>
+                <td>{$i+1}</td>
+                <td>{$rows.wenti_name}</td>
+                <td>{$rows.username1}</td>
+                <td>{$rows.wenti_addtime}</td>
+                <td>{$rows.username2}</td>
+                <td>{$rows.wenti_shenhetime}</td>
+                <td>{$rows.username3}</td>
+                <td>{$rows.wenti_chilitime}</td>
+                <td>{$rows.wenti_type}</td>
+                <td><a href="xiangxi.php?id={$rows.id}">详细</a>
+                    {if $rows.wenti_zhuangtai==1}
+                    {if $group_id==14||$group_id==15||$group_id==1}
+                    /<a href="shenhe.php?id={$rows.id}">审核</a>
+                    {/if}
+                    {else if $rows.wenti_zhuangtai==2}
+                    {if $rows.wenti_empid1==$a_uid}
+                    /<a href="xiugai.php?id={$rows.id}">修改</a>
+                    {/if}
+                    {else if $rows.wenti_zhuangtai==3}
+                    {if $group_id==1}
+                    /<a href="chuli.php?id={$rows.id}">处理</a>
+                    {/if}
+                    {else if $rows.wenti_zhuangtai==4}
+                    {if $rows.wenti_empid1==$a_uid}
+                    /<a href="quereng.php?id={$rows.id}">确认</a>
+                    {/if}
+                    {/if}
+
+                </td>
+                {if $group_id==14||$group_id==1}
+                <td style="border-right:1px solid #ddd;"><a href="delete.php?id={$rows.id}">删除</a>
+                    {/if}
+
+            </tr>
+            {/foreach}
+
+        </table>
+    </div>
+
+</div>
+
+
+</body>
+</html>

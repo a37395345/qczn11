@@ -1,0 +1,326 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>管理后台</title>
+<link href="../../../../css/style.css" rel="stylesheet" type="text/css">
+<link href="../../../../js/jbox/jBox/Skins/GreyBlue/jbox.css" rel="stylesheet"  />
+<script type="text/javascript" src="../../../../js/jquery.js"></script>
+<script type="text/javascript" src="../../../../js/common.js"></script>
+<script type="text/javascript" src="../../../../js/calendar.js"></script>
+<script type="text/javascript" src="../../../../js/fancybox/jquery.mousewheel-3.0.4.pack.js"></script>
+<script type="text/javascript" src="../../../../js/fancybox/jquery.fancybox-1.3.4.pack.js"></script>
+<script type="text/javascript" src="../../../../js/jbox/jBox/jquery.jBox-2.3.min.js"></script>
+<script type="text/javascript" src="../../../../js/jbox/jBox/i18n/jquery.jBox-zh-CN.js"></script>
+</head>
+
+<body>
+<div class="so_main">
+  <div class="page_tit">业绩统计明细---{$search_name}&nbsp;&nbsp;时间范围：{$sdate}&nbsp;&nbsp;到&nbsp;&nbsp;{$edate}</div>
+  {if $list1}
+  <div class="Toolbar_inbox"><span>临时自驾</span></div>
+  <div class="list">
+  <table width="100%" border="0" cellspacing="0" cellpadding="0">
+  <tr>
+	<th>序号</th>
+	<th>进账时间</th>
+	<th>名称</th>
+	<th>金额</th>
+	<th>合同号</th>
+	<th>用车时间</th>
+	<th>联系人</th>
+  </tr>
+  {foreach from=$list1 item=row name=foo}
+  {$all_money=$all_money+$row.money}
+  <tr overstyle='on' id="badge_{$row.id}" {if ($smarty.foreach.foo.index+1) mod 2 ==0}style="background-color:#EAF2D3;"{/if}>
+	  	<td>{$smarty.foreach.foo.index+1}</td>
+	  	<td>{$row.add_time}</td>
+	    <td>{$row.name}</td>
+	    <td>{$row.money}</td>
+	    <td>{$row.paiche_contractNum}</td>
+	    <td>{$row.paiche_startDate}&nbsp;&nbsp;到&nbsp;&nbsp;{$row.paiche_endDate}</td>
+	    <td>{$row.paiche_linker}</td>	    
+ </tr>
+ {/foreach}
+ <tr style="background-color:#FE6E47;">
+    <td>合计</td>
+    <td colspan="2">&nbsp;</td>
+    <td>{$all_money}</td>
+    <td colspan="3">&nbsp;</td>
+  </tr>
+ </table>
+ </div>
+ {/if}
+ {if $list11}
+ {$all_money=0}
+ <div class="Toolbar_inbox"><span>优惠券</span></div>
+ <div class="list">
+  <table width="100%" border="0" cellspacing="0" cellpadding="0">
+  <tr>
+	<th>序号</th>
+	<th>报销日期</th>
+	<th>报销人</th>
+	<th>金额</th>
+	<th>付款方式</th>
+	<th>付款账号</th>
+	<th width="35%">报销内容</th>
+	<th>受理时间</th>
+	<th>报销单号</th>
+  </tr>
+  {foreach from=$list11 item=row name=foo}
+  {$all_money=$all_money+$row.baoxiao_money}
+  {$count=$count+1}
+  <tr overstyle='on' id="badge_{$row.baoxiao_id}" {if ($smarty.foreach.foo.index+1) mod 2 ==0}style="background-color:#EAF2D3;"{/if}>
+	  	<td>{$count}</td>
+	  	<td>{$row.baoxiao_date}</td>
+	    <td>{$row.emp_name}</td>
+	    <td>{$row.baoxiao_money}</td>
+	    <td>{$row.payment_name}</td>
+	    <td>{$row.bank_name}</td>
+	    <td>{$row.baoxiao_content}</td>
+	    <td>{$row.baoxiao_isOverTime}</td>
+	    <td>{$row.baoxiao_code}</td>
+ </tr>
+ {/foreach}
+ <tr style="background-color:#FE6E47;">
+    <td>合计</td>
+    <td colspan="2">&nbsp;</td>
+    <td>{$all_money}</td>
+    <td colspan="7">&nbsp;</td>
+  </tr>
+  </table>
+  </div>
+ {/if}
+ {if $list2}
+ {$all_money=0}
+ <div class="Toolbar_inbox"><span>临时带驾</span></div>
+ <div class="list">
+  <table width="100%" border="0" cellspacing="0" cellpadding="0">
+  <tr>
+	<th width="42">序号</th>
+	<th>进账时间</th>
+	<th>名称</th>
+	<th width="288">用车时间</th>
+	<th width="80">金额</th>
+	<th width="130">合同号</th>
+	<th width="270">说明</th>
+	<th>联系人</th>
+  </tr>
+  {foreach from=$list2 item=row name=foo}
+  {$all_money=$all_money+$row.money}
+  <tr overstyle='on' id="badge_{$row.id}" {if ($smarty.foreach.foo.index+1) mod 2 ==0}style="background-color:#EAF2D3;"{/if}>
+	  	<td>{$smarty.foreach.foo.index+1}</td>
+	  	<td>{$row.add_time}</td>
+	    <td>{$row.name}</td>
+	  	<td>{$row.paiche_startDate}&nbsp;&nbsp;到&nbsp;&nbsp;{$row.paiche_endDate}</td>
+	    <td>{$row.money}</td>
+	    <td>{$row.paiche_contractNum}</td>
+	    <td></td>
+	    <td>{$row.paiche_linker}</td>	    
+ </tr>
+ {/foreach}
+ <tr style="background-color:#FE6E47;">
+    <td>合计</td>
+    <td  colspan="3">&nbsp;</td>
+    <td>{$all_money}</td>
+    <td colspan="3">&nbsp;</td>
+  </tr>
+  </table>
+  </div>
+ {/if}
+ {if $list22}
+ {$all_money=0}
+ <div class="Toolbar_inbox"><span>临时带驾批量结算</span></div>
+ <div class="list">
+  <table width="100%" border="0" cellspacing="0" cellpadding="0">
+  <tr>
+	<th width="62">序号</th>
+	<th width="160">进账时间</th>
+	<th width="400">客户名称</th>
+	<th width="80">金额</th>
+	<th>结算号</th>
+  </tr>
+  {foreach from=$list22 item=row name=foo}
+  {$all_money=$all_money+$row.money}
+  <tr overstyle='on' id="badge_{$row.id}" {if ($smarty.foreach.foo.index+1) mod 2 ==0}style="background-color:#EAF2D3;"{/if}>
+	  	<td>{$smarty.foreach.foo.index+1}</td>
+	  	<td>{$row.add_time}</td>
+	  	<td>{$row.client_name}</td>
+	    <td>{$row.money}</td>
+	    <td>{$row.bill_code}</td>
+ </tr>
+ {/foreach}
+ <tr style="background-color:#FE6E47;">
+    <td>合计</td>
+    <td colspan="2">&nbsp;</td>
+    <td>{$all_money}</td>
+    <td>&nbsp;</td>
+  </tr>
+  </table>
+  </div>
+ {/if}
+ {if $list21}
+ {$all_money=0}
+ <div class="Toolbar_inbox"><span>调车结算</span></div>
+ <div class="list">
+  <table width="100%" border="0" cellspacing="0" cellpadding="0">
+  <tr>
+	<th width="62">序号</th>
+	<th width="160">进账时间</th>
+	<th width="400">调车企业名称</th>
+	<th width="80">金额</th>
+	<th>结算号</th>
+  </tr>
+  {foreach from=$list21 item=row name=foo}
+  {$all_money=$all_money+$row.money}
+  <tr overstyle='on' id="badge_{$row.id}" {if ($smarty.foreach.foo.index+1) mod 2 ==0}style="background-color:#EAF2D3;"{/if}>
+	  	<td>{$smarty.foreach.foo.index+1}</td>
+	  	<td>{$row.add_time}</td>
+	  	<td>{$row.bro_name}</td>
+	    <td>{$row.money}</td>
+	    <td>{$row.bill_code}</td>
+ </tr>
+ {/foreach}
+ <tr style="background-color:#FE6E47;">
+    <td>合计</td>
+    <td colspan="2">&nbsp;</td>
+    <td>{$all_money}</td>
+    <td>&nbsp;</td>
+  </tr>
+  </table>
+  </div>
+ {/if}
+ {if $list3}
+ {$all_money=0}
+ <div class="Toolbar_inbox"><span>长期自驾</span></div>
+ <div class="list">
+  <table width="100%" border="0" cellspacing="0" cellpadding="0">
+  <tr>
+	<th width="52">序号</th>
+	<th width="160">进账时间</th>
+	<th width="338">用车时间</th>
+	<th width="80">金额</th>
+	<th width="180">合同号</th>
+	<th width="370">客户名称</th>
+	<th>联系人</th>
+  </tr>
+  {foreach from=$list3 item=row name=foo}
+  {$all_money=$all_money+$row.money}
+  <tr overstyle='on' id="badge_{$row.id}" {if ($smarty.foreach.foo.index+1) mod 2 ==0}style="background-color:#EAF2D3;"{/if}>
+	  	<td>{$smarty.foreach.foo.index+1}</td>
+	  	<td>{$row.add_time}</td>
+	  	<td>{$row.paiche_startDate}&nbsp;&nbsp;到&nbsp;&nbsp;{$row.paiche_endDate}</td>
+	    <td>{$row.money}</td>
+	    <td>{$row.paiche_contractNum}</td>
+	    <td>{$row.client_name}</td>
+	    <td>{$row.paiche_linker}</td>	    
+ </tr>
+ {/foreach}
+ <tr style="background-color:#FE6E47;">
+    <td>合计</td>
+    <td colspan="2">&nbsp;</td>
+    <td>{$all_money}</td>
+    <td colspan="3">&nbsp;</td>
+  </tr>
+  </table>
+  </div>
+ {/if}
+ {if $list4}
+ {$all_money=0}
+ <div class="Toolbar_inbox"><span>长期带驾</span></div>
+ <div class="list">
+  <table width="100%" border="0" cellspacing="0" cellpadding="0">
+  <tr>
+	<th width="52">序号</th>
+	<th width="160">进账时间</th>
+	<th width="338">用车时间</th>
+	<th width="80">金额</th>
+	<th width="180">合同号</th>
+	<th width="400">客户名称</th>
+	<th>联系人</th>
+  </tr>
+  {foreach from=$list4 item=row name=foo}
+  {$all_money=$all_money+$row.money}
+  <tr overstyle='on' id="badge_{$row.id}" {if ($smarty.foreach.foo.index+1) mod 2 ==0}style="background-color:#EAF2D3;"{/if}>
+	  	<td>{$smarty.foreach.foo.index+1}</td>
+	  	<td>{$row.add_time}</td>
+	  	<td>{$row.paiche_startDate}&nbsp;&nbsp;到&nbsp;&nbsp;{$row.paiche_endDate}</td>
+	    <td>{$row.money}</td>
+	    <td>{$row.paiche_contractNum}</td>
+	    <td>{$row.client_name}</td>
+	    <td>{$row.paiche_linker}</td>	    
+ </tr>
+ {/foreach}
+ <tr style="background-color:#FE6E47;">
+    <td>合计</td>
+    <td colspan="2">&nbsp;</td>
+    <td>{$all_money}</td>
+    <td colspan="3">&nbsp;</td>
+  </tr>
+  </table>
+  </div>
+ {/if}
+ {if $list5}
+ {$all_money=0}
+ <div class="Toolbar_inbox"><span>长期大客</span></div>
+ <div class="list">
+  <table width="100%" border="0" cellspacing="0" cellpadding="0">
+  <tr>
+	<th width="52">序号</th>
+	<th>进账时间</th>
+	<th width="338">用车时间</th>
+	<th width="80">金额</th>
+	<th width="180">合同号</th>
+	<th width="470">客户名称</th>
+	<th>联系人</th>
+  </tr>
+  {foreach from=$list5 item=row name=foo}
+  {$all_money=$all_money+$row.money}
+  <tr overstyle='on' id="badge_{$row.id}" {if ($smarty.foreach.foo.index+1) mod 2 ==0}style="background-color:#EAF2D3;"{/if}>
+	  	<td>{$smarty.foreach.foo.index+1}</td>
+	  	<td>{$row.add_time}</td>
+	  	<td>{$row.paiche_startDate}&nbsp;&nbsp;到&nbsp;&nbsp;{$row.paiche_endDate}</td>
+	    <td>{$row.money}</td>
+	    <td>{$row.paiche_contractNum}</td>
+	    <td>{$row.client_name}</td>
+	    <td>{$row.paiche_linker}</td>	    
+ </tr>
+ {/foreach}
+ <tr style="background-color:#FE6E47;">
+    <td>合计</td>
+    <td >&nbsp;</td>
+    <td>{$all_money}</td>
+    <td colspan="3">&nbsp;</td>
+  </tr>
+  </table>
+  </div>
+ {/if}
+ 
+</div>
+<!-{literal}->
+<script>
+	//鼠标移动表格效果
+	$(document).ready(function(){
+        $("a.zoomIn").fancybox({
+            'overlayShow'   : false,
+            'transitionIn'  : 'elastic',
+            'transitionOut' : 'elastic'
+        });         
+        
+		$("tr[overstyle='on']").hover(
+		  function () {
+		    $(this).addClass("bg_hover");
+		  },
+		  function () {
+		    $(this).removeClass("bg_hover");
+		  }
+		);
+	});	
+	
+
+</script>
+<!-{/literal}->
+
+</body>
+</html>

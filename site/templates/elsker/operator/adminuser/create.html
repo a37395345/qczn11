@@ -1,0 +1,191 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>管理后台</title>
+<link href="../../../css/style.css" rel="stylesheet" type="text/css">
+<link href="../../../css/box.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="../../../js/jquery.js"></script>
+<script type="text/javascript" src="../../../js/common.js"></script>
+<script type="text/javascript" src="../../../js/box.js"></script>
+<style>
+/*{literal}*/
+	.navi_name{font-size:14px;font-weight:bold;}
+	.indent{padding-left:40px;}
+/*{/literal}*/
+</style>
+</head>
+<body>
+<div class="so_main">
+  <div class="page_tit">添加权限</div>
+  
+  <form method="post" action="" onsubmit="return check(this)">
+    
+  <div class="form2">
+    <dl class="lineD">
+      <dt>用户名：</dt>
+      <dd>
+        <input type="text" name="username" value="{$user.username}" /> *
+	  </dd>
+    </dl>	
+	{if $task!="update"}
+    <dl class="lineD">
+      <dt>密码：</dt>
+      <dd>
+        <input type="password" name="password" />
+	  </dd>
+    </dl>
+    {/if}
+	<dl class="lineD">
+      <dt>选择员工：</dt>
+      <dd>
+        <select id="select1" name="user_id" >
+		{foreach from=$employee key=i item=rows}
+			<option calss='user_id' value="{$rows.emp_id}" {if $rows.emp_id == $user.user_id}selected{else}{/if}>{$rows.emp_name}</option>	
+		{/foreach}
+		</select>
+		&nbsp;&nbsp;&nbsp;
+		搜索：<input type="text" name="name" id="name1">&nbsp;&nbsp;
+		<input type="button" id="bt1" value="点击">
+		&nbsp;&nbsp;
+		<span style="color: red">*支持模糊查询</span>
+
+	  </dd>
+    </dl>
+
+    <script>
+    	$("#bt1").click(function(){
+    		var name=$('#name1').val();
+    		$.ajax({
+    			type:'POST',
+    			url:"getemp.php",
+    			data:{ldelim}"name":name{rdelim},
+    			success:function(result){
+    				$("#select1").find("option").remove();
+    				var list=JSON.parse (result);
+    				for(var i=0;i<list.length;i++){
+    					$("#select1").append("<option value='"+list[i]['emp_id']+"'>"+list[i]['emp_name']+"</option>");
+    				}
+    				
+    				
+    			}
+        	});
+		})
+    </script>
+
+
+
+    <dl class="lineD">
+      <dt>选择店铺：</dt>
+      <dd>
+        <select name="shop_id" >
+        	<option value="0" {if 0 == $user.shop_id}selected{else}{/if}>请选择</option>
+		{foreach from=$shop key=i item=rows}
+			<option value="{$rows.shop_id}" {if $rows.shop_id == $user.shop_id}selected{else}{/if}>{$rows.shop_name}</option>	
+		{/foreach}
+		</select>
+	  </dd>
+    </dl>
+	
+    <dl class="lineD">
+      <dt>权限组：</dt>
+      <dd>
+		<select name="admin_group_id" >
+		{foreach from=$privilege key=i item=rows}
+			<option value="{$rows.admin_group_id}" {if $rows.admin_group_id == $user.admin_group_id}selected{else}{/if}>{$rows.title}</option>	
+		{/foreach}
+		</select>
+	  <!--
+      	<a href="javascript:selectAll();"><span>全选</span></a> | <a href="javascript:unselectAll();"><span>取消</span></a>
+		<ul>
+		{foreach from=$privilegeList key=i item=row}
+	      	<li style="padding-top:5px;">
+	      		<input type="checkbox" name="privileges[]" value="{$row.action}" class="navi"{if $row.checked} checked{/if} /> <span class="navi_name">{$row.name}</span>
+		        <ul>
+		            {foreach from=$row.list key=r item=navi}
+		          	<li class='indent'><input type="checkbox" name="privileges[]" value="{$navi.action}" id="{$navi.action}"{if $navi.checked} checked{/if} class="subnavi" /> {$navi.name}</li>
+		          	{/foreach}
+				</ul>
+		     </li>
+		 {/foreach}
+		 </ul>-->
+	  </dd>
+	  <dl class="lineD">
+	      <dt>使用范围：</dt>
+	      <dd>
+	        <input type="radio" name="userscope" value="0" {if $user.userscope==0}checked{/if}/>内外网
+	        <input type="radio" name="userscope" value="1" {if $user.userscope==1}checked{/if}/>只限内网
+		  </dd>
+	  </dl>
+	  <dl class="lineD">
+	      <dt>当前状态：</dt>
+	      <dd>
+	        <input type="radio" name="userstates" value="0" {if $user.userstates==0}checked{/if}/>正常
+	        <input type="radio" name="userstates" value="1" {if $user.userstates==1}checked{/if}/>禁用
+		  </dd>
+	  </dl>
+    </dl>
+	
+    <div class="page_btm">
+      <input type="submit" class="btn_b" value="确定" />
+    </div>
+  </div>
+  <input type="hidden" name="aid" value="{$user.admin_user_id}" />
+  <input type="hidden" name="task" value="{$task}" /></form>
+</div>
+
+<script type="text/javascript">
+	function selectAll(){
+		$("input[type='checkbox']").attr("checked",true);
+	}
+	function unselectAll(){
+		$("input[type='checkbox']").attr("checked",false);
+	}
+	$(document).ready(function(){
+		$(".subnavi").click(function(){
+			var checked = false;
+			$(this).parent().parent().find(".subnavi").each(function(){
+				if($(this).attr("checked")){
+					checked = true;
+				}
+			});
+			var navi = $(this).parent().parent().parent().find(".navi");
+			if(checked){
+				navi.attr("checked",true);
+			}else{
+				navi.attr("checked",false);
+			}
+		});
+		$(".navi").click(function(){
+			$(this).parent().find(".subnavi").attr("checked",$(this).attr("checked"));
+		});
+	});
+
+	function check(_form){
+		if(_form.username.value==""){
+			alert("请输入用户名！");
+			_form.username.focus();
+			return false;
+		}
+		if(_form.password.value==""){
+			if (_form.task.value=="insert"){
+				alert("请输入登录密码！");
+				_form.password.focus();
+				return false;
+			}
+		}else{
+			var strPS=_form.password.value;
+	    	if (/[^a-z]/gi.test(strPS) && /[^0-9]/gi.test(strPS) && strPS.length>=6){
+	    	}else{
+		        alert("密码只能由6位以上的数字和字母组成");
+		        _form.password.focus();
+				return false;
+		    }
+		}
+		return true;
+	}
+</script>
+
+</body>
+</html>

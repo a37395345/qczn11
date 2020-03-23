@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html>
+<!-- Mirrored from www.zi-han.net/theme/hplus/table_bootstrap.html by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 20 Jan 2016 14:20:03 GMT -->
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>管理后台</title>
+
+<link rel="shortcut icon" href="favicon.ico">
+<link href="../../../crm/fonts1/iconfont.css?a=1" rel="stylesheet">
+
+<link href="../../../crm/css/bootstrap.min14ed.css" rel="stylesheet">
+<link href="../../../crm/css/font-awesome.min93e3.css?v=3" rel="stylesheet">
+<link href="../../../crm/css/plugins/bootstrap-table/bootstrap-table.min.css" rel="stylesheet">
+
+
+<script type="text/javascript" src="../../../js/laydate/laydate.js"></script>
+
+<link href="../../../crm/css/animate.min.css" rel="stylesheet">
+<link href="../../../crm/css/style.min862f.css" rel="stylesheet">
+
+
+<link href="../../../crm/css/plugins/sweetalert/sweetalert.css" rel="stylesheet">
+<link href="../../../css/conmone.css" rel="stylesheet">
+<script src="../../../crm/js/plugins/sweetalert/sweetalert.min.js"></script>
+<script type="text/javascript" src="../../../js/jquery.js">
+</script>
+<link href="../../../js/jbox/jBox/Skins/GreyBlue/jbox.css?a=2" rel="stylesheet">
+<script type="text/javascript" src="../../../js/jbox/jBox/jquery.jBox-2.3.min.js?a=5"></script>
+<script type="text/javascript" src="../../../js/jbox/jBox/i18n/jquery.jBox-zh-CN1.js?a=101"></script>
+
+    <style type="text/css">
+        tr{
+            font-size: 12px;line-height: 10px;
+        }
+        td{
+            
+margin: 0;padding: 1px !important;list-style: none;color: #000000;
+        }
+    </style>
+</head>
+<body class="gray-bg">
+<div class="wrapper wrapper-content animated fadeInRight">
+    <!-- Panel Other -->
+    <div class="ibox float-e-margins">
+        <div class="ibox-title">
+            <h5>长期自驾派车管理</h5>
+        </div>
+        <form id="form1" action="index.php" method="get">
+            <div class="wrapper wrapper-content animated fadeInRight" style=" margin: 0; padding: 0;">
+                <div class="ibox float-e-margins" style="margin:0">
+                    <div class="ibox-title" style=" margin: 0; padding: 0;float: left;margin-bottom: 5px;width: 100%;">
+
+                        <div class="ibox-tools" style="padding-top: 12px; padding-left: 10px;float: left">
+                            <span style="color:#000;">状态:</span>
+                        </div>
+
+                         <div class="ibox-tools" style="padding-top: 6px; padding-right: 20px;float: left">
+                            <select class="form-control input-sm" name="search_status" id="search_status">
+                                <option {if $search_status=="qb"}selected{/if} value="qb">全部</a></option>
+                                <option {if $search_status=="yy"}selected{/if} value="yy">预约单</option>
+                                <option {if $search_status=="ss"}selected{/if} value="ss">正在运行中</option>
+                                <!--<option {if $search_status=="cswh"}selected{/if} value="cswh">调车超时未还车</option>-->
+                                <option {if $search_status=="yh"}selected{/if} value="yh">已还车未结账</option>
+                                 <option {if $search_status=="yj"}selected{/if} value="yj">已结账</option>
+                               
+
+                            </select>
+                        </div>
+                        <h5 style="padding-top: 15px; padding-left: 10px;">搜索
+                        </h5>
+
+                        <div class="ibox-tools" style="padding-top: 14px; padding-left: 10px;float: left;">
+                            <a class="collapse-link">
+                            <i class="fa fa-chevron-down" id="up"></i>
+                            </a>
+                        </div>
+                         <div class="ibox-tools" style="padding-top: 14px; padding-right: 20px;float: left;">
+                            
+                        </div>
+                        
+                        <div class="ibox-tools" style=" padding-right: 20px;float: left;">
+                            <div  style="margin-top:5px;" >
+                              
+                                <a href="index.php?search_status=zjyy" class="btn btn-outline btn-default">72h预约订单：{$getzuijinyueyue}个
+                                </a>
+                                <a href="index.php?search_status=daoqi_a" class="btn btn-outline btn-default">到期未还车的订单：{$daoqi_a}个
+                                </a>
+                                 <a href="index.php?search_status=daoqi" class="btn btn-outline btn-default">60天内到期的订单：{$daoqi}个
+                                </a>
+                                {if $add==1}
+                                <a  href="index.php?task=add" class="btn btn-outline btn-default">
+                                <i class="glyphicon glyphicon-plus" aria-hidden="true"></i>
+                                                        新建派车单
+                                </a>
+                                {/if}
+                            </div>
+                        </div>
+                        
+                    </div>
+                    <div class="ibox-content" id="content" style=" margin: 0px; padding: 0px;display: none">
+                        <div class="row row-lg">
+                            <div class="col-sm-12">
+                                <!-- Example Events -->
+                                <div class="example-wrap">
+                                    <div class="example">
+                                        <table class="table table-bordered">
+                                        <tr>
+                                            <th width="15%" style="background-color:#F5F5F6">
+                                                <span style="color:#000;">&nbsp;&nbsp;&nbsp;&nbsp;合同号:</span>
+                                            </th>
+                                            <td width="35%">
+                                                <input type="text" class="form-control input-sm" placeholder="合同号" name="paiche_contractNum">
+                                            </td>
+                                             <th width="15%" style="background-color:#F5F5F6">
+                                                <span style="color:#000">&nbsp;&nbsp;&nbsp;&nbsp;车牌号:</span>
+                                            </th>
+                                            <td>
+                                                <input type="text" class="form-control input-sm" placeholder="车牌号" name="paiche_car">
+                                            </td>
+                                           
+                                        </tr>
+                                        <tr>
+                                            <th width="15%" style="background-color:#F5F5F6">
+                                                <span style="color:#000">&nbsp;&nbsp;&nbsp;&nbsp;联系人:</span>
+                                            </th>
+                                            <td width="35%">
+                                                <input type="text" class="form-control input-sm" placeholder="联系人" name="name">
+                                            </td>
+                                            <th width="15%" style="background-color:#F5F5F6">
+                                                <span style="color:#000;">&nbsp;&nbsp;&nbsp;&nbsp;开始时间:</span>
+                                            </th>
+                                            <td width="35%">
+                                                <input name="paiche_startDate" placeholder="请输入日期" value="" class="laydate-icon form-control input-sm" onclick="laydate({ldelim}istime: true, format: 'YYYY-MM-DD'{rdelim})">
+                                            </td>
+
+                                        </tr>
+                                        <tr>
+                                             <th width="15%" style="background-color:#F5F5F6">
+                                                <span style="color:#000">&nbsp;&nbsp;&nbsp;&nbsp;联系电话:</span>
+                                            </th>
+                                            <td width="35%">
+                                                <input type="text" class="form-control input-sm" placeholder="联系电话" name="phone">
+                                            </td>
+                                            <th width="15%" style="background-color:#F5F5F6">
+                                                <span style="color:#000">&nbsp;&nbsp;&nbsp;&nbsp;结束时间:</span>
+                                            </th>
+                                            <td width="35%">
+                                                <input name="paiche_endDate" placeholder="请输入日期" value="" class="laydate-icon form-control input-sm" onclick="laydate({ldelim}istime: true, format: 'YYYY-MM-DD'{rdelim})">
+                                            </td>
+                                            
+                                            
+                                        </tr>
+                                         <tr>
+                                             <th width="15%" style="background-color:#F5F5F6">
+                                                <span style="color:#000">&nbsp;&nbsp;&nbsp;&nbsp;公司名称:</span>
+                                            </th>
+                                            <td width="35%">
+                                                <input type="text" class="form-control input-sm" placeholder="公司名称" name="client_name">
+                                            </td>
+
+                                           <th width="15%" style="background-color:#F5F5F6">
+                                            {if $zijia_shenghe==1&&$search_status=='yj'}
+                                                <span style="color:#000;">&nbsp;&nbsp;&nbsp;&nbsp;订单审核状态:</span>
+                                            
+
+                                            </th>
+
+                                            <td width="35%">
+                                                 {if $search_status=='yj'}
+                                                    <select class="form-control input-sm" name="zijia_shenhe">
+                                                        <option value="0">全部</option>
+                                                        <option value="1">未审核</option>
+                                                        <option value="2">已审核</option>
+
+                                                    </select>
+                                                {/if}
+                                            </td>
+                                            {else}
+                                                <th width="15%" style="background-color:#F5F5F6">
+                                                <span style="color:#000">&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                                            </th>
+                                            <td width="35%">
+                                               
+                                            </td>
+                                            {/if}
+                                            
+                                            
+                                        </tr>
+                                        
+                                        </table>
+
+                                         <button type="submit" class="btn btn-outline btn-default" style="margin-left:45%;width: 10%">
+                                <i class="glyphicon glyphicon-search" aria-hidden="true"></i>
+                                                        搜索
+                                </button>
+                                    </div>
+                                </div>
+                                <!-- End Example Events -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- End Panel Other -->
+            </div>
+        </form>
+
+        <div class="ibox-content">
+            <div class="row row-lg">
+                <div class="col-sm-12">
+                    <!-- Example Events -->
+                    <div class="example-wrap">
+                        <div class="example">
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <div class="pull-left" style="margin-top:15px">
+                                        <p>
+                                            显示 {($p-1)*10+1} 到 {$p*10} 项，共 {$total} 项
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="pull-right">
+                                        <ul class="pagination">
+                                               {$PAGINATION}
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <table class="table table-bordered table-hover" data-height="400" style="margin-bottom:0px" data-mobile-responsive="true">
+                            <thead>
+                            <tr>
+                                <th style="text-align: center;width: 4%">
+                                    状态
+                                </th>
+                                <th style="text-align: center;width: 9%">
+                                    合同编号
+                                </th>
+                                <th style="text-align: center;width: 10%">
+                                    联系人信息
+                                </th>
+                                <th style="text-align: center;width: 6%">
+                                    业务员
+                                </th>
+                                <th style="text-align: center;width: 14%">
+                                    用车时间
+                                </th>
+                                <th style="text-align: center;width: 6%">
+                                    调度人
+                                </th>
+                                <th style="text-align: center;width: 5%">
+                                    车辆
+                                </th>
+                                <th style="text-align: center;width: 22%">
+                                    金额明细
+                                </th>
+                                
+                                <th style="width: 14%">
+                                    <div align="center">
+                                        操作
+                                    </div>
+                                </th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                                {$index=1}
+                                        {foreach from=$list key=i item=row}
+                            <tr>
+                                <td style="text-align: center;color: {if $row.zhuangtai=='预约单'}#4b5fe6{else if $row.zhuangtai=='违约单'}#141415{else if $row.zhuangtai=='取消单'}#8c948e{else if $row.zhuangtai=='超时未还'||$row.zhuangtai=='60天赊账超时未还'}#fb6800{else if $row.zhuangtai=='超时4小时以上未还'}red{else if $row.zhuangtai=='调车未还'||$row.zhuangtai=='60天赊账调车未还'}#0bea3b{else if $row.zhuangtai=='已还车未结账'}#ff00f7
+                                {else if $row.zhuangtai=='已结账'}
+
+                                    #17c8e4
+
+                                {/if};">
+                                    {$row.zhuangtai}
+                                    {if $row.paiche_jie==3}
+                                        {if $row.paiche_checkTimes>0}
+                                            <br><span style="color: #2d2f2f">（已审核）</span>
+                                        {else}
+                                            <br><span style="color: red">（未审核）</span>
+                                        {/if}
+                                    {/if}
+                                </td>
+                                
+                                <td style="text-align: center;">
+                                    <span {if $row.client_name!=""} style="border-bottom:1px solid #b19d9d;line-height: 23px"{/if}>
+                                                {$row.paiche_contractNum}<br>
+                                            </span>
+                                            {$row.client_name}
+                                    <br/>
+                                </td>
+
+                                <td style="text-align: center;">
+                                    {$row.name}({$row.phone})
+                                </td>
+                                <td style="text-align: center;">
+                                    <span style="border-bottom:1px solid #b19d9d;line-height: 23px">{$row.ywshopname}
+                                    </span><br/>{$row.yewuyuan}
+                                </td>
+                                <td style="text-align: center;">
+                                    <span style="border-bottom:1px solid #b19d9d;line-height: 23px">{$row.paiche_startDate}
+                                    </span><br/>{$row.paiche_endDate}
+                                </td>
+                                <td style="text-align: center;">
+                                    <span style="border-bottom:1px solid #b19d9d;line-height: 23px">{$row.shop_name}
+                                    </span><br/>{$row.emp_name}
+                                </td>
+                                <td style="text-align: center;">
+                                            {$row.car_num}
+                                            {if $row.paiche_changelist}
+                                                {foreach from=$row.paiche_changelist item=rows name=foo}
+                                                    <br/><font style="TEXT-DECORATION: line-through;">{$rows.car_num}</font>
+                                                    {/foreach}
+                                            {/if}  
+                                </td>
+
+                                <td style="text-align:left;">
+                                    {$z_yingshou=0}
+                                    {$z_yingshou_a=0}
+            {$yinshou=0}{$yishou=0}
+        {foreach from=$row.paiche_chargelist item=row2 name=foo}
+
+        {if $row2.charge_name=='押金'}
+            <span style="border-bottom:1px solid #b19d9d;line-height: 23px">
+                {$row2.charge_name}:{$row2.conv_money}元-已收:{$row2.have_in_money}元-已冻结:{$row2.have_freeze_money}元{if $row2.back_money!=0}-已退:{$row2.have_back_money}元{/if}<br/><br/>
+            </span>
+        {else}
+            {$yinshou=$yinshou+$row2.conv_money}{$yishou=$yishou+$row2.have_in_money}
+            <span style="border-bottom:1px solid #b19d9d;line-height: 23px">
+                {$row2.charge_name}:{$row2.conv_money}元 &nbsp;&nbsp;已收:{$row2.have_in_money}元<br/>
+            </span>
+        {/if}
+        {/foreach}
+
+        {if $row.paiche_unlimitTime!="Y" && $row.settle_overTimeMoney!=0}
+            <span style="border-bottom:1px solid #b19d9d;line-height: 23px">
+                超时费:{$row.settle_overTimeMoney}元 &nbsp;&nbsp;已收:{$row.settle_overTimeMoney_have}元<br/>
+            </span>
+        {/if}
+        {if $row.paiche_unlimitKm!="Y" && $row.settle_overKmMoney!=0}
+            <span style="border-bottom:1px solid #b19d9d;line-height: 23px">
+                超公里费:{$row.settle_overKmMoney}元 &nbsp;&nbsp;已收:{$row.settle_overKmMoney_have}元<br/>
+            </span>
+        {/if}
+        {if $row.paiche_status==-1}
+              <span style="border-bottom:1px solid #b19d9d;line-height: 23px">
+                违约金:{$row.settle_vio}元 &nbsp;&nbsp;已收:{$row.settle_vio}元<br/>
+            </span>
+        {/if}
+        <br/>
+        {$yinyouhui=0}{$yiyouhui=0}
+        {if $row.paiche_youhuilist}
+        {foreach from=$row.paiche_youhuilist item=row2 name=foo}
+            <span style="border-bottom:1px solid #b19d9d;line-height: 23px;color: red">
+                {$row2.youhui_name}:{$row2.youhui_mone}元 &nbsp;&nbsp;已优惠:{$row2.youhui_omone}元<br/>
+            </span>
+        {$yinyouhui=$yinyouhui+$row2.youhui_mone}{$yiyouhui=$yiyouhui+$row2.youhui_omone}
+        {/foreach}
+        {/if}
+
+        {if $row.settle_favor!=0}
+             <span style="border-bottom:1px solid #b19d9d;line-height: 23px;color: red">
+            优惠：{$row.settle_favor}元&nbsp;&nbsp;已优惠:{$row.settle_favor}元<br/>
+            </span>
+        {/if}
+
+        <br/><br/>
+        
+                                </td>
+                              
+                                <td align="center">
+                                    <div>
+                                    {if $zijia_shenghe==1&&$row.paiche_checkTimes==0&&$row.paiche_jie==3}
+                                       <a href="javascript:;" onclick="zijia_shenghe({$row.paiche_id});return false" title=" 订单审核" style="color:#CC6600" target="_blank">
+                                        <i style="font-size: 22px;color: red" class="fa fa-flask"></i>
+                                   
+                                    </a>
+
+                                    {/if}
+
+                                    {if $edit==1}
+                                         {if $row.paiche_jie==-1}
+                                        <a href="index.php?task=edit&p_id={$row.paiche_id}" title="修改">
+                                        <i class="iconfont icon-xiugai" aria-hidden="true"></i>
+                                        </a>
+                                        {/if}
+                                    {/if}
+
+                                    {if $xuzu==1}
+                                         {if $row.paiche_jie==1}
+                                          &nbsp;&nbsp;
+                                         <a href="javascript:;" onclick="xuzu({$row.paiche_id});return false" title="续租" style="color:#CC6600">
+                                        <i class="iconfont icon-woyaoxuzu" aria-hidden="true"></i>
+                                        </a>
+                                        {/if}
+                                    {/if}
+
+                                    {if $diaoche==1}
+                                        {if $row.paiche_jie==-1}
+                                                    &nbsp;&nbsp;
+                                        <a href="javascript:;" onclick="diaoche({$row.paiche_id});return false" title="调度" style="color:#CC6600">
+                                        <i class="iconfont icon-ziyuan" aria-hidden="true"></i>
+                                        </a>
+                                        {/if}
+                                    {/if}
+
+
+                                        {if $huanche==1}
+                                        {if $row.paiche_jie==1}
+                                        &nbsp;&nbsp;
+                <a href="javascript:;" onclick="huanche({$row.paiche_id});return false" title="换车" style="color:#CC6600" target="_blank">
+                    <i class="iconfont icon-qiehuancheliang" aria-hidden="true"></i>
+                                            </a>
+                                        {/if}
+                                        {/if}
+
+                    {if $mingxi==1}
+
+                                       
+
+                                        
+                                        &nbsp;&nbsp;
+                                            <a href="index.php?task=mingxi&pid={$row.paiche_id}" title="明细" style="color:#CC6600" target="_blank">
+                                          <i class="iconfont icon-mingxi1" aria-hidden="true"></i>
+                                                                    </a>
+                
+           
+                                        
+                    {/if}
+                          <hr/>
+ {if $delete==1}
+{if $row.paiche_accountstatus==0&&$row.paiche_jie==-1}
+                                             &nbsp;&nbsp;
+                                            <a onclick="delete_a({$row.paiche_id});return false"  title="删除" style="color:#CC6600" >
+               <i class="iconfont icon-shanchu" aria-hidden="true"></i>
+                                                                    </a>
+                                        {/if}
+
+ {/if}                                 
+
+{if $huanche_a==1&&$row.paiche_jie==1}
+                                        
+                                            &nbsp;&nbsp;
+<a href="javascript:;" onclick="huanche_a({$row.paiche_id});return false"   title="还车" style="color:#CC6600" target="_blank">
+
+        <i class="iconfont icon-yihuanche" aria-hidden="true"></i>
+                                                                    </a>
+                                        
+
+{/if}
+
+                            {if $qita==1}
+                                        {if $row.paiche_jie<3&&$row.paiche_jie>-1}
+                                             &nbsp;&nbsp;
+                                            <a href="javascript:;" onclick="qita({$row.paiche_id});return false"  title="增加其他费用" style="color:#CC6600" target="_blank">
+
+                             <i class="iconfont icon-qitafeiyong" aria-hidden="true"></i>
+                                                                    </a>
+                            {/if}
+
+ {/if} 
+
+ {if $youhui==1}                                     
+                                        {if $row.paiche_jie<3&&$row.paiche_jie>-1}
+                                             &nbsp;&nbsp;
+                                            <a href="javascript:;" onclick="youhui({$row.paiche_id});return false"  title="优惠" style="color:#CC6600" target="_blank">
+                             <i class="iconfont icon-youhui" aria-hidden="true"></i>
+                                                                    </a>
+                                        {/if}                                  
+{/if}
+
+
+
+        {if $kaipiao==1}
+            {if $row.paiche_jie>0}
+                                         &nbsp;&nbsp;
+        <a href="javascript:;" onclick="kaipiao({$row.paiche_id});return false" title="开票" style="color:#CC6600" target="_blank">
+        <i class="iconfont icon-xiangxixinxi" aria-hidden="true"></i>
+        </a>
+            {/if}
+        {/if}
+
+
+                                      
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="9" style="border-bottom: 2px #c7c3c4 solid;">
+                                    <p>
+                                         {if $row.paiche_jie==3&&$row.paiche_checkTimes>0}
+                                            <span style="color: #f7a30a;">
+                                                订单审核意见：
+                                                {if $row.paiche_checkNote!=""}
+                                                    {$row.paiche_checkNote}
+                                                {else}
+                                                    无
+                                                {/if}
+                                                &nbsp;&nbsp;&nbsp;
+                                            </span>
+                                         {/if}
+                                        
+                                    {$row.paiche_line}&nbsp;&nbsp;&nbsp;
+                                    备注：<span id="span_{$row.paiche_id}" dat="{$row.paiche_id}" class="spanremarks">
+                                    </span>
+
+                                     <input type="hidden"  value="{$row.paiche_id}" class="pid">
+                                    <input type="text" name="" style="display:none;width: 50%" value="{$row.paiche_specialRemarks}" class="ipt">
+<span class="beizhu" >
+ {if $row.paiche_specialRemarks!=''}
+  {$row.paiche_specialRemarks}
+{else}
+  无
+{/if}
+</span>
+</p>
+                                </td>
+                            </tr>
+                            {$index=$index+1}
+                                        {/foreach}
+
+                            </tbody>
+                            </table>
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <div class="pull-left" style="margin-top:15px">
+                                        <p>
+                                            显示 {($p-1)*10+1} 到 {$p*10} 项，共 {$total} 项
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="pull-right">
+                                        <ul class="pagination">
+                                               {$PAGINATION}
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- End Example Events -->
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End Panel Other -->
+</div>
+
+<script src="../../../crm/js/bootstrap.min.js?v=3.3.6"></script>
+<script src="../../../crm/js/content.min.js?v=2"></script>
+<script src="../../../crm/js/plugins/bootstrap-table/bootstrap-table.min.js"></script>
+<script src="../../../crm/js/plugins/bootstrap-table/bootstrap-table-mobile.min.js"></script>
+<script src="../../../crm/js/plugins/bootstrap-table/locale/bootstrap-table-zh-CN.min.js"></script>
+<script src="../../../crm/js/demo/bootstrap-table-demo.min.js"></script>
+
+
+
+<script type="text/javascript">
+    var body_W = $("body").width();
+    function setBody_W(){
+        body_W = $("body").width();
+    }
+    function youhui(pid){
+    	setBody_W();
+        demo_iframe('index.php?task=youhui&pid='+pid,'添加优惠',body_W,500,'login_js');
+    }
+     function qita(pid){
+     	setBody_W();
+        demo_iframe('index.php?task=qita&pid='+pid,'增加其他费用',body_W,500,'login_js');
+    }
+
+    function kaipiao(pid){
+    	setBody_W();
+        demo_iframe('index.php?task=kaipiao&pid='+pid,'开票',body_W,500,'login_js');
+    }
+
+    function huanche_a(pid){
+    	setBody_W();
+        demo_iframe('index.php?task=huanche_a&pid='+pid,'还车',body_W,500,'login_js');
+    }
+
+     
+    function huanche(pid){
+    	setBody_W();
+        demo_iframe('index.php?task=huanche&pid='+pid,'换车',body_W,500,'login_js');
+    }
+
+    function zijia_shenghe(pid){
+    	setBody_W();
+        demo_iframe('index.php?task=zijia_shenghe&pid='+pid,'订单审核',body_W,500,'login_js');
+    }
+
+    function diaoche(pid){
+    	setBody_W();
+        demo_iframe('index.php?task=diaoche&pid='+pid,'调度',body_W,500,'login_js');
+    }
+
+    function xuzu(pid){
+    	setBody_W();
+        demo_iframe('index.php?task=xuzu&pid='+pid,'续租',body_W,500,'login_js');
+    }
+
+    $("#search_status").change(function(){
+       
+         window.location.href = "index.php?search_status="+$("#search_status").val();
+    })
+    
+    
+    $("#up").click(function(){
+        var content=$("#content").css('display');
+        if(content=="none"){
+            
+            $("#content").css('display','block');
+        $('#up').removeClass("fa-chevron-down");
+        $('#up').addClass("fa-chevron-up");
+        }else{
+            $("#content").css('display','none');
+        $('#up').removeClass("fa-chevron-up");
+        $('#up').addClass("fa-chevron-down");
+        }
+    });
+    
+     $(".beizhu").click(function(){
+        
+        var index = $(".beizhu").index(this);
+        $(this).css("display","none");
+        $(".ipt").eq(index).css("display","inline");
+         var val = $(".ipt").eq(index).val();
+
+         
+        $(".ipt").eq(index).val("");
+         $(".ipt").eq(index).focus();
+         
+         $(".ipt").eq(index).val(val);
+     })
+
+
+$(".ipt").blur(function(){
+        var index = $(".ipt").index(this);
+        var pid=$('.pid').eq(index).val();
+        var content=$(this).val();
+
+        $.ajax({
+            type:'POST',
+            url:'index.php?task=setBeizhu',
+            data:{ldelim}"paiche_specialRemarks":content,"pid":pid{rdelim},
+            dataType:"json",
+            cache: false,
+            success:function(req){
+               
+                 $(".beizhu").eq(index).html(content);
+                 $(".beizhu").eq(index).css("display","inline");
+                 $(".ipt").eq(index).css("display","none");
+            }
+        })
+    })
+
+
+ function delete_a(id) {
+            swal(
+                {ldelim}title:"您确定切换启用？",
+                      text:"",
+                      type:"warning",
+                      showCancelButton:true,
+                      confirmButtonColor:"#DD6B55",
+                      confirmButtonText:"确定",
+                      cancelButtonText:"取消",
+                      closeOnConfirm:false,
+                      closeOnCancel:false{rdelim},
+                      function(isConfirm){
+                        if(isConfirm){
+                            window.location.href = "index.php?task=delete&pid="+id;
+                        }else{
+                            swal("已取消",
+                                 "您取消了切换操作！","error"
+                            )
+                        }
+                    }
+                )
+        };
+</script>
+
+</body>
+<!-- Mirrored from www.zi-han.net/theme/hplus/table_bootstrap.html by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 20 Jan 2016 14:20:06 GMT -->
+</html>

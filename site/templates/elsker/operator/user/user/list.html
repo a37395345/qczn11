@@ -1,0 +1,218 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>管理后台</title>
+<link href="/admincp/css/style.css" rel="stylesheet" type="text/css">
+<link href="/admincp/css/box.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="/admincp/js/jquery.js"></script>
+<script type="text/javascript" src="/admincp/js/common.js"></script>
+<script type="text/javascript" src="/admincp/js/box.js"></script>
+</head>
+<body>
+<div class="so_main">
+  <div class="page_tit">会员列表</div>
+
+<!--搜索用户-->
+<div id="searchUser_div" style="display:none;">
+	<div class="page_tit">
+	搜索会员 [<a onclick="searchUser();" href="javascript:void(0);">隐藏</a>]
+    </div>
+	<div class="form2">
+		<form action="list.php?task=search" method="post">
+			<dl class="lineD">
+			<dt>用户ID：</dt>
+			<dd>
+			<input id="uid" type="text" value="" name="uid">
+			<p>用户ID</p>
+			</dd>
+			</dl>
+			<dl class="lineD">
+			<dt>用户昵称：</dt>
+			<dd>
+			<input id="nickname" type="text" value="" name="nickname">
+			<p>支持模糊查询</p>
+			</dd>
+			</dl>
+			<dl class="lineD">
+			<dt>联系电话：</dt>
+			<dd>
+			<input id="phone" type="text" value="" name="mobile">
+			<p>支持模糊查询</p>
+			</dd>
+			</dl>
+			<dl class="lineD">
+			<dt>Email：</dt>
+			<dd>
+			<input id="email" type="text" value="" name="email">
+			<p>支持模糊查询</p>
+			</dd>
+			</dl>
+            
+            <dl class="lineD">
+            <dt>VIP用户：</dt>
+            <dd>
+            <select id="is_vip" name="is_vip">
+                <option value="">请选择</option>
+                <option value="1">是</option>
+                <option value="2">否</option>  
+            </select>
+            </dd>
+            </dl>            
+			
+				<div class="page_btm">
+				<input class="btn_b" type="submit" value="确定">
+				</div>			
+		</form>
+	</div>
+</div>
+
+
+
+  <!-------- 用户列表 -------->
+  <div class="Toolbar_inbox">
+  	<div class="page right">共{$total}条记录&nbsp;&nbsp;&nbsp;{$PAGINATION}</div>	
+	<a href="javascript:void(0);" class="btn_a" onclick="deleteUser();"><span>删除会员</span></a>
+	<a href="javascript:void(0);" class="btn_a" onclick="searchUser();" id="searchUser_action"><span>搜索会员</span></a>
+  </div>
+  <div class="list">
+  <table width="100%" border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <th style="width:30px;">
+		<input type="checkbox" id="checkbox_handle" onclick="checkAll(this)" value="0">
+    	<label for="checkbox"></label>
+	</th>
+    <th class="line_l"><a href="list.php?order=user_id">ID</a></th>
+    <th class="line_l">电子邮箱</th>
+    <th class="line_l"><a href="list.php?order=nickname">昵称</a></th>
+    <th class="line_l">真实姓名</th>
+     <th class="line_l">性别</th>
+    <th class="line_l">年龄</th>           
+    <th class="line_l">联系电话</th>
+
+     <th class="line_l">地址</th>
+      <th class="line_l">邮编</th>
+      <th class="line_l">VIP会员</th>      
+	<th class="line_l"><a href="list.php?order=time">注册时间</a></th>
+	<th class="line_l"><a href="list.php?order=status">状态</a></th>
+	<th class="line_l">操作</th>
+  </tr>
+  {foreach from=$userList key=i item=row}
+  <tr overstyle='on' id="user_{$row.user_id}">  
+    	<td><input type="checkbox" name="checkbox" id="checkbox{$row.user_id}" value="{$row.user_id}"></td>
+	  	<td>{$row.user_id}</td>
+        <td>{$row.email}</td>
+	    <td><a href="/user/show/uid/{$row.user_id}" target="_blank">{$row.nickname}</a></td>
+        <td>{$row.realname}</td>
+        <td>{$row.gender}</td>
+        <td>{$row.age}</td>                 
+        <td>{$row.mobile}</td>        
+		<td>{$row.address}</td>
+        <td>{$row.zip}</td>
+        <td>{if $row.is_vip==1}是{else}否{/if}</td>
+		<td>{$row.created}</td>
+		<td>{if $row.is_active == 2}激活{elseif $row.is_active == 1}等待邮件激活{else}禁用{/if}</td>
+
+	    <td>
+			<a href="modify.php?uid={$row.user_id}">编辑</a>
+			<a href="{literal}javascript:if(confirm('是否确定删除？')){window.location.href='delete.php?uid={/literal}{$row.user_id}';{literal}}{/literal}">删除</a>
+		</td>
+ </tr>
+ {/foreach}
+ </table>
+ </div>
+
+  <div class="Toolbar_inbox">
+	<div class="page right">共{$total}条记录&nbsp;&nbsp;&nbsp;{$PAGINATION}</div>
+	<a href="javascript:void(0);" class="btn_a" onclick="deleteUser();"><span>删除会员</span></a>
+	<a href="javascript:void(0);" class="btn_a" onclick="searchUser();" id="searchUser_actions"><span>搜索会员</span></a>
+  </div> 
+</div>
+<!-{literal}->
+<script>
+	//鼠标移动表格效果
+	$(document).ready(function(){
+		$("tr[overstyle='on']").hover(
+		  function () {
+		    $(this).addClass("bg_hover");
+		  },
+		  function () {
+		    $(this).removeClass("bg_hover");
+		  }
+		);
+	});
+	
+	function checkon(o){
+		if( o.checked == true ){
+			$(o).parents('tr').addClass('bg_on') ;
+		}else{
+			$(o).parents('tr').removeClass('bg_on') ;
+		}
+	}
+	
+	function checkAll(o){
+		if( o.checked == true ){
+			$('input[name="checkbox"]').attr('checked','true');
+			$('tr[overstyle="on"]').addClass("bg_on");
+		}else{
+			$('input[name="checkbox"]').removeAttr('checked');
+			$('tr[overstyle="on"]').removeClass("bg_on");
+		}
+	}
+
+	//获取已选择用户的ID数组
+	function getChecked() {
+		var uids = new Array();
+		$.each($('table input:checked'), function(i, n){
+			uids.push( $(n).val() );
+		});
+		return uids;
+	}
+	
+	//删除用户
+	function deleteUser(uid) {
+		uid = uid ? uid : getChecked();
+		uid = uid.toString();
+		if(uid == '' || !confirm('删除成功后将无法恢复，确认继续？')) return false;
+		
+		$.post("delete.php?multi=1", {uid:uid}, function(res){
+			if(res == '1') {
+				uid = uid.split(',');
+				for(i = 0; i < uid.length; i++) {
+					$('#user_'+uid[i]).remove();
+				}
+				ui.success('操作成功');
+			}else {
+				ui.error('操作失败');
+			}
+		});
+	}
+
+	//搜索用户
+	var isSearchHidden = 1;
+	function searchUser() {
+	  if(isSearchHidden == 1) {
+		$("#searchUser_div").slideDown("fast");
+		isSearchHidden = 0;
+	  }else {
+		$("#searchUser_div").slideUp("fast");
+		isSearchHidden = 1;
+	  }
+	} 
+	
+	function folder(type, _this) {
+		$('#search_'+type).slideToggle('fast');
+		if ($(_this).html() == '展开') {
+			$(_this).html('收起');
+		}else {
+			$(_this).html('展开');
+		}
+		
+	}
+
+</script>
+<!-{/literal}->
+
+</body>
+</html>

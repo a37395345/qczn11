@@ -1,0 +1,147 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Insert title here</title>
+<link href="../../../css/style.css" rel="stylesheet" type="text/css">
+<link href="../../../js/jbox/jBox/Skins/GreyBlue/jbox.css" rel="stylesheet"  />
+<script type="text/javascript" src="../../../js/jquery.js"></script>
+<script type="text/javascript" src="../../../js/common.js"></script>
+<script type="text/javascript" src="../../../js/date_select.js"></script>
+<script type="text/javascript" src="../../../js/calendar.js"></script>
+<script type="text/javascript" src="../../../js/fancybox/jquery.mousewheel-3.0.4.pack.js"></script>
+<script type="text/javascript" src="../../../js/fancybox/jquery.fancybox-1.3.4.pack.js"></script>
+<script type="text/javascript" src="../../../js/jbox/jBox/jquery.jBox-2.3.min.js"></script>
+<script type="text/javascript" src="../../../js/jbox/jBox/i18n/jquery.jBox-zh-CN.js"></script>
+<script language="javascript" type="text/javascript" src="../../../js/My97DatePicker/WdatePicker.js"></script>
+</head>
+<body>
+<form method="post" action="returncar_accept.php" name="form1" id="form1">
+<input type="hidden" name="pid" value="{$pid}" />
+<div class="so_main">
+  <div class="page_tit_1">自驾还车</div>
+  
+  <div class="page_tit_2">
+  	车辆：{$list.car_num}-{$list.car_color}-{$list.car_brand}-{$list.car_type}&nbsp;&nbsp;
+  </div>
+		<div class="form2">
+
+
+			<dl class="lineD">
+				<dt>约定用车时间：</dt>
+				<dd>{$list.paiche_startDate_All}到{$list.paiche_endDate_All}<input type="hidden" name="paiche_endDate" id="paiche_endDate" value="{$list.paiche_endDate_All}"/>
+				<input type="hidden" name="diff_day" id="diff_day" value="{$overtime.day}"/>
+				</dd>
+			</dl>
+			<dl class="lineD">
+				<dt>实际开始时间：</dt>
+				<dd><input type="text" name="changecar_times" id="changecar_times" size="16" value="{$changecar_times}" />
+				</dd>
+			</dl>
+			<dl class="lineD">
+				<dt>实际还车时间：</dt>
+				<dd><input type="text" name="return_endDate" id="return_endDate" size="16" value="{$nowtime}" onclick="{literal}WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'}){/literal}"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				<span class="redstar" id="showerr2">
+					{if $nowtime2>$list.paiche_endDate}超时：{if $overtime.day>0}{$overtime.day}天{/if}{if $overtime.hour>0}{$overtime.hour}小时{/if}{if $overtime.min>0}{$overtime.min}分{/if}{if $overtime.sec>0}{$overtime.sec}秒{/if}{/if}</span></dd>
+			</dl>
+
+			<dl class="lineD">
+				<dt><span class="redstar">*</span>开始公里数：</dt>
+				<dd><input type="text" name="settle_startKm" id="settle_startKm" size="18"/>公里
+				</dd>
+			</dl>
+
+			<dl class="lineD">
+				<dt><span class="redstar">*</span>结束公里数：</dt>
+				<dd><input type="text" name="settle_endKm" id="settle_endKm" size="18" onchange="jisuan()" />公里
+
+					{if $totalChangeCarKilo!=0}(注：换车一共行驶了{$totalChangeCarKilo}公里) {/if}
+				</dd>
+			</dl>
+
+			{if $totalChangeCarKilo!=0}
+			<dl class="lineD">
+				<dt><span class="redstar">*</span>换车行驶公里数：</dt>
+				<dd><input type="text" name="totalChangeCarKilo" id="totalChangeCarKilo" size="18" value="{$totalChangeCarKilo}" readonly/>公里
+				</dd>
+			</dl>
+			{/if}
+
+			<dl class="lineD">
+				<dt>共计行驶：</dt>
+				<dd>
+				<input type="text" name="settle_totalKm" id="settle_totalKm" value="" size="4" readonly/>公里
+
+
+				&nbsp;&nbsp;结算公里数：
+				<input type="text" name="settle_totalcalKm" id="settle_totalcalKm" value="" size="4"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="redstar" id="showerr" style="display:none;">行驶公里数异常</span>
+			</dd>
+			</dl>
+
+	{if $list.plan_chaokm=="y"}
+			<dl class="lineD">
+				<dt>超公里数：</dt>
+				<dd><input type="text" name="overKm" id="overKm" size="18"  />公里×<input type="text" name="paiche_overKm" id="paiche_overKm" value="{$list.paiche_overKm}" size="3"/>元&nbsp;&nbsp;
+		超公里费用：
+				<input type="text" name="overKmMoney" id="overKmMoney" size="8" value=""  class="grey noborder"/>元
+				</dd>
+			</dl>
+	{/if}
+
+	
+			<dl class="lineD">
+				<dt>超时：</dt>
+				<dd><input type="text" name="settle_overTime" id="settle_overTime" size="18" />小时×
+					<input type="text" name="paiche_overTime" id="paiche_overTime" value="{$list.plan_chaoshi}" size="3" readonly/>元&nbsp;&nbsp;
+					超时费用：
+				<input type="text" name="overTimeMoney" id="overTimeMoney" size="8" value="" onfocus="this.blur()" class="grey noborder" readonly/>元
+				</dd>
+			</dl>
+	
+
+	
+
+	{foreach from=$chargelist item=row name=foo}
+			<dl class="lineD">
+				<dt>{$row.charge_name}：</dt>
+				<dd>{$row.conv_money}元，已收：{$row.have_in_money}元，<input type="hidden" name="charge_id[]" value="{$row.id}">
+				<input type="hidden" name="charge_money[]" id="charge_money_{$row.id}" value="{$row.conv_money-$row.have_in_money}"/>
+				</dd>
+			</dl>
+	{/foreach}
+			
+			<dl class="lineD">
+				<dt>优惠金额：</dt>
+				<dd><input type="text" name="settle_favor" id="settle_favor" size="8"/>元&nbsp;&nbsp;优惠原因：<input type="text" name="settle_favorreason" id="settle_favorreason" size="48"/>
+				</dd>
+			</dl>
+			<dl class="lineD">
+				<dt>还需向客户收取：</dt>
+				<dd><input type="text" name="debt" id="debt" size="8" value="" class="red noborder" onfocus="this.blur()"/>元
+				</dd>
+			</dl>
+
+	
+		</div>
+
+  <div class="Toolbar_inbox">
+    <a href="javascript:void(0);" class="btn_a" name="btn_save" id="btn_save" onclick="ok();"><span>确定</span></a>
+    <a href="javascript:void(0);" class="btn_a" onclick="closebox();"><span>关闭</span></a>   	
+  </div> 
+</div>
+</form>
+<script type="text/javascript" src="../../../js/account.js"></script>
+<!-{literal}->
+<script>
+function jisuan(){
+	var settle_startKm=$("#settle_startKm").val();
+	var settle_endKm=$("#settle_endKm").val();
+	if(!(parseInt(settle_startKm)>0)){
+		alert('请填写车辆开始公里数！');
+		$("#settle_endKm").val("");
+	}
+}
+</script>
+<!-{/literal}->
+</body>
+</html>

@@ -1,0 +1,324 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Insert title here</title>
+<link href="../../../css/style.css" rel="stylesheet" type="text/css" />
+<link href="../../../js/jbox/jBox/Skins/GreyBlue/jbox.css" rel="stylesheet"  />
+<script type="text/javascript" src="../../../js/jquery.js"></script>
+<script type="text/javascript" src="../../../js/jbox/jBox/jquery.jBox-2.3.min.js"></script>
+<script type="text/javascript" src="../../../js/jbox/jBox/i18n/jquery.jBox-zh-CN.js"></script>
+<!-{literal}->
+
+<style>
+.leftspan{position: absolute;color: #131212;font-size: 16px;font-weight: bolder;text-align: center;width: 135px;}
+</style>
+<!-{/literal}->
+<script>
+
+
+$(function(){
+	//加载下拉框
+	$.get("../../../site/operator/business/list.php?task=getClientList",{}, function(jsonmsg){
+		if (jsonmsg.status==0){
+			var nRe=jsonmsg.totalRecords;
+			if (nRe>0){
+				var dataObj = jsonmsg.data;
+				for (var i=0;i<nRe;i++){
+					$("#paiche_name").append("<option value='"+dataObj[i].client_id+"'>"+dataObj[i].client_name+"</option>");
+				}
+			}
+			$("#spanmonth").html(jsonmsg.syear+"年"+jsonmsg.smonth+"月份");
+			$("#spanyear").html(jsonmsg.syear+"年度");
+			var nRe=jsonmsg.totalRecords1;
+			if (nRe>0){
+				var dataObj = jsonmsg.data1;
+				for (var i=0;i<nRe;i++){
+				    sResult2="<tr height='30'><td>"+ (i+1)+"</td><td>"+dataObj[i].shop_name+"</td><td>"+dataObj[i].total_money1+"</td><td>"+dataObj[i].total_money11+"</td>";
+				    sResult2+="<td>"+dataObj[i].total_money12+"</td><td>"+dataObj[i].total_money2+"</td><td>"+dataObj[i].total_money22+"</td><td>"+dataObj[i].total_money21+"</td></tr>";
+					$('#tablemonth').append(sResult2);
+				}
+			}
+			var nRe=jsonmsg.totalRecords2;
+			if (nRe>0){
+				var dataObj = jsonmsg.data2;
+				for (var i=0;i<nRe;i++){
+				    sResult2="<tr height='30'><td>"+ (i+1)+"</td><td>"+dataObj[i].shop_name+"</td><td>"+dataObj[i].total_money1+"</td><td>"+dataObj[i].total_money11+"</td>";
+				    sResult2+="<td>"+dataObj[i].total_money12+"</td><td>"+dataObj[i].total_money2+"</td><td>"+dataObj[i].total_money22+"</td><td>"+dataObj[i].total_money21+"</td></tr>";
+					$('#tableyear').append(sResult2);
+				}
+			}
+		}		
+	},"json");
+	
+	//右下角弹出层
+	$.get("../../../site/operator/business/list.php?task=getNearList",{}, function(jsonmsg){
+		if (jsonmsg.status==0){
+			var nRe=jsonmsg.totalRecords;
+			var sResult="<tr><th>序号</th><th>服务门店</th><th>用车类型</th><th>预约车辆</th><th>合同号</th><th>公司名/联系人</th><th>起止时间</th><th>操作</th></tr>";
+			$('#maint').html(sResult);
+			if (nRe>0){
+				var dataObj = jsonmsg.data;
+				var sResult3="<ul>";
+				for (var i=0;i<nRe;i++){
+				    sResult2="<tr><td>"+ (i+1)+"</td><td>"+dataObj[i].shop_name+"</td><td>"+dataObj[i].item_name+"</td><td>"+dataObj[i].car_num+"</td><td><a href=\"../../../site/operator/business/detail.php?uid="+dataObj[i].paiche_id+"\" target='blank'>"+ dataObj[i].paiche_contractNum+"</a></td><td>";
+				    
+				    sResult3+="<li>"+ (i+1)+"."+dataObj[i].item_name+"<a href=\"../../../site/operator/business/detail.php?uid="+dataObj[i].paiche_id+"\">"+ dataObj[i].paiche_contractNum+"</a>[";
+					if (dataObj[i].paiche_personal==0){
+						sResult2+=dataObj[i].client_name;
+						sResult3+=dataObj[i].client_name;
+					}else{
+						sResult2+=dataObj[i].paiche_linker;
+						sResult3+=dataObj[i].paiche_linker;
+					}
+					sResult2+="</td><td>"+dataObj[i].paiche_startDate+" --- "+dataObj[i].paiche_endDate+"</td><td><a href='javascript:diaodu("+dataObj[i].paiche_id+");'>调度</a></td></tr>";
+					sResult3+="]<br/>"+dataObj[i].paiche_startDate+" --- "+dataObj[i].paiche_endDate+"</li>";
+					$('#maint').append(sResult2);
+				}
+				sResult3+="</ul>";
+				//$(".pop_Content").html(sResult3);
+				//$("#pop").removeAttr("style");
+			}else{
+				$("#pop").hide();
+				$('#maint').append("<tr><td colspan=\"7\">近期无需要调度的用车订单！</td></tr>");
+			}
+		}else{
+			$("#pop").hide();
+			$('#maint').append("<tr><td colspan=\"7\">获取数据失败！</td></tr>");
+		}
+		
+	},"json");
+	
+	jQuery("#contraction").click(function(){
+		jQuery(".box-16css").animate({
+        height: '30px',bottom:'0px'
+    }, 1000, 'linear', function() { jQuery(".pop_Content").hide(); });
+	jQuery("#contraction").hide();
+	jQuery("#open_window").show();
+	});
+	
+	jQuery("#open_window").click(function(){
+		jQuery(".box-16css").animate({
+        height: '280px'
+    }, 10, 'linear', function() { jQuery(".pop_Content").show(); });
+	jQuery("#open_window").hide();
+	jQuery("#contraction").show();
+	});
+	
+	jQuery("#close_window").click(function(){
+		jQuery(".box-16css").animate({
+	        height: '0px',bottom:'0px'
+	    }, 1000, 'linear', function() { jQuery(".pop_Content").hide(); });
+	});
+	jQuery("#search_key").live('input propertychange',function(){
+	    var aa=jQuery("#search_key").val();
+	    if (aa!=""){
+	    	jQuery("#paiche_name option").each(function (){  
+		        var txt = $(this).text();  
+		        if(txt.toLowerCase().indexOf(aa) >-1){  
+		            $(this).attr("selected",true);
+		            jQuery("#paiche_name").change();
+		            return false;
+		        }
+		     });
+	    }
+	});
+	jQuery("#btnSearch").click(function(){
+		var clientid=$("#paiche_name").val();
+		if (clientid=="0"){
+			alert("请先选择要查询的企业！");
+			return false;
+		}
+		$('#clentprice').hide();
+		$("#wait").show();
+		$.get("../../../site/operator/business/list.php?task=getclientprice4&clientid="+clientid,{}, function(jsonmsg){
+			if (jsonmsg.status==0){
+				$("#clentprice tr:not(:first)").empty();
+				var nRe=jsonmsg.totalRecords;
+				if (nRe>0){
+					var dataObj = jsonmsg.data;
+					for (var i=0;i<nRe;i++){
+					    sResult2="<tr><td>"+ (i+1)+"</td><td>"+dataObj[i].destination+"</td><td>"+dataObj[i].carmodel+"</td>";
+					    sResult2+="<td>"+dataObj[i].scheme_price1+"</td><td>"+dataObj[i].scheme_price2+"</td><td>"+dataObj[i].remarks+"</td></tr>";
+						$('#clentprice').append(sResult2);
+					}
+					$("#wait").hide();
+					$('#clentprice').show();
+				}else{
+					alert("该企业无用车价格！");
+					$("#wait").hide();
+				}
+			}else{
+				alert("获取数据失败！");
+				$("#wait").hide();
+			}
+		},"json");
+		
+	});
+});
+</script>
+</head>
+
+<body>
+<div class="so_main" >
+	<div class="list" style="display: inline-block;width:100%;border:1px solid #e3e6eb;">
+		<table id="paihangbang" width="100%" border="0" cellspacing="0" cellpadding="0" align="left">
+		  <tr height="36">
+		  	<th width="50%" style="background-color: #FF7744;color: #000000;font-size: 14px;">
+		  	<span id="spanmonth"></span>
+		  	</th>
+		  	<th width="50%" style="background-color: #FF7744;color: #000000;font-size: 14px;">
+		  	<span id="spanyear"></span>
+		  	</th>
+		  </tr>
+		  <tr>
+		  	<td width="50%" style="vertical-align: top;">
+		  	<table width="100%" border="0" cellspacing="0" cellpadding="0" id="tablemonth">
+			  <tr>
+				<th>名次</th>
+				<th>门店</th>
+				<th>临时自驾</th>
+				<th>优惠券金额</th>
+				<th>实际金额</th>
+				<th>临时带驾-现结</th>
+				<th>临时带驾-批结</th>
+				<th>调车结算</th>
+			  </tr>
+			</table>
+		  	</td>
+		  	<td width="50%" style="vertical-align: top;">
+		  	<table width="100%" border="0" cellspacing="0" cellpadding="0" id="tableyear">
+			  <tr>
+				<th>名次</th>
+				<th>门店</th>
+				<th>临时自驾</th>
+				<th>优惠券金额</th>
+				<th>实际金额</th>
+				<th>临时带驾-现结</th>
+				<th>临时带驾-批结</th>
+				<th>调车结算</th>
+			  </tr>
+			</table>
+		  	</td>
+		  </tr>
+		</table>
+		
+	</div>
+
+
+
+
+	<div class="page_tit">提成计算表</div>
+	<div class="list">
+		<table border="1px" cellspacing="0" cellpadding="0" style="width: 50%";>
+			<tr>
+				<td colspan="2" style="font-size: 15px"><span style="color: red"></span>提成算法（单位：元）</td>
+			</tr>
+			<tr>
+				<td>营业额</td>
+				<td>提成比例</td>
+				
+			</tr>
+			<tr>
+				<td>0~19999</td>
+				<td>1.0%</td>
+			</tr>
+			<tr>
+				<td>20000~39999</td>
+				<td>1.1%</td>
+			</tr>
+			<tr>
+				<td>40000~59999</td>
+				<td>1.2%</td>
+			</tr>
+			<tr>
+				<td>60000~79999</td>
+				<td>1.3%</td>
+			</tr>
+			<tr>
+				<td>80000~99999</td>
+				<td>1.4%</td>
+			</tr>
+			<tr>
+				<td>100000~149999</td>
+				<td>1.5%</td>
+			</tr>
+			<tr>
+				<td>150000~199999</td>
+				<td>1.6%</td>
+			</tr>
+			<tr>
+				<td>200000~249999</td>
+				<td>1.7%</td>
+			</tr>
+			<tr>
+				<td>250000~299999</td>
+				<td>1.8%</td>
+			</tr>
+			<tr>
+				<td>300000~399999</td>
+				<td>1.9%</td>
+			</tr>
+			<tr>
+				<td>400000~499999</td>
+				<td>2.0%</td>
+			</tr>
+			<tr>
+				<td>500000~599999</td>
+				<td>2.1%</td>
+			</tr>
+			<tr>
+				<td>......</td>
+				<td>......</td>
+			</tr>
+		</table>
+	</div>
+	
+	
+	<div class="page_tit">业务待办事宜提醒</div>
+	<div class="Toolbar_inbox_2" style="width:780px;">
+  	<div class="page ">近期需要调度的用车订单</div>
+	</div>
+	
+	<div class="list">
+		<table id="maint" width="790px" border="0" cellspacing="0" cellpadding="0" align="left">
+		  <tr>
+		    <th>序号</th>
+			<th>服务门店</th>
+			<th>用车类型</th>
+			<th>预约车辆</th>
+			<th>合同号</th>
+			<th>公司名/联系人</th>
+		    <th>起止时间</th>
+		    <th>操作</th>
+		  </tr>
+		  <tr>
+		  	<td colspan="7"><img src="../../../images/wait.gif" /></td>
+		  </tr>
+		</table>
+		
+	</div>
+</div>
+
+
+	<div id="pop" class="box-16css" style="display:none;">
+		<div class="pop_title">
+			<div class="pop_title_left">
+			 	<strong>近期需要调度的用车订单</strong>
+			</div>
+			<div class="pop_title_right">
+				<img src="../../../css/img01.gif" id="contraction" /><img src="../../../css/img03.gif" id="open_window" style="display:none;" / ><img src="../../../css/img02.gif" id="close_window" />
+			</div>
+	    </div>
+	    <div class="pop_Content">
+	    	
+	     </div>
+	</div>
+<script>
+function diaodu(pid){
+	demo_iframe('../../operator/business/diaodu.php?pid='+pid,'订单车辆调度',750,460,'login_js');
+}
+</script>
+
+</body>
+</html>

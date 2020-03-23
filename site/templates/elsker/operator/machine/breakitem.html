@@ -1,0 +1,234 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<title>管理后台</title>
+	<link href="../../../css/style.css" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" href="../../../../../crm/css/bootstrap.min14ed.css">
+	<link rel="stylesheet" href="../../../../../crm/css/style.min862f.css">
+	<script type="text/javascript" src="../../../js/jquery.js"></script>
+	<script type="text/javascript" src="../../../js/calendar.js"></script>
+</head>
+
+<body class="gray-bg" onload="winload()">
+	<div class="wrapper wrapper-content animated fadeInRight">
+		<!-- Panel Other -->
+		<div class="ibox float-e-margins">
+			<div class="ibox-title">
+				<h5>违章项目</h5>
+			</div>
+			<div class="wrapper wrapper-content animated fadeInRight" style=" margin: 0; padding: 0;">
+				<div class="ibox float-e-margins" style="margin:0">
+					<div class="ibox-content">
+						<div class="row row-lg">
+
+							<!-- Example Events -->
+							<div class="example-wrap">
+								<div class="example">
+									<div id="waitbackbg">
+										<img src="../../../images/wait2.gif"
+											style="position:absolute;left:50%;top:50%;" />
+									</div>
+									<div class="so_main">
+										<input type="hidden" id="id" value="{$iteminfo.item_id}" />
+										<div class="list">
+											<table width="100%" class="table table-bordered table-hover">
+												{if $itemlist}
+												<tr>
+													<th style="width: 5%;">序号 </th>
+													<th>违章项目</th>
+													<th>违章款</th>
+													<th>手续费</th>
+													<th>扣分</th>
+													<th>金额抵扣分</th>
+													<th style="width: 8%;">操作</th>
+												</tr>
+												{foreach from=$itemlist item=row name=foo}
+												<tr overstyle='on' id="badge_{$row.item_id}">
+													<td><input type="hidden" name="id[]"
+															value="{$row.item_id}">{$smarty.foreach.foo.index+1}
+													</td>
+													<td style="text-align:left;">{$row.item_name}</td>
+													<td>{$row.item_money1}元</td>
+													<td>{$row.item_money2}元</td>
+													<td>{$row.item_scope}</td>
+													<td>{$row.item_money4}元</td>
+													<td><a href="breakitem.php?id={$row.item_id}" title="编辑"
+															style="color:#ff0101;font-size:16px;margin-top: 2px;"
+															 ><span
+																class="glyphicon glyphicon-pencil"></span></a>&nbsp;
+														<a href="javascript:del({$row.item_id});" title="删除"
+															style="color:#ff0101;font-size:16px;margin-top: 2px;"
+															 ><span
+																class="glyphicon glyphicon-trash"></span></a></td>
+												</tr>
+												{/foreach}
+												{/if}
+											</table>
+										</div>
+										<div class="form2">
+											<table class="table table-bordered">
+												<tr>
+													<th width="15%" style="background-color:#F5F5F6">
+														<span style="color:#000;">违章项目：</span> </th>
+													<td width="35%">
+														<input type="text" name="item_name" id="item_name"
+															class=" form-control input-sm" size="95" placeholder="必填"
+															value="{$iteminfo.item_name}" />
+													</td>
+
+													<th width="15%" style="background-color:#F5F5F6">
+														<span style="color:#000;">
+															违章罚款：</span> </th>
+													<td width="35%">
+														<input type="text" name="item_money1" id="item_money1" class=" form-control input-sm"
+															placeholder="必填" onkeyup="value=value.replace(/[^\d.]/g,'')"
+															onafterpaste="this.value=this.value.replace(/\d/g,'')"
+															value="{$iteminfo.item_money1}"
+															size="5" />
+													</td>
+
+
+												</tr>
+												<tr>
+														<th width="15%" style="background-color:#F5F5F6">
+																<span style="color:#000;">代办手续费</span>：
+													</th>
+													<td>
+														<input type="text" name="item_money2" id="item_money2" class=" form-control input-sm"
+															value="{$iteminfo.item_money2}" size="5" placeholder="元" readonly />
+													<th width="15%" style="background-color:#F5F5F6">
+														<span style="color:#000;">违章扣分：</span> </th>
+													<td width="35%">
+														<input type="text" name="item_scope" id="item_scope" class=" form-control input-sm"
+															placeholder="分" onkeyup="value=value.replace(/[^\d.]/g,'')"
+															onafterpaste="this.value=this.value.replace(/\d/g,'')"
+															value="{$iteminfo.item_scope}" size="5"  />
+													</td>
+												</tr>
+												<tr>
+
+
+														<th width="15%" style="background-color:#F5F5F6">
+																<span style="color:#000;">金额抵扣分:</span>
+													</th>
+													<td>
+														<input type="text" name="item_money4" id="item_money4" class=" form-control input-sm"
+															value="{$iteminfo.item_money4}" size="5" placeholder="元" readonly />
+													</td>
+													<th width="15%" style="background-color:#F5F5F6"></th>
+													<td width="35%"></td>
+												</tr>
+											</table>
+										</div>
+										<div>
+											<a href="javascript:void(0);" class="btn btn-outline btn-default"
+												name="btn_save" id="btn_save" onclick="ok();"
+												style="margin-left: 25%; width: 10%">确定</a>
+											<a href="javascript:void(0);" class="btn btn-outline btn-default"
+												onclick="closebox();" style="margin-left: 25%; width: 10%">关闭</a>
+										</div>
+									</div>
+									<!-{literal}->
+										<script>
+											$(document).ready(function () {
+												$("#item_money1").live('input propertychange', function () {
+													if ($(this).val() == "" || $(this).val() == 0) {
+														$("#item_money2").val("0");
+													} else {
+														var scope = $(this).val();
+														$("#item_money2").val(parseInt(scope) * 0.5);
+													}
+												});
+												$("#item_scope").live('input propertychange', function () {
+													if ($(this).val() == "" || $(this).val() == 0) {
+														$("#item_money4").val("0");
+													} else {
+														var scope = $(this).val();
+														$("#item_money4").val(parseInt(scope) * 150);
+													}
+												});
+											});
+											function ok() {
+												$("#btn_save").attr("disabled", true);
+												if ($('#item_name').val() == "") {
+													alert("违章项目不能为空！");
+													$('#item_name').focus();
+													$("#btn_save").removeAttr("disabled");
+													return false;
+												}
+												if ($('#item_money1').val() == "") {
+													alert("违章罚款不能为空！");
+													$('#item_money1').focus();
+													$("#btn_save").removeAttr("disabled");
+													return false;
+												}
+												$.ajax({
+													type: 'POST',
+													url: 'breakitem.php?task=breakitem_acc',
+													data: {
+														"item_name": $('#item_name').val(), "item_money1": $('#item_money1').val(),
+														"item_money2": $('#item_money2').val(), "item_scope": $('#item_scope').val(),
+														"item_money4": $('#item_money4').val(), "id": $('#id').val()
+													},
+													dataType: "json",
+													cache: false,
+													error: function () {
+													},
+													beforeSend: function () {
+														$("#waitbackbg").css("display", "block");
+													},
+													complete: function () {
+														//$("#waitbackbg").css("display","none");
+													},
+													success: function (jsonmsg) {
+														if (jsonmsg.status == "ok") {
+															alert("保存成功！");
+															window.location.href = "breakitem.php";
+														} else {
+															alert("保存失败！");
+															$("#btn_save").removeAttr("disabled");
+														}
+
+													}
+												});
+											}
+											function del(id) {
+												if (!confirm("确定要删除吗？")) {
+													return false;
+												}
+												$.ajax({
+													type: 'POST',
+													url: 'breakitem.php?task=breakitem_acc&op=delete',
+													data: { "id": id },
+													dataType: "json",
+													cache: false,
+													error: function () {
+													},
+													beforeSend: function () {
+														$("#waitbackbg").css("display", "block");
+													},
+													complete: function () {
+														//$("#waitbackbg").css("display","none");
+													},
+													success: function (jsonmsg) {
+														if (jsonmsg.status == "ok") {
+															alert("删除成功！");
+															window.location.href = "breakitem.php";
+														} else {
+															alert("删除失败！");
+														}
+													}
+												});
+											}
+											function winload() {
+												var h = $(document).height() - $(window).height();
+												$(document).scrollTop(h);
+												$("#waitbackbg").css("display", "none");
+											}
+											function closebox() {
+												window.parent.window.jBox.close();
+											}
+										</script>
+										<!-{/literal}-> </body> </html>

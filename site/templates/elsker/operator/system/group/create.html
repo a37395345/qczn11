@@ -1,0 +1,107 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>管理后台</title>
+<link href="../../../../css/style.css" rel="stylesheet" type="text/css">
+<link href="../../../../css/box.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="../../../../js/jquery.js"></script>
+<script type="text/javascript" src="../../../../js/common.js"></script>
+<script type="text/javascript" src="../../../../js/box.js"></script>
+<style>
+
+/*{literal}*/
+	.navi_name{font-size:14px;font-weight:bold;}
+	.indent{padding-left:40px;}
+/*{/literal}*/
+</style>
+</head>
+<body>
+<div class="so_main">
+  <div class="page_tit">编辑权限</div>
+  
+  <form method="post" action="update.php" onsubmit="return check(this)">
+    
+  <div class="form2">
+    <dl class="lineD">
+      <dt>名称：</dt>
+      <dd>
+        <input type="text" name="title" value="{$group.title}" /> *
+	  </dd>
+    </dl>
+		
+   <dl class="lineD">
+      <dt>权限：</dt>
+      <dd>
+        <a href="javascript:selectAll();"><span>全选</span></a> | <a href="javascript:unselectAll();"><span>取消</span></a>
+		<ul>
+		{foreach from=$privilegeList key=i item=row}
+	      	<li style="padding-top:5px;">
+	      		<input type="checkbox" name="privileges[]" value="{$row.action}" class="navi"{if $row.checked} checked{/if} /> <span class="navi_name">{$row.name}</span>
+		        <ul>
+		            {foreach from=$row.list key=r item=navi}
+		          	<li class='indent'><input type="checkbox" name="privileges[]" value="{$navi.action}" id="{$navi.action}"{if $navi.checked} checked{/if} class="subnavi" /> {$navi.name}</li>
+		          	{/foreach}
+				</ul>
+		     </li>
+		 {/foreach}
+	  </dd>
+    </dl>
+    <dl class="lineD">
+      <dt>其他权限：</dt>
+      <dd>
+        <input type="checkbox" name="permissions[]" value="inputidcard" {if strstr($group.permissions,'inputidcard')}checked{/if}/>手输身份证号&nbsp;&nbsp;
+		<input type="checkbox" name="permissions[]" value="modifyorder" {if strstr($group.permissions,'modifyorder')}checked{/if}/>调度后修改订单&nbsp;&nbsp;
+		<input type="checkbox" name="permissions[]" value="searchphonecode" {if strstr($group.permissions,'searchphonecode')}checked{/if}/>调度后查看电话号码&nbsp;&nbsp;
+		<input type="checkbox" name="permissions[]" value="searchorder" {if strstr($group.permissions,'searchorder')}checked{/if}/>查询订单明细&nbsp;&nbsp;
+	  </dd>
+    </dl>
+
+
+    <div class="page_btm">
+      <input type="submit" class="btn_b" value="确定" />
+    </div>
+  </div>
+  <input type="hidden" name="aid" value="{$group.admin_group_id}" />
+  <input type="hidden" name="task" value="{$task}" /></form>
+</div>
+
+<script type="text/javascript">
+	function selectAll(){
+		$("input[type='checkbox']").attr("checked",true);
+	}
+	function unselectAll(){
+		$("input[type='checkbox']").attr("checked",false);
+	}
+	$(document).ready(function(){
+		$(".subnavi").click(function(){
+			var checked = false;
+			$(this).parent().parent().find(".subnavi").each(function(){
+				if($(this).attr("checked")){
+					checked = true;
+				}
+			});
+			var navi = $(this).parent().parent().parent().find(".navi");
+			if(checked){
+				navi.attr("checked",true);
+			}else{
+				navi.attr("checked",false);
+			}
+		});
+		$(".navi").click(function(){
+			$(this).parent().find(".subnavi").attr("checked",$(this).attr("checked"));
+		});
+	});
+	function check(_form){
+		if(_form.title.value==""){
+			alert("请输入用户组名称！");
+			_form.title.focus();
+			return false;
+		}
+		return true;
+	}
+</script>
+
+</body>
+</html>

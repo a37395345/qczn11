@@ -1,0 +1,478 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+	
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Insert title here</title>
+<link href="../../../css/style.css" rel="stylesheet" type="text/css">
+<link href="../../../js/jbox/jBox/Skins/GreyBlue/jbox.css" rel="stylesheet"  />
+<script type="text/javascript" src="../../../js/jquery.js"></script>
+<script type="text/javascript" src="../../../js/common.js"></script>
+<script type="text/javascript" src="../../../js/date_select.js"></script>
+<script type="text/javascript" src="../../../js/calendar.js"></script>
+<script type="text/javascript" src="../../../js/fancybox/jquery.mousewheel-3.0.4.pack.js"></script>
+<script type="text/javascript" src="../../../js/fancybox/jquery.fancybox-1.3.4.pack.js"></script>
+<script type="text/javascript" src="../../../js/jbox/jBox/jquery.jBox-2.3.min.js"></script>
+<script type="text/javascript" src="../../../js/jbox/jBox/i18n/jquery.jBox-zh-CN.js"></script>
+
+
+</head>
+<body>
+<form method="post" action="accept.php" name="form1" id="form1">
+<input type="hidden" id="op" name="op" value="{$op}" />
+<input type="hidden" id="account_flag" name="account_flag" value="{$account_flag}" />
+<input type="hidden" name="pid" value="{$pid}" />
+<input type="hidden" name="pids" value="{$pids}" />
+<div class="so_main">
+{if $account_flag=="deposit" || $account_flag=="account0" || $account_flag=="accountcon"}
+<div class="list">
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <th style="width:30px;">序号	</th>
+	<th>收费项目</th>
+	<th>约定金额</th>
+	<th>已收金额</th>
+	<th>本次收款</th>
+  </tr>
+  {foreach from=$chargelist item=row name=foo}
+  <tr overstyle='on' id="badge_{$row.id}">
+    	<td><input type="hidden" name="charge_id[]" value="{$row.id}">{$smarty.foreach.foo.index+1} </td>
+	  	<td>{$row.charge_name}</td>
+		<td>{$row.conv_money}</td>
+		<td><input type="hidden" name="charge_havemoney[]" id="charge_havemoney_{$row.id}" value="{$row.have_in_money}" />{$row.have_in_money}</td>
+		{if $row.charge_name=='押金'}
+		<td><input type="text" name="charge_money[]" id="charge_money_{$row.id}"  size="10"/></td>
+		{else}
+		<td><input type="text" name="charge_money[]" id="charge_money_{$row.id}" value="{$row.conv_money-$row.have_in_money}" size="10"/></td>
+		{/if}
+  </tr>
+  
+  {/foreach}
+
+  {if $youhui_list}
+   <tr>
+    <th style="width:30px;">序号	</th>
+	<th>优惠项目</th>
+	<th>优惠金额</th>
+	<th>已优惠金额</th>
+	<th>本次优惠</th>
+  </tr>
+  {$index=0}
+  {foreach from=$youhui_list item=row name=foo}
+  {$index=$index+1}
+  <tr overstyle='on' id="youhui_{$row.id}">
+    	<td><input type="hidden" name="youhui_id[]" value="{$row.id}">{$index} </td>
+	  	<td>{$row.youhui_name}</td>
+		<td>{$row.youhui_mone}</td>
+		<td>{$row.youhui_omone}</td>
+		<td><input type="text" name="youhui_omone[]" id="youhui_omone_{$row.id}" value="{$row.youhui_mone-$row.youhui_omone}" size="10"/></td>
+		
+  </tr>
+  
+  {/foreach}
+  {/if}
+
+ </table>
+ <table width="100%" border="0" cellspacing="0" cellpadding="0">
+ <tr>
+    <th style="text-align:left;">
+    	合计金额:<input type="text" name="total" id="total" value="" size="5" readonly/><input type="hidden" name="infact" id="infact" value="" />
+    	收款方式:<select name="payments" id="payments">
+	                  <option value="">请选择</option>
+	                  {foreach from=$paymentslist key=i item=rows}
+	                  <option value="{$rows.payment_id}" rel="{$rows.payment_fee}" {if $default_payments==$rows.payment_id}selected{/if}>{$rows.payment_name}</option>
+	                  {/foreach}
+	              </select>
+	         收款 账户:<select name="bank" id="bank">
+	                  <option value="">请选择</option>
+	                  {foreach from=$banklist key=i item=rows}
+	                  <option value="{$rows.bank_id}" {if $default_bank==$rows.bank_id}selected{/if}>{$rows.bank_name}</option>
+	                  {/foreach}
+	              </select>	          
+    	{if $account_flag=="deposit"}收款时间：<input type="text" name="addtime" size="18" value="{$addtime}" readonly="readonly" /><br/>
+    	 收款备注:<input type="text" name="charge_remarks" id="charge_remarks" value="" size="95"/>{/if}
+    </th>
+  </tr>
+ </table>
+</div>
+{/if}
+{if $account_flag=="freezedeposit"}
+<input type="hidden" name="paicheCar2" id="paicheCar2" value="{$list.paicheCar}" />
+<div class="list">
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <th style="width:30px;">序号	</th>
+	<th>退款项目</th>
+	<th>约定金额</th>
+	<th>实收</th>
+	<th>已冻结金额</th>
+	<th>已退金额</th>
+	<th>本次冻结</th>
+	<th>备注</th>
+  </tr>
+  {foreach from=$chargelist item=row name=foo}
+  {$leftmoney=$leftmoney+$row.have_in_money-$row.have_back_money-$row.have_freeze_money}
+  <tr overstyle='on' id="badge_{$row.id}">
+    	<td><input type="hidden" name="back_id[]" value="{$row.id}">{$smarty.foreach.foo.index+1} </td>
+	  	<td>{$row.charge_name}</td>
+	  	<td>{$row.back_money}</td>
+		<td><input type="hidden" name="left_money[]" id="left_money_{$row.id}" value="{$row.have_in_money-$row.have_back_money-$breakmoney}" />{$row.have_in_money}</td>
+		<td><input type="hidden" name="freeze_havemoney[]" id="freeze_havemoney_{$row.id}" value="{$row.have_freeze_money}" />{$row.have_freeze_money}</td>
+		<td><input type="hidden" name="back_havemoney[]" id="back_havemoney_{$row.id}" value="{$row.have_back_money}" />{$row.have_back_money}</td>
+		<td><input type="text" name="freeze_money[]" id="freeze_money_{$row.id}" value="" size="10" readonly/></td>
+  </tr>
+  {/foreach}
+ </table> 
+ <table width="100%" border="0" cellspacing="0" cellpadding="0">
+ <tr>
+    <th style="text-align:left;">
+    	违章记录:<select name="breaklist" id="breaklist">
+	                  <option value="">请选择</option>
+	                  {foreach from=$breaklist key=i item=rows}
+	                  <option value="{$rows.breakrules_id}" rel="{$rows.payment_fee}">苏D{$rows.car_num}|{$rows.breakrules_date}|{$rows.breakrules_item}</option>
+	                  {/foreach}
+	              </select>
+    	<span id="showillegal" style="display:none;">违章款：<input type="text" name="backmoney_1" id="backmoney_1" value="" size="4" readonly/>
+    	手续费：<input type="text" name="backmoney_2" id="backmoney_2" value="" size="4" readonly/>
+    	扣分：<input type="text" name="backmoney_3" id="backmoney_3" value="" size="1" readonly/>=<input type="text" name="backmoney_4" id="backmoney_4" value="" size="4" readonly/>元</span>
+    	<br/>合计金额:<input type="text" name="total" id="total" value="" size="5" readonly/><input type="hidden" name="infact" id="infact" value="" />&nbsp;
+    	<input type="hidden" name="leftmoney" id="leftmoney" value="{$leftmoney}" /><input type="hidden" name="breakrules_id" id="breakrules_id" value="" />
+    </th>
+  </tr>
+ </table>
+</div>
+{/if}
+{if $account_flag=="backdeposit"}
+<input type="hidden" name="paicheCar2" id="paicheCar2" value="{$list.paicheCar}" />
+<div class="list">
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <th style="width:30px;">序号	</th>
+	<th>退款项目</th>
+	<th>约定金额</th>
+	<th>实收</th>
+	<th>冻结金额</th>
+	<th>已退金额</th>
+	<th>本次退款</th>
+	<th>备注</th>
+  </tr>
+  {foreach from=$chargelist item=row name=foo}
+  {$leftmoney=$leftmoney+$row.have_in_money-$row.have_back_money-$row.have_freeze_money}
+  <tr overstyle='on' id="badge_{$row.id}">
+    	<td><input type="hidden" name="back_id[]" value="{$row.id}">{$smarty.foreach.foo.index+1} </td>
+	  	<td>{$row.charge_name}</td>
+	  	<td>{$row.back_money}</td>
+		<td><input type="hidden" name="left_money[]" id="left_money_{$row.id}" value="{$row.have_in_money-$row.have_back_money-$breakmoney}" />{$row.have_in_money}</td>
+		<td><input type="hidden" name="freeze_havemoney[]" id="freeze_havemoney_{$row.id}" value="{$row.have_freeze_money}" />{$row.have_freeze_money}</td>
+		<td><input type="hidden" name="back_havemoney[]" id="back_havemoney_{$row.id}" value="{$row.have_back_money}" />{$row.have_back_money}</td>
+		<td><input type="text" name="back_money[]" id="back_money_{$row.id}" value="" size="10"/></td>
+  </tr>
+  {/foreach}
+ </table> 
+ <table width="100%" border="0" cellspacing="0" cellpadding="0">
+ <tr>
+    <th style="text-align:left;">
+    	合计金额:<input type="text" name="total" id="total" value="" size="5" readonly/><input type="hidden" name="infact" id="infact" value="" />&nbsp;
+    	付款方式:<select name="payments" id="payments">
+	                  <option value="">请选择</option>
+	                  {foreach from=$paymentslist key=i item=rows}
+	                  <option value="{$rows.payment_id}" rel="{$rows.payment_fee}" {if $default_payments==$rows.payment_id}selected{/if}>{$rows.payment_name}</option>
+	                  {/foreach}
+	              </select>&nbsp;
+	              付款 账户:<select name="bank" id="bank">
+	                  <option value="">请选择</option>
+	                  {foreach from=$banklist key=i item=rows}
+	                  <option value="{$rows.bank_id}" {if $default_bank==$rows.bank_id}selected{/if}>{$rows.bank_name}</option>
+	                  {/foreach}
+	              </select><br/>
+    	 原因:<input type="text" name="backreason" id="backreason" value="" size="45"/>
+    	 <select name="backreason2" id="backreason2"><option value="">选择原因</option><option value="客户加油油费">客户加油油费</option><option value="客户续租金">客户续租金</option><option value="车辆修理费用">车辆修理费用</option><option value="其他">其他</option></select>
+    	<span id="showillegal" style="display:none;">违章款：<input type="text" name="backmoney_1" id="backmoney_1" value="" size="4"/>
+    	手续费：<input type="text" name="backmoney_2" id="backmoney_2" value="" size="4"/>
+    	扣分：<input type="text" name="backmoney_3" id="backmoney_3" value="" size="1"/>=<input type="text" name="backmoney_4" id="backmoney_4" value="" size="4"/>元</span>
+    	<input type="hidden" name="leftmoney" id="leftmoney" value="{$leftmoney}" />
+    </th>
+  </tr>
+ </table>
+</div>
+{/if}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!--结账-->
+{if $account_flag=="account1" || $account_flag=="account2"}
+<input type="hidden" name="paiche_shunt" id="paiche_shunt" value="{$list.paiche_shunt}" />
+<input type="hidden" name="paiche_brother" id="paiche_brother" value="{$list.paiche_brother}" />
+{if $list.paiche_shunt==1}
+<div class="form2">
+	<dl class="lineD">
+    	<dt>调车公司：</dt>
+    	<dd>{$list.paiche_shuntline.bro_name}</dd>
+  	</dl>
+  	<dl class="lineD">
+	    <dt>调车公司报价：</dt>
+	    <dd><input type="hidden" name="shunt_rent" id="shunt_rent" value="{$list.shunt_rent}" />{$list.shunt_rent}元</dd>
+	</dl>
+	<dl class="lineD">
+	    <dt>调车公司收现：</dt>
+	    <dd><input type="hidden" name="shunt_rented" id="shunt_rented" value="{$list.shunt_rented}" />{$list.shunt_rented}元</dd>
+	</dl>
+</div>
+{/if}
+{if $list.paiche_brother!=0}
+<div class="form2">
+	<dl class="lineD">
+    	<dt>调车公司：</dt>
+    	<dd>{$list.bro_name}</dd>
+  	</dl>
+	<dl class="lineD">
+	    <dt>本公司报价：</dt>
+	    <dd><input type="hidden" name="shunt_rent" id="shunt_rent" value="{$list.shunt_rent}" />{-1*$list.shunt_rent}元<input type="hidden" name="shunt_other" id="shunt_other" value="" /></dd>
+	</dl>
+	<dl class="lineD">
+	    <dt>本公司收现：</dt>
+	    <dd><input type="hidden" name="shunt_rented" id="shunt_rented" value="{$list.shunt_rented}" />{-1*$list.shunt_rented}元</dd>
+	</dl>
+</div>
+{/if}
+<div class="list">
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <th style="width:30px;">序号	</th>
+	<th>收费项目</th>
+	<th>约定金额</th>
+	<th>已收金额</th>
+	<th></th>
+  </tr>
+  {foreach from=$chargelist item=row name=foo}
+  <tr overstyle='on' id="badge_{$row.id}">
+    	<td><input type="hidden" name="charge_id[]" value="{$row.id}">{$smarty.foreach.foo.index+1} </td>
+	  	<td>{$row.charge_name}</td>
+		<td>{$row.conv_money}</td>
+		<td><input type="hidden" name="charge_havemoney[]" id="charge_havemoney_{$row.id}" value="{$row.have_in_money}" />{$row.have_in_money}</td>
+		<td>
+		{if ($list.paiche_shunt==1 || $list.paiche_brother!=0) && $row.charge_name =='租金'}
+		{if $list.paiche_shunt==1}
+		<input type="hidden" name="charge_money[]" id="charge_money_{$row.id}" value="{$row.conv_money-$row.have_in_money-$list.shunt_rented}" size="10"/>
+		{else}
+		<input type="hidden" name="charge_money[]" id="charge_money_{$row.id}" value="{-1*$list.shunt_rented-$row.have_in_money}" size="10"/>
+		{/if}
+		{else}
+		<input type="hidden" name="charge_money[]" id="charge_money_{$row.id}" value="{$row.conv_money-$row.have_in_money}" size="10"/>
+		{/if}</td>
+  </tr>
+  {/foreach}
+  {if $youhui_list}
+   <tr>
+    <th style="width:30px;">序号	</th>
+	<th>优惠项目</th>
+	<th>优惠金额</th>
+	<th>已优惠金额</th>
+	
+  </tr>
+  {$index=0}
+  {foreach from=$youhui_list item=row name=foo}
+  {$index=$index+1}
+  <tr overstyle='on' id="youhui_{$row.id}">
+    	<td><input type="hidden" name="youhui_id[]" value="{$row.id}">{$index} </td>
+	  	<td>{$row.youhui_name}</td>
+		<td>{$row.youhui_mone}</td>
+		<td>{$row.youhui_omone}</td>
+		<input type="hidden" name="youhui_omone[]" id="youhui_omone_{$row.id}" value="{$row.youhui_mone-$row.youhui_omone}" size="10"/>
+		
+		
+  </tr>
+  
+  {/foreach}
+  {/if}
+  {if $list.settle_overKmMoney!=0 && $list.settle_overKmMoney!=$list.settle_overKmMoney_have}
+ <tr overstyle='on' id="badge_88">
+    	<td>0</td>
+	  	<td>超公里费</td>
+		<td>{$list.settle_overKmMoney}</td>
+		<td><input type="hidden" name="overKmMoneyhave" value="{$list.settle_overKmMoney_have}"/>{$list.settle_overKmMoney_have}</td>
+		<td><input type="hidden" name="overKmMoney" id="overKmMoney" value="{$list.settle_overKmMoney-$list.settle_overKmMoney_have}" size="10"/></td>
+ </tr>
+ {/if}
+ {if $list.settle_overTimeMoney!=0 && $list.settle_overTimeMoney!=$list.settle_overTimeMoney_have}
+ <tr overstyle='on' id="badge_88">
+    	<td>0</td>
+	  	<td>超时费</td>
+		<td>{$list.settle_overTimeMoney}</td>
+		<td><input type="hidden" name="overTimeMoneyhave" value="{$list.settle_overTimeMoney_have}" />{$list.settle_overTimeMoney_have}</td>
+		<td><input type="hidden" name="overTimeMoney" id="overTimeMoney" value="{$list.settle_overTimeMoney-$list.settle_overTimeMoney_have}" size="10"/></td>
+ </tr>
+ {/if}
+ {if $list.settle_waitTimeMoney!=0 && $list.settle_waitTimeMoney!=$list.settle_waitTimeMoney_have}
+ <tr overstyle='on' id="badge_88">
+    	<td>0</td>
+	  	<td>等待费</td>
+		<td>{$list.settle_waitTimeMoney}</td>
+		<td><input type="hidden" name="waitTimeMoneyhave" value="{$list.settle_waitTimeMoney_have}" />{$list.settle_waitTimeMoney_have}</td>
+		<td><input type="hidden" name="waitTimeMoney" id="waitTimeMoney" value="{$list.settle_waitTimeMoney-$list.settle_waitTimeMoney_have}" size="10"/></td>
+ </tr>
+ {/if}
+ {foreach from=$itemlist item=row name=foo}
+  <tr overstyle='on' id="badge_{$row.id}">
+    	<td><input type="hidden" name="item_id[]" value="{$row.id}">{$smarty.foreach.foo.index+1} </td>
+	  	<td>{$row.item_costname}</td>
+		<td>{$row.conv_money}</td>
+		<td>{$row.have_in_money}</td>
+		<td><input type="hidden" name="item_money[]" id="item_money_{$row.id}" value="{$row.conv_money-$row.have_in_money}" size="10"/></td>
+ </tr>
+ {/foreach}
+ </table>
+
+ <table width="100%" border="0" cellspacing="0" cellpadding="0">
+ <tr>
+    <th style="text-align:left;">
+    	{if $account_flag=="account1" && $list.settle_favor>0}优惠金额：<input type="text" name="settle_favor" id="settle_favor" size="5" value="{$list.settle_favor}"  readonly/>&nbsp;{/if}
+    	合计金额:<input type="text" name="total" id="total" value="" size="5" readonly/>{if $list.paiche_brother!=0}<input type="checkbox" value="1" name="chkOther" id="chkOther">额外费用由调车公司支付{/if}<br />
+    	收款方式:<select name="payments" id="payments">
+	                  <option value="">请选择</option>
+	                  {foreach from=$paymentslist key=i item=rows}
+	                  <option value="{$rows.payment_id}" rel="{$rows.payment_fee}" {if $default_payments==$rows.payment_id}selected{/if}>{$rows.payment_name}</option>
+	                  {/foreach}
+	              </select>
+	         收款 账户:<select name="bank" id="bank">
+	                  <option value="">请选择</option>
+	                  {foreach from=$banklist key=i item=rows}
+	                  <option value="{$rows.bank_id}" {if $default_bank==$rows.bank_id}selected{/if}>{$rows.bank_name}</option>
+	                  {/foreach}
+	              </select><input type="hidden" name="infact" id="infact" value=""/>
+    	发票号码:<input type="text" name="settle_billNum" size="15"/>
+    	开票日期:<input type="text" name="settle_billDate" size="16" onClick="calendar.show(this);" readonly="readonly" />
+    </th>
+  </tr>
+ </table>
+</div>
+{/if}
+{if $account_flag=="backmoney"}
+<div class="list">
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <th style="width:30px;">序号	</th>
+	<th>退款项目</th>
+	<th>应退金额</th>
+	<th>已退金额</th>
+	<th>违章金额</th>
+	<th>本次退款</th>
+  </tr>
+  {foreach from=$chargelist item=row name=foo}
+  <tr overstyle='on' id="badge_{$row.id}">
+    	<td><input type="hidden" name="back_id[]" value="{$row.id}">{$smarty.foreach.foo.index+1} </td>
+	  	<td>{$row.charge_name}</td>
+		<td>{$row.have_in_money}</td>
+		<td><input type="hidden" name="back_havemoney[]" id="back_havemoney_{$row.id}" value="{$row.have_back_money}" />{$row.have_back_money}</td>
+		<td><input type="hidden" name="break_money[]" id="break_money_{$row.id}" value="{$breakmoney}" />{$breakmoney}</td>
+		<td><input type="text" name="back_money[]" id="back_money_{$row.id}" value="{$row.have_in_money-$row.have_back_money-$breakmoney}" size="10"/></td>
+  </tr>
+  {/foreach}
+ </table> 
+ <table width="100%" border="0" cellspacing="0" cellpadding="0">
+ <tr>
+    <th style="text-align:left;">
+    	合计金额:<input type="text" name="total" id="total" value="" size="5" readonly/>&nbsp;
+    	付款方式:<select name="payments" id="payments">
+	                  <option value="">请选择</option>
+	                  {foreach from=$paymentslist key=i item=rows}
+	                  <option value="{$rows.payment_id}" rel="{$rows.payment_fee}" {if $default_payments==$rows.payment_id}selected{/if}>{$rows.payment_name}</option>
+	                  {/foreach}
+	              </select>&nbsp;
+	              付款 账户:<select name="bank" id="bank">
+	                  <option value="">请选择</option>
+	                  {foreach from=$banklist key=i item=rows}
+	                  <option value="{$rows.bank_id}" {if $default_bank==$rows.bank_id}selected{/if}>{$rows.bank_name}</option>
+	                  {/foreach}
+	              </select><input type="hidden" name="infact" id="infact" value="" />
+    	
+    </th>
+  </tr>
+ </table>
+</div>
+{/if}
+{if $account_flag=="accvio"}
+<div class="list">
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+  {if $chargelist}
+  <tr>
+    <th style="width:30px;">序号	</th>
+	<th>收费项目</th>
+	<th>约定金额</th>
+	<th>已收金额</th>
+	<th>已退金额</th>
+	<th>退款金额</th>
+  </tr>
+  {foreach from=$chargelist item=row name=foo}
+  <tr overstyle='on' id="badge_{$row.id}">
+    	<td><input type="hidden" name="charge_id[]" value="{$row.id}">{$smarty.foreach.foo.index+1} </td>
+	  	<td>{$row.charge_name}</td>
+		<td>{$row.conv_money}</td>
+		<td><input type="hidden" name="charge_havemoney[]" id="charge_havemoney_{$row.id}" value="{$row.have_in_money}"/>{$row.have_in_money}</td>
+		<td><input type="hidden" name="charge_havebackmoney[]" id="charge_havebackmoney_{$row.id}" value="{$row.have_back_money}"/>{$row.have_back_money}</td>
+		<td><input type="hidden" name="back_money[]" id="back_money_{$row.id}" value="{$row.have_in_money-$row.have_back_money}"/>{$row.have_in_money-$row.have_back_money}</td>
+  </tr>
+  {/foreach}
+  {/if}
+ </table>
+ <table width="100%" border="0" cellspacing="0" cellpadding="0">
+ <tr>
+    <th style="text-align:left;">
+    	违约金：<input type="text" name="settle_vio" id="settle_vio" size="5" value="{$list.settle_vio}" readonly/>合计金额:<input type="text" name="total" id="total" value="" size="5" readonly/><br />
+    	收款方式一:<select name="payments" id="payments" onFocus="this.blur()">
+	                  <option value="">请选择</option>
+	                  {foreach from=$paymentslist key=i item=rows}
+	                  <option value="{$rows.payment_id}" rel="{$rows.payment_fee}" {if $default_payments==$rows.payment_id}selected{/if}>{$rows.payment_name}</option>
+	                  {/foreach}
+	              </select>
+	         收款 账户一:<select name="bank" id="bank" onFocus="this.blur()">
+	                  <option value="">请选择</option>
+	                  {foreach from=$banklist key=i item=rows}
+	                  <option value="{$rows.bank_id}" {if $default_bank==$rows.bank_id}selected{/if}>{$rows.bank_name}</option>
+	                  {/foreach}
+	              </select>收款金额一:<input type="text" name="money1" id="money1" value="{-1*$paiche_rented}" size="3" /><br />
+	         收款方式二:<select name="payments2" id="payments2" onFocus="this.blur()">
+	                  <option value="">请选择</option>
+	                  {foreach from=$paymentslist key=i item=rows}
+	                  <option value="{$rows.payment_id}" rel="{$rows.payment_fee}" {if $default_payments==$rows.payment_id}selected{/if}>{$rows.payment_name}</option>
+	                  {/foreach}
+	              </select>       
+	         收款账户二:<select name="bank2" id="bank2" onFocus="this.blur()">
+	                  <option value="">请选择</option>
+	                  {foreach from=$banklist key=i item=rows}
+	                  <option value="{$rows.bank_id}" {if $default_bank2==$rows.bank_id}selected{/if}>{$rows.bank_name}</option>
+	                  {/foreach}
+	              </select>收款金额二:<input type="text" name="money2" id="money2" value="{-1*$paiche_deposit_have}" size="3" /><br />    	
+    	实收/实付:<input type="text" name="infact" id="infact" value="" size="5" readonly/><input type="hidden" name="client_id" value="{$list.paicheCom}" />
+    </th>
+  </tr>
+ </table>
+</div>
+{/if}
+
+
+  <div class="Toolbar_inbox">
+    <a href="javascript:void(0);" class="btn_a" name="btn_save" id="btn_save" onclick="ok();"><span>确定</span></a>
+    <a href="javascript:void(0);" class="btn_a" onclick="closebox();"><span>关闭</span></a>   	
+  </div>
+</div>
+</form>
+<script type="text/javascript" src="../../../js/account.js?a=1.1"></script>
+<!-{literal}->
+<script>
+
+</script>
+<!-{/literal}->
+</body>
+</html>

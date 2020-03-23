@@ -1,0 +1,302 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>管理后台</title>
+<link href="../../../../css/style.css" rel="stylesheet" type="text/css">
+<link href="../../../../css/box.css" rel="stylesheet" type="text/css" />
+<link id="skin" rel="stylesheet" href="../../../../js/jbox/jBox/Skins/GreyBlue/jbox.css" />
+<script type="text/javascript" src="../../../../js/jquery.js"></script>
+<script type="text/javascript" src="../../../../js/common.js"></script>
+<script type="text/javascript" src="../../../../js/calendar.js"></script>
+<script type="text/javascript" src="../../../../js/check_form.js"></script>
+<script type="text/javascript" src="../../../../js/jbox/jBox/jquery.jBox-2.3.min.js"></script>
+<script type="text/javascript" src="../../../../js/jbox/jBox/i18n/jquery.jBox-zh-CN.js"></script>
+    
+    
+<style>
+/*{literal}*/
+	.navi_name{font-size:14px;font-weight:bold;}
+	.indent{padding-left:40px;}
+/*{/literal}*/
+</style>
+</head>
+<body>
+<div class="so_main">
+  <div class="page_tit">编辑{$PAGETITLE}</div>
+  
+  <form method="post" action="insert.php" enctype="multipart/form-data" onsubmit="return base_check(this)" name="form1">
+  <div class="form2">
+	{if $tasktype == 'client'}
+	  <dl class="lineD">
+    	<dt><span class="redstar">*</span>公司名称：</dt>
+    	<dd><input type="text" name="client_name" id="client_name" size="30" value="{$list.client_name}" /></dd>
+	  </dl>
+	  {if $task=='insert'}
+	  <dl class="lineD">
+    	<dt><span class="redstar">*</span>业绩归属业务员：</dt>
+    	<dd><select id="client_salesman" name="client_salesman" >
+		<option value="0">请选择</option>
+		{foreach from=$ywy_list item=row3 name=foo}
+    	<option value="{$row3.emp_id}">{$row3.emp_name}</option>
+    	{/foreach}
+		</select></dd>
+	  </dl>
+	  <dl class="lineD">
+    	<dt><span class="redstar">*</span>服务归属门店：</dt>
+    	<dd><select name="client_shopid" id="client_shopid" >
+		<option value="0">请选择</option>
+		{foreach from=$shop_list item=row3 name=foo}
+    	<option value="{$row3.shop_id}">{$row3.shop_name}</option>
+    	{/foreach}
+		</select></dd>
+	  </dl>
+	  {/if}
+	  <dl class="lineD">
+	    <dt><span class="redstar">*</span>主联系人：</dt>
+	    <dd><input type="text" name="client_Mlinker" id="client_Mlinker" size="16" value="{$list.client_Mlinker}" /></dd>
+	  </dl>
+	  <dl class="lineD">
+	    <dt><span class="redstar">*</span>主联系人手机：</dt>
+	    <dd><input type="text" name="client_Mphone" id="client_Mphone" size="16"  value="{$list.client_Mphone}" /></dd>
+	  </dl>
+	  <dl class="lineD">
+	    <dt>主联系人职位：</dt>
+	    <dd><input type="text" name="client_Mpost" id="client_Mpost" size="16"  value="{$list.client_Mpost}"/></dd>
+	  </dl>
+	  <dl class="lineD">
+	    <dt>主联系人备注：</dt>
+	    <dd><textarea name="client_Mremark" id="client_Mremark" cols="40" rows="5">{$list.client_Mremark}</textarea></dd>
+	  </dl>
+	  <dl class="lineD">
+	  <dt>所属分类</dt>
+	  <dd>
+	  	
+	
+	
+        {foreach from=$type_list key=i item=rows}
+          	<label><input name="client_typeid[]" type="checkbox"  
+          		 value="{$rows.id}" {$rows.checked} />{$rows.name} </label> 
+        {/foreach}
+	  </dd>
+	  </dl>
+	  <dl class="lineD">
+	    <dt>营业执照：</dt>
+	    <dd><input type="text" name="client_license" id="client_license" size="26" value="{$list.client_license}" /></dd>
+	  </dl>
+	  <dl class="lineD">
+	    <dt>税号：</dt>
+	    <dd><input type="text" name="client_tariff" id="client_tariff" size="26" value="{$list.client_tariff}" /></dd>
+	  </dl>
+	  <dl class="lineD">
+	    <dt>开户银行：</dt>
+	    <dd><input type="text" name="client_bank" id="client_bank" size="26" value="{$list.client_bank}" /></dd>
+	  </dl>
+	  <dl class="lineD">
+	    <dt>账号：</dt>
+	    <dd><input type="text" name="client_account" id="client_account" size="26" value="{$list.client_account}"/></dd>
+	  </dl>
+	  <dl class="lineD">
+	    <dt>电话：</dt>
+	    <dd><input type="text" name="client_tel" id="client_tel" size="16" value="{$list.client_tel}"  /></dd>
+	  </dl>
+	  <dl class="lineD">
+	    <dt>传真：</dt>
+	    <dd><input type="text" name="client_fax" id="client_fax" size="16" value="{$list.client_fax}" /></dd>
+	  </dl>
+	  <dl class="lineD">
+	    <dt>邮箱：</dt>
+	    <dd><input type="text" name="client_mail" id="client_mail" size="16" value="{$list.client_mail}" /></dd>
+	  </dl>
+	  <dl class="lineD">
+	    <dt>地址：</dt>
+	    <dd><input type="text" name="client_add" id="client_add" size="50" value="{$list.client_add}" /></dd>
+	  </dl>
+      <input type="hidden" name="uid" value="{$list.client_id}" />
+    {elseif $tasktype == 'brother'}
+      <dl class="lineD">
+	    <dt><span class="redstar">*</span>公司名称：</dt>
+	    <dd><input type="text" name="bro_name" id="bro_name" size="30" value="{$list.bro_name}" /></dd>
+	  </dl>
+	  <dl class="lineD">
+	    <dt><span class="redstar">*</span>联系人：</dt>
+	    <dd><input type="text" name="bro_linker" id="bro_linker" size="16" value="{$list.bro_linker}" /></dd>
+	  </dl>
+	  <dl class="lineD">
+	    <dt><span class="redstar">*</span>联系人手机：</dt>
+	    <dd><input type="text" name="bro_phone" id="bro_phone" size="16"  value="{$list.bro_phone}"/></dd>
+	  </dl>
+	  <dl class="lineD">
+	    <dt>联系人职位：</dt>
+	    <dd><input type="text" name="bro_post" id="bro_post" size="16"  value="{$list.bro_post}"/></dd>
+	  </dl>
+	  <dl class="lineD">
+	    <dt>联系人身份证：</dt>
+	    <dd><input type="text" name="bro_linkerNum" id="bro_linkerNum" size="16"  value="{$list.bro_linkerNum}"/></dd>
+	  </dl>
+	  <dl class="lineD">
+	    <dt>联系人备注：</dt>
+	    <dd><textarea name="bro_remark" id="bro_remark" cols="40" rows="5">{$list.bro_remark}</textarea></dd>
+	  </dl>
+	  <dl class="lineD">
+	    <dt>营业执照：</dt>
+	    <dd><input type="text" name="bro_license" id="bro_license" size="16" value="{$list.bro_license}" /></dd>
+	  </dl>
+	  <dl class="lineD">
+	    <dt>组织机构代码证：</dt>
+	    <dd><input type="text" name="bro_orgCode" id="bro_orgCode" size="16" value="{$list.bro_orgCode}" /></dd>
+	  </dl>
+	  <dl class="lineD">
+	    <dt>税号：</dt>
+	    <dd><input type="text" name="bro_tariff" id="bro_tariff" size="16" value="{$list.bro_tariff}" /></dd>
+	  </dl>
+	  <dl class="lineD">
+	    <dt>开户银行：</dt>
+	    <dd><input type="text" name="bro_bank" id="bro_bank" size="16" value="{$list.bro_bank}" /></dd>
+	  </dl>
+	  <dl class="lineD">
+	    <dt>账号：</dt>
+	    <dd><input type="text" name="bro_account" id="bro_account" size="16" value="{$list.bro_account}"/></dd>
+	  </dl>
+	  <dl class="lineD">
+	    <dt>电话：</dt>
+	    <dd><input type="text" name="bro_tel" id="bro_tel" size="16" value="{$list.bro_tel}" /></dd>
+	  </dl>
+	  <dl class="lineD">
+	    <dt>传真：</dt>
+	    <dd><input type="text" name="bro_fax" id="bro_fax" size="16" value="{$list.bro_fax}" /></dd>
+	  </dl>
+	  <dl class="lineD">
+	    <dt>邮箱：</dt>
+	    <dd><input type="text" name="bro_mail" id="bro_mail" size="16" value="{$list.bro_mail}" /></dd>
+	  </dl>
+	  <dl class="lineD">
+	    <dt>地址：</dt>
+	    <dd><input type="text" name="bro_add" id="bro_add" size="30" value="{$list.bro_add}" /></dd>
+	  </dl>
+	  <input type="hidden" name="uid" value="{$list.bro_id}" />
+	{elseif $tasktype == 'charge'}
+	  <dl class="lineD">
+	    <dt><span class="redstar">*</span>项目名称：</dt>
+	    <dd><input type="text" name="charge_name" id="charge_name" size="26" value="{$list.charge_name}" /></dd>
+	  </dl>
+	  <dl class="lineD">
+	    <dt>默认值：</dt>
+	    <dd><input type="text" name="charge_default" id="charge_default" size="16" value="{$list.charge_default}" /></dd>
+	  </dl>
+	  <dl class="lineD">
+          <dt>适用的业务品种：</dt>
+          <dd>
+              {foreach from=$itemlist key=i item=rows}
+              <input type="checkbox" name="target_id[]" value="{$rows.item_paicheType}" id="target_id" class="subnavi" {if $rows.checked == 1}checked{/if} />{$rows.item_name}
+              {/foreach}
+          </dd>
+      </dl>
+      <dl class="lineD">
+          <dt>驾驶员是否提成：</dt>
+          <dd>
+              <input type="radio" name="charge_provision" value="1" id="charge_provision" {if $list.charge_provision == 1}checked{/if} />是
+              <input type="radio" name="charge_provision" value="0" id="charge_provision" {if $list.charge_provision == 0}checked{/if} />否
+          </dd>
+      </dl>
+	  <dl class="lineD">
+	    <dt>驾驶员提成率：</dt>
+	    <dd><input type="text" name="charge_provision_fee" id="charge_provision_fee" size="12" value="{$list.charge_provision_fee}"/></dd>
+	  </dl>
+	  <input type="hidden" name="uid" value="{$list.charge_id}" />
+	
+    {elseif $tasktype == 'payment'}
+      <dl class="lineD">
+	    <dt><span class="redstar">*</span>名称：</dt>
+	    <dd><input type="text" name="payment_name" id="payment_name" size="26" value="{$list.payment_name}" /></dd>
+	  </dl>
+	  <dl class="lineD">
+	    <dt>费率：</dt>
+	    <dd><input type="text" name="payment_fee" id="payment_fee" size="12" value="{$list.payment_fee}"/></dd>
+	  </dl>
+	  <input type="hidden" name="uid" value="{$list.payment_id}" />
+    {elseif $tasktype == 'bank'}
+      <dl class="lineD">
+	    <dt><span class="redstar">*</span>开户银行：</dt>
+	    <dd><input type="text" name="bank_name" id="bank_name" size="26" value="{$list.bank_name}" /></dd>
+	  </dl>
+	  <dl class="lineD">
+	    <dt><span class="redstar">*</span>账号：</dt>
+	    <dd><input type="text" name="bank_no" id="bank_no" size="26" value="{$list.bank_no}"/></dd>
+	  </dl>
+	  <input type="hidden" name="uid" value="{$list.bank_id}" />
+	{elseif $tasktype == 'item'}
+	  <dl class="lineD">
+	    <dt><span class="redstar">*</span>条款名称：</dt>
+	    <dd><input type="text" name="item_name" id="item_name" size="26" value="{$list.item_name}" /></dd>
+	  </dl>
+	  <dl class="lineD">
+	    <dt>对应的费用名称：</dt>
+	    <dd><input type="text" name="item_costname" id="item_costname" size="26" value="{$list.item_costname}" /></dd>
+	  </dl>
+	  <dl class="lineD">
+          <dt>适用的业务品种：</dt>
+          <dd>
+              {foreach from=$itemlist key=i item=rows}
+              <input type="checkbox" name="target_id[]" value="{$rows.item_paicheType}" id="target_id" class="subnavi" {if $rows.checked == 1}checked{/if} />{$rows.item_name}
+              {/foreach}
+          </dd>
+      </dl>
+      <dl class="lineD">
+          <dt>展示类型：</dt>
+          <dd>
+              <input type="radio" name="item_type" value="text" id="item_type" {if $list.item_type == 'text'}checked{/if} />文本
+              <input type="radio" name="item_type" value="radio" id="item_type" {if $list.item_type == 'radio'}checked{/if} />单选
+          </dd>
+      </dl>
+      <dl class="lineD">
+          <dt>选择项(仅对单选有效)：</dt>
+          <dd>
+              <input type="text" name="item_options" id="item_options" size="46" value="{$list.item_options}" />(多个选择项之间用,隔开)
+          </dd>
+      </dl>
+      <dl class="lineD">
+          <dt>是否参与计算：</dt>
+          <dd>
+              <input type="radio" name="item_calcu" value="0" id="item_calcu" {if $list.item_calcu == 0}checked{/if} />否
+              <input type="radio" name="item_calcu" value="1" id="item_calcu" {if $list.item_calcu == 1}checked{/if} />是
+          </dd>
+      </dl>
+      <dl class="lineD">
+          <dt>计算方式(仅对参与计算的有效)：</dt>
+          <dd>
+              <input type="radio" name="item_caltype" value="0" id="item_caltype" {if $list.item_caltype == 0}checked{/if} />固定值
+              <input type="radio" name="item_caltype" value="1" id="item_caltype" {if $list.item_caltype == 1}checked{/if} />按计量单位
+          </dd>
+      </dl>
+      <dl class="lineD">
+          <dt>计量单位：</dt>
+          <dd>
+              <input type="text" name="item_unit" id="item_unit" size="16" value="{$list.item_unit}" />
+          </dd>
+      </dl>
+      <dl class="lineD">
+          <dt>排序：</dt>
+          <dd>
+              <input type="text" name="item_order" id="item_order" size="16" value="{$list.item_order}" />
+          </dd>
+      </dl>
+	  <input type="hidden" name="uid" value="{$list.item_id}" />
+	{/if}
+	
+    <div class="page_btm">
+      <input type="submit" class="btn_b" value="确定" /><b> 注：<span class="red">*</span>为必填项</b>
+    </div>
+  </div>
+  <input type="hidden" name="task" value="{$task}" />
+  <input type="hidden" name="tasktype" value="{$tasktype}" /></form>
+</div>
+<script type="text/javascript">
+	function addlinker()//添加企业信息时使用的添加联系人
+	{
+		demo_iframe('add.php','增加联系人',650,380,'login_js');
+	}
+</script>
+</body>
+</html>

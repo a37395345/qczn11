@@ -1,0 +1,172 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>出车单打印</title>
+<link href="../../../css/pact.css" rel="stylesheet" type="text/css" />
+<script language="javascript">
+
+function printme()
+
+{   document.body.innerHTML=document.getElementById('iepage1').innerHTML+'<br/>'+document.getElementById('iepage2').innerHTML+'<br/>'+document.getElementById('iepage3').innerHTML+'<br/>'+document.getElementById('iepage4').innerHTML;
+
+    window.print();
+
+}
+
+</script>
+</head>
+
+<body>
+<div align="right" id="btnPrint"><input id="btnPrint" type="button" value="打印预览" onclick="printme()" /></div>
+<div class="iepage1" id="iepage1">
+<table width="950" border="1" cellpadding="0" cellspacing="0" align="center" class="table" style="text-align:center;border:#c4c4c4 solid 1px;">
+  <tr>
+    <td colspan="4"><div style=" position:absolute; margin:20px 0 0 740px;"><iframe src="BCGcode39.php?text={$list.paiche_contractNum}" width="184" height="50" frameborder="0" scrolling="no"></iframe></div><h1>常州市运河汽车租赁出车单</h1></td>
+  </tr>
+  <tr>
+    <td align="right" bgcolor="#F5F5F5"><b>用车单位：</b></td>
+    <td align="left" colspan="3">{$list.client_name}</td>
+  </tr>
+  <tr>
+    <td width="22%" align="right" bgcolor="#F5F5F5"><b>联系人：</b></td>
+    <td width="28%" align="left">{$list.paiche_linker}</td>
+    <td width="22%" align="right" bgcolor="#F5F5F5"><b>联系人手机：</b></td>
+    <td width="28%" align="left">{$list.paiche_linkerPhone}</td>
+  </tr>
+  <tr>
+    <td align="right" bgcolor="#F5F5F5"><b>业务员：</b></td>
+    <td align="left">{$list.yewuyuan}</td>
+    <td align="right" bgcolor="#F5F5F5"><b>业务员电话：</b></td>
+    <td align="left">{$list.emp_phone}</td>
+  </tr>
+  <tr>
+    <td align="right" bgcolor="#F5F5F5"><b>调度员：</b></td>
+    <td align="left">{$list.paicheDispatchMan}</td>
+    <td align="right" bgcolor="#F5F5F5"><b>调度员电话：</b></td>
+    <td align="left">{$list.paicheDispatchManPhone}</td>
+  </tr>
+  <tr>
+    <td align="right" bgcolor="#F5F5F5"><b>司机：</b></td>
+    <td align="left">{$list.siji}</td>
+    <td align="right" bgcolor="#F5F5F5"><b>车辆：</b></td>
+    <td align="left">苏D{$list.car_num}</td>
+  </tr>
+  <tr>
+    <td align="right" bgcolor="#F5F5F5"><b>用车起始日期：</b></td>
+    <td align="left">{$list.paiche_startDate_All}</td>
+    <td align="right" bgcolor="#F5F5F5"><b>用车到期日期：</b></td>
+    <td align="left">{$list.paiche_endDate_All}</td>
+  </tr>  
+  <tr>
+  	{foreach from=$itemlist item=row name=foo}
+    <td align="right" bgcolor="#F5F5F5"><b>{$row.item_name}：</b></td>
+    <td align="left">{$row.conv_result}</td>
+    {if ($smarty.foreach.foo.index+1) mod 2==0}
+    </tr><tr>
+    {/if}
+    {/foreach}
+  </tr>
+  
+  <tr>
+    <td align="right" bgcolor="#F5F5F5"><b>每天工作时间：</b></td>
+    <td align="left">{$list.paiche_workTime}小时</td>
+    <td align="right" bgcolor="#F5F5F5"><b>超时费：</b></td>
+    <td align="left">{if $list.paiche_unlimitTime!="Y"}{$list.paiche_overTime}元/小时{else}<p class='red'>不限时</p>{/if}</td>
+  </tr>
+  <tr>
+    <td align="right" bgcolor="#F5F5F5"><b>用车限制公里数：</b></td>
+    <td align="left">{if $list.paiche_unlimitKm!="Y"}{$list.paiche_limitKm}公里 {else}<p class='red'>不限公里</p>{/if}</td>
+    <td align="right" bgcolor="#F5F5F5"><b>超公里，每公里费用：</b></td>
+    <td align="left">{if $list.paiche_unlimitKm!="Y"}{$list.paiche_overKm}元/公里{/if}</td>
+  </tr>
+  <tr>
+    <td align="right" bgcolor="#F5F5F5"><b>合同租金：</b></td>
+    <td align="left">{$paiche_rent}元</td>
+    <td align="right" bgcolor="#F5F5F5"><b>已交定金：</b></td>
+    <td align="left">{$paiche_front}元</td>
+  </tr>
+  <tr>
+    <td align="right" bgcolor="#F5F5F5"><b>还需收尾款：</b></td>
+    <td align="left" colspan="3">租金{$paiche_rent-$paiche_rented-$paiche_front}元
+    			{if $list.paiche_unlimitKm!="Y"}、超公里费{/if}{if $list.paiche_unlimitTime!="Y"}、超时费{/if}
+    			{foreach from=$itemlist item=row}
+    			{if $row.conv_result=="否"}、{$row.item_costname}{/if}
+    			{/foreach}
+    			</td>
+  </tr>
+  <tr>
+    <td align="right" bgcolor="#F5F5F5"><b>线路说明：</b></td>
+    <td align="left" colspan="3">{$list.paiche_line}</td>
+  </tr>
+  <tr>
+    <td align="right" bgcolor="#F5F5F5"><b>特殊备注：</b></td>
+    <td align="left" colspan="3">{$list.paiche_specialRemarks}</td>
+  </tr>
+  <tr>
+    <td align="right" bgcolor="#F5F5F5"><b>实际向客户收取车费：</b></td>
+    <td align="left" colspan="3"></td>
+  </tr>
+  <tr>
+    <td height="80px" align="right" bgcolor="#F5F5F5"><b>客户意见：</b></td>
+    <td align="left" colspan="3">&nbsp;</td>
+  </tr>
+  <tr>
+    <td align="right" bgcolor="#F5F5F5"><b>客户确认签字：</b></td>
+    <td align="left" colspan="3">&nbsp;</td>
+  </tr>
+</table>
+<div style="border-bottom:dotted #000 1px; margin:10px 0; font-size:12px;"></div>
+<table width="950" border="1" cellpadding="0" cellspacing="0" align="center" class="table" style="text-align:center;border:#c4c4c4 solid 1px;">
+  <tr>
+  <td width="22%" align="right" bgcolor="#F5F5F5">*<b>过桥过路及费：</b></td>
+  <td width="28%">&nbsp;</td>
+  <td width="22%" align="right" bgcolor="#F5F5F5"><b>#过桥过路费审核人：</b></td>
+  <td width="28%">&nbsp;</td>
+</tr>
+  <tr>
+    <td width="22%" align="right" bgcolor="#F5F5F5">*<b>油卡加油：</b></td>
+    <td width="28%">&nbsp;</td>
+    <td width="22%" align="right" bgcolor="#F5F5F5">*<b>油卡加油日期时间：</b></td>
+    <td width="28%">&nbsp;</td>
+  </tr>
+  <tr>
+    <td align="right" bgcolor="#F5F5F5">*<b>现金加油：</b></td>
+    <td>&nbsp;</td>
+    <td align="right" bgcolor="#F5F5F5"><b>#现金加油审核人：</b></td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <td align="right" bgcolor="#F5F5F5">*<b>住宿费：</b></td>
+    <td>&nbsp;</td>
+    <td align="right" bgcolor="#F5F5F5"><b>#住宿费审核人：</b></td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <td align="right" bgcolor="#F5F5F5">*<b>开始公里数：</b></td>
+    <td>&nbsp;</td>
+    <td align="right" bgcolor="#F5F5F5">*<b>结束公里数：</b></td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <td align="right" bgcolor="#F5F5F5">*<b>共行驶公里数：</b></td>
+    <td colspan="3">&nbsp;</td>
+  </tr>
+  <tr>
+    <td align="right" bgcolor="#F5F5F5"><b>备注：</b></td>
+    <td height="50" colspan="3">&nbsp;</td>
+  </tr>
+  <tr>
+    <td align="right" bgcolor="#F5F5F5"><b>司机签字：</b></td>
+    <td>&nbsp;</td>
+    <td align="right" bgcolor="#F5F5F5"><b>财务签字：</b></td>
+    <td>&nbsp;</td>
+  </tr>
+</table>
+<!--<div style=" width:100%; height:30px; bottom:0px; margin-bottom:0px; text-align:right; z-index:999; display:block; position:fixed;">注：“*”为司机填写，“#”为调度员填写</div>-->
+<table style="bottom:0px; margin-bottom:0px; width:100%;">
+<tr>
+<td valign="bottom" style="text-align:right; height:100px;">注："*"为司机填写，"#"为调度员填写</td>
+</tr>
+</table></div>
+</body>

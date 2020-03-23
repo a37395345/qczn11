@@ -1,0 +1,74 @@
+<?php
+// Check to ensure this file is within the rest of the framework
+
+/**
+ * Bzip2 format adapter for the Archive class
+ *
+ * @package 	Imag.Framework
+ * @subpackage	FileSystem
+ * @modify by   gary wang (wangbaogang123@hotmail.com)
+ * 
+ */
+class ArchiveBzip2 extends Object
+{
+	/**
+	 * Bzip2 file data buffer
+	 * @var string
+	 */
+	private $_data = null;
+
+	/**
+	 * Constructor tries to load the bz2 extension of not loaded
+	 *
+	 * @access	protected
+	 * @return	void
+	 */
+	public function __construct()
+	{
+		// Is bz2 extension loaded?  If not try to load it
+		if (!extension_loaded('bz2')) {
+			if (PATH_ISWIN) {
+				@ dl('php_bz2.dll');
+			} else {
+				@ dl('bz2.so');
+			}
+		}
+	}
+
+	/**
+	* Extract a Bzip2 compressed file to a given path
+	*
+	* @access	public
+	* @param	string	$archive		Path to Bzip2 archive to extract
+	* @param	string	$destination	Path to extract archive to
+	* @param	array	$options		Extraction options [unused]
+	* @return	boolean	True if successful
+	*/
+	public function extract($archive, $destination, $options = array ())
+	{
+		// Initialize variables
+		$this->_data = null;
+
+		if (!extension_loaded('bz2')) {
+			$this->set('error.message', 'BZip2 Not Supported');
+			return new Exception($this->get('error.message'));
+		}
+
+		if (!$this->_data = FuseFile::read($archive)) {
+			$this->set('error.message', 'Unable to read archive');
+			return new Exception($this->get('error.message'));
+		}
+
+		$buffer = bzdecompress($this->_data);
+		if (empty ($buffer)) {
+			$this->set('error.message', 'Unable to decompress data');
+			return new Exception($this->get('error.message'));
+		}
+
+		if (FuseFile::write($destination, $buffer) === false) {
+			$this->set('error.message', 'Unable to write archive');
+			return new Exception($this->get('error.message'));
+		}
+		return true;
+	}
+}

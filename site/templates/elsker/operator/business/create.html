@@ -1,0 +1,468 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=9;IE=8;IE=7;IE=EDGE">
+<title>管理后台</title>
+<link href="../../../css/style.css" rel="stylesheet" type="text/css">
+<link href="../../../css/box.css" rel="stylesheet" type="text/css" />
+<link href="../../../js/jbox/jBox/Skins/GreyBlue/jbox.css" rel="stylesheet"  />
+<link href="../../../css/jquery.editable-select.min.css" rel="stylesheet" type="text/css" />
+
+<script type="text/javascript" src="../../../js/jquery.js"></script>
+<script type="text/javascript" src="../../../js/common.js"></script>
+<script type="text/javascript" src="../../../js/calendar.js"></script>
+<script type="text/javascript" src="../../../js/check_form.js"></script>
+<script type="text/javascript" src="../../../js/jbox/jBox/jquery.jBox-2.3.min.js"></script>
+<script type="text/javascript" src="../../../js/jbox/jBox/i18n/jquery.jBox-zh-CN.js"></script>
+<script type="text/javascript" src="../../../js/jquery.editable-select.min.js"></script>
+    
+<style>
+/*{literal}*/
+	.navi_name{font-size:14px;font-weight:bold;}
+	.indent{padding-left:40px;}
+/*{/literal}*/
+</style>
+<!-{literal}->
+<script type="text/javascript">
+var i=2;
+setInterval("window_onload()",300);
+
+function beginread_onclick(){
+	i=0;
+	rdcard.ReadCard2();
+	if (rdcard.bHaveCard){
+		document.getElementsByName("paiche_linker")[0].value=rdcard.NameS;
+		document.getElementsByName("paiche_linkerNum")[0].value=rdcard.CardNo;
+		document.getElementsByName("paiche_linkerAdd")[0].value=rdcard.Address;
+		getPitcure(rdcard.CardNo,rdcard.JPGBuffer,1);
+		rdcard.bHaveCard=false;
+	}
+}
+function beginread_onclick2(){
+	i=1;
+	rdcard.ReadCard2();
+	if (rdcard.bHaveCard){
+		document.getElementsByName("paiche_promier")[0].value=rdcard.NameS;
+		document.getElementsByName("paiche_promierNum")[0].value=rdcard.CardNo;
+		document.getElementsByName("paiche_promierAdd")[0].value=rdcard.Address;
+		getPitcure(rdcard.CardNo,rdcard.JPGBuffer,2);
+		rdcard.bHaveCard=false;
+	}
+}
+
+function endread_onclick(){
+	rdcard.endread();
+}
+function window_onload(){
+	if(i<2){
+	    if (i==0){
+			document.getElementsByName("paiche_linker")[0].value=rdcard.NameS;
+			document.getElementsByName("paiche_linkerNum")[0].value=rdcard.CardNo;
+			document.getElementsByName("paiche_linkerAdd")[0].value=rdcard.Address;
+			getPitcure(rdcard.CardNo,rdcard.JPGBuffer,1);
+	    }
+	    if (i==1){
+			document.getElementsByName("paiche_promier")[0].value=rdcard.NameS;
+			document.getElementsByName("paiche_promierNum")[0].value=rdcard.CardNo;
+			document.getElementsByName("paiche_promierAdd")[0].value=rdcard.Address;
+			getPitcure(rdcard.CardNo,rdcard.JPGBuffer,2);
+	    }
+	}
+}
+
+function window_onUnload(){
+	  rdcard.DeleteOutputFile();
+	  rdcard.DeleteAllPicture();
+}
+
+function getPitcure(strCardNo,strBase64Code,nFlag){
+	if (strCardNo!=""){
+		$.ajax({
+			  type:'POST',
+			  url:'list.php?task=generatepicutre',
+			  data:{"IDcard":strCardNo,"Base64Code":strBase64Code},
+			  dataType:"json",
+			  cache: false,
+			  async:false,
+			  error: function(){
+			      sre="err1";
+			  },
+			  success:function(jsonmsg){
+				if (jsonmsg.status==0){
+					if (nFlag==1){
+						document.getElementsByName('img_linker_picture')[0].setAttribute('src','../../../thumb/upload/idpicture/'+strCardNo+'.jpg');
+						document.getElementsByName("paiche_linkerPicture")[0].value=strCardNo+'.jpg';
+						if (jsonmsg.havecount>0){
+							stitle="此客户此前曾经有"+jsonmsg.havecount+"次用车，<a href='searchlist.php?firstop=firstop&paiche_linkerNum="+strCardNo+"' target='_blank'>用车详情</a>";
+						}else{
+							stitle="此客户首次租车！";
+						}
+						$("#havecount").html(stitle);
+						$("#havecount").show();
+					}
+					if (nFlag==2){
+						document.getElementsByName('img_promier_picture')[0].setAttribute('src','../../../thumb/upload/idpicture/'+strCardNo+'.jpg');
+						document.getElementsByName("paiche_promierPicture")[0].value=strCardNo+'.jpg';
+					}
+				}else{
+				    //alert('error');
+				}
+			  }
+		});
+	}
+}
+</script>
+<!-{/literal}->
+<OBJECT
+	  classid="clsid:F1317711-6BDE-4658-ABAA-39E31D3704D3"                  
+	  codebase="SDRdCard.cab#version=1,3,5,0"
+	  width=330
+	  height=0
+	  align=center
+	  hspace=0
+	  vspace=0
+	  id=idcard
+	  name=rdcard		 
+>
+</OBJECT>
+</head>
+<body>
+<div class="so_main">
+  <div class="page_tit">编辑-{$PAGETITLE}<span class="pc_inner">{$list.shop_name}</span></div>
+  <form method="post" action="insert.php" onsubmit="return business_check(this)" name="form1">
+  <div class="form2">
+	<dl class="lineD">
+	    <dt>用车类型：</dt>
+	    <dd><input type="hidden" name="paiche_contractNum" value="{$list.paiche_contractNum}" />
+	    {if $busitype == '1' || $busitype == '2'}
+	    <input type="radio" name="paiche_busitype" value="1" {if $list.paiche_busitype == "1"}checked{/if} />前台散客&nbsp;&nbsp;
+	    {/if}<input type="radio" name="paiche_busitype" value="2" {if $list.paiche_busitype == "2"}checked{/if} />长期合作企业客户
+	    {if $busitype == '2'}
+	    &nbsp;&nbsp; <input type="radio" name="paiche_busitype" value="3" {if $list.paiche_busitype == "3"}checked{/if} />调车公司
+	    {/if}
+	    </dd>
+	</dl>
+	<dl class="lineD" id="busishow_2" style="display:none">
+      <dt><span class="redstar">*</span>长期合作企业客户：</dt>
+      <dd>
+        <select name="paiche_name2" id="paiche_name2">
+	                  <option value="0">请选择</option>
+	                  {foreach from=$clientlist key=i item=rows}
+	                  <option value="{$rows.client_id}" {if $list.paicheCom==$rows.client_id}selected{/if} at="{$rows.client_Mlinker}#{$rows.client_Mphone}#{$rows.emp_shopid}#{$rows.emp_name}#{$rows.client_salesman}#{$rows.client_shopid}">{$rows.client_name}</option>
+	                  {/foreach}
+	    </select><input type="text" id="search_key" size="4" placeholder="快速检索" />
+	  </dd>
+    </dl>
+    <dl class="lineD" id="busishow_3" style="display:none">
+      <dt><span class="redstar">*</span>调车公司：</dt>
+      <dd><select name="paiche_brother" id="paiche_brother" >
+	                  <option value="0">请选择</option>
+	                  {foreach from=$brotherlist key=i item=rows}
+	                  <option value="{$rows.bro_id}" {if $list.paiche_brother==$rows.bro_id}selected{/if} at="{$rows.bro_linker}#{$rows.bro_phone}">{$rows.bro_name}</option>
+	                  {/foreach}
+	              </select>
+	              
+	  </dd>
+    </dl>
+	<dl class="lineD">
+      <dt><span class="redstar">*</span>业务归属：</dt>
+      <dd>归属门店：<select name="paicheCounterShop" id="paicheCounterShop">
+		  <option value="0">请选择</option>
+		  {foreach from=$shoplist key=i item=rows}
+		 	<option value="{$rows.shop_id}" {if $rows.shop_id==$list.paicheCounterShop}selected{/if} at="{$rows.shop_name}">{$rows.shop_name}</option>
+		  {/foreach}
+		  </select>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;业务员：<input type="text" name="paicheCounterMan" id="paicheCounterMan" size="16" onFocus="this.blur()" value="{$list.yewuyuan}" />
+	    <input type="hidden" name="paicheCounterMan2" id="paicheCounterMan2" size="16" value="{$list.paicheCounterMan}" />
+	    <a href="javascript:select_ywy();" id="selywy"><img src="../../../css/driver.gif" width="16" height="15" class="peoplePic" /></a>
+	  </dd>
+    </dl>
+    <dl class="lineD">
+	    <dt>服务门店及接待员：</dt>
+	    <dd>服务门店：<select name="shop_id" id="shop_id" {if $task=='insert'}disabled="disabled"{/if}>
+		  <option value="0">请选择</option>
+		  {foreach from=$shoplist key=i item=rows}
+		 	<option value="{$rows.shop_id}" {if $rows.shop_id==$list.paiche_shopid}selected{/if} at="{$rows.shop_name}">{$rows.shop_name}</option>
+		  {/foreach}
+		  </select>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;接待员：<input type="text" name="paicheServerMan" id="paicheServerMan" size="16" onFocus="this.blur()" value="{$list.jiedaiyuan}" />
+	    <input type="hidden" name="paicheServerMan2" id="paicheServerMan2" size="16" value="{$list.paicheServerMan}" />
+	    <a href="javascript:select_emp();" id="seljdy"><img src="../../../css/driver.gif" width="16" height="15" class="peoplePic" /></a>
+	    
+	    </dd>
+	</dl>
+    <dl class="lineD">
+      <dt><span class="redstar">*</span>联系人：</dt>
+      <dd>
+        <div style="position: absolute;margin-left: 375px;" ><img id="img_linker_picture" name="img_linker_picture" {if $list.paiche_linkerPicture}src="../../../thumb/upload/idpicture/{$list.paiche_linkerPicture}"{else}src=""{/if}></div>
+        <input type="text" name="paiche_linker" id="paiche_linker" size="16" value="{$list.paiche_linker}" />
+        <input type="hidden" name="paiche_linkerPicture" id="paiche_linkerPicture" value="{$list.paiche_linkerPicture}" />
+	  </dd>
+    </dl>
+    <dl class="lineD">
+      <dt><span class="redstar">*</span>联系人手机：</dt>
+      <dd>
+        <input type="text" name="paiche_linkerPhone" id="paiche_linkerPhone" size="16"  value="{$list.paiche_linkerPhone}"/>
+	  </dd>
+    </dl>
+    {if $busitype == '1' || $busitype == '3'}
+    <dl class="lineD">
+      <dt><span class="redstar">*</span>联系人身份证：</dt>
+      <dd>
+        <input type="text" name="paiche_linkerNum" id="paiche_linkerNum" size="26"  value="{$list.paiche_linkerNum}" {if strstr($a_permissions,'inputidcard')}{else}onFocus="this.blur()"{/if}/>&nbsp;
+        <input type="button" value="开始读卡" name="beginread" onClick="beginread_onclick()">&nbsp;
+
+        <input type="button" value="停止读卡" name="endread"   onclick="endread_onclick()"  >
+
+        <div class="showprice list" id="havecount" style="width: 350px;margin-left: 490px;height: 38px;line-height: 38px;font-size: 16px;"></div>
+	  </dd>
+    </dl>
+    <dl class="lineD">
+      <dt><span class="redstar">*</span>联系人地址：</dt>
+      <dd>
+        <input type="text" name="paiche_linkerAdd" id="paiche_linkerAdd" size="40"  value="{$list.paiche_linkerAdd}"/>
+	  </dd>
+    </dl>
+    <dl class="lineD">
+	    <dt>担保人：</dt>
+	    <dd>
+	    <div style="position: absolute;margin-left: 375px;" ><img id="img_promier_picture" name="img_promier_picture" {if $list.paiche_promierPicture}src="../../../thumb/upload/idpicture/{$list.paiche_promierPicture}"{else}src=""{/if}></div>
+	    <input type="text" name="paiche_promier" id="paiche_promier" size="16"  value="{$list.paiche_promier}"/>
+	    <input type="hidden" name="paiche_promierPicture" id="paiche_promierPicture" value="{$list.paiche_promierPicture}" />
+	    </dd>
+	</dl>
+    <dl class="lineD">
+	    <dt>担保人手机：</dt>
+	    <dd><input type="text" name="paiche_promierPhone" id="paiche_promierPhone" size="16"  value="{$list.paiche_promierPhone}"/></dd>
+    </dl>
+    <dl class="lineD">
+	    <dt>担保人身份证：</dt>
+	    <dd><input type="text" name="paiche_promierNum" id="paiche_promierNum" size="26" value="{$list.paiche_promierNum}"/>&nbsp;<input type="button" value="开始读卡" name="beginread" onClick="beginread_onclick2()">&nbsp;<input type="button" value="停止读卡" name="endread"   onclick="endread_onclick()"  ></dd>
+    </dl>
+    <dl class="lineD">
+      <dt>担保人地址：</dt>
+      <dd>
+        <input type="text" name="paiche_promierAdd" id="paiche_promierAdd" size="40"  value="{$list.paiche_promierAdd}"/>
+	  </dd>
+    </dl>
+    {/if}
+    
+	
+	<dl class="lineD">
+      <dt><span class="redstar">*</span>用车开始时间：</dt>
+      <dd>
+        <input type="text" name="paiche_startDate" id="paiche_startDate" size="16" value="{$list.paiche_startDate_format}" onClick="calendar.show(this);" readonly="readonly" />
+        <select name="paiche_startHour" id="paiche_startHour">
+            <option value="00" {if $list.paiche_startHour=="00"} selected {else}{/if}>-请选择小时-</option>
+	        {foreach from=$hourlist key=i item=rows}
+	            <option value="{$rows.hour}" {if $rows.hour==$list.paiche_startHour}selected{else}{/if}>{$rows.hour}点</option>
+	        {/foreach}
+        </select>
+        <input id="paiche_startMinute" name="paiche_startMinute" type="text" value="{$list.paiche_startMinute}" class='cssINPUT' style='position: absolute; border-right: 0px;margin-left: 3px;' />
+        <select name="select_startMinute" id="select_startMinute" class="cssINPUT" style="display: none; height: 22px; position: absolute; cursor: pointer;margin-left: 3px;">
+        	{foreach from=$minuelist key=i item=rows}
+	            <option value="{$rows.minute}" >{$rows.minute}</option>
+	        {/foreach}
+        </select>
+        <input type="hidden" id="p_startDate" name="p_startDate" value="" />
+        <input type="hidden" id="p_endDate" name="p_endDate" value="" />
+      </dd>
+    </dl>
+    <dl class="lineD">
+      <dt><span class="redstar">*</span>用车结束时间：</dt>
+      <dd>
+        <input type="text" name="paiche_endDate" id="paiche_endDate" size="16" value="{$list.paiche_endDate_format}" onClick="calendar.show(this);" readonly="readonly" />
+        <select name="paiche_endHour" id="paiche_endHour">
+            <option value="00" {if $list.paiche_endHour=="00"} selected {else}{/if}>-请选择小时-</option>
+	        {foreach from=$hourlist key=i item=rows}
+	            <option value="{$rows.hour}" {if $rows.hour==$list.paiche_endHour}selected{else}{/if}>{$rows.hour}点</option>
+	        {/foreach}
+        </select>
+        <input id="paiche_endMinute" name="paiche_endMinute" type="text" value="{$list.paiche_endMinute}" class='cssINPUT' style='position: absolute; border-right: 0px;margin-left: 3px;' />
+        <select name="select_endMinute" id="select_endMinute" class="cssINPUT" style="display: none; height: 22px; position: absolute; cursor: pointer;margin-left: 3px;">
+        	{foreach from=$minuelist key=i item=rows}
+	            <option value="{$rows.minute}">{$rows.minute}</option>
+	        {/foreach}
+        </select>
+        {if $busitype == '1'}<span style="margin-left: 120px;">&nbsp;&nbsp;租赁期限:<input type="text" name="paiche_aaa"  size="2"  value="{$list.paiche_aaa}"/>注：填写的内容仅供合同打印使用，如：3天、2个月、1年</span>{/if}
+      </dd>
+    </dl>
+    {if $busitype == '1' || $busitype == '2'}
+    <dl class="lineD">
+	    <dt>优惠券编号：</dt>
+    	<dd><input type="text" name="paiche_coupons" id="paiche_coupons" size="26" value="{$list.paiche_coupons}" {if $list.paiche_coupons==""}readonly{/if} />&nbsp;
+    	不使用：<input type="checkbox" id="paiche_unuseCoupons" name="paiche_unuseCoupons" onClick="unlimited(this,'paiche_coupons')" {if $list.paiche_coupons==""}checked{/if} value="Y" /></dd>
+    </dl>
+	<dl class="lineD" id="showCar">
+	    <dt>{if $busitype == '1'}<span class="redstar">*</span>{/if}预约车辆：</dt>
+	    <dd><input type="text" name="paicheCar" id="paicheCar" size="45" onFocus="this.blur()" value="{$list.paicheCar2s}" /> 
+	         <input type="button" value="清 空" onClick="clearValue('paicheCar','paicheCar2')" />&nbsp;
+	         关键字：<input type="text" name="paicheCarKey" id="paicheCarKey" size="10" />
+	    <input type="hidden" name="paicheCar2" id="paicheCar2" value="{$list.paicheCar2}" />
+	    <a href="javascript:select_car();"><img src="../../../css/car2.gif" height="15" class="peoplePic" /></a>
+	    </dd>
+    </dl>
+	{/if}
+
+    {if $busitype == '2' || $busitype == '4' || $busitype == '5'}
+    <dl class="lineD">
+	    <dt><span class="redstar">*</span>司机每天工作时间：</dt>
+	    <dd><input type="text" name="paiche_workTime" id="paiche_workTime" size="16"  value="{$list.paiche_workTime}"/></dd>
+	</dl>
+	{/if}
+    <dl class="lineD">
+	    <dt><span class="redstar">*</span>超时费用：</dt>
+    	<dd><input type="text" name="paiche_overTime" id="paiche_overTime" size="16" value="{$list.paiche_overTime}" {if $list.paiche_unlimitTime=="Y"}readonly{/if} />
+    不限时间：<input type="checkbox" id="paiche_unlimitTime" name="paiche_unlimitTime" onClick="unlimited(this,'paiche_overTime')" {if $list.paiche_unlimitTime=="Y"}checked{/if} value="Y" /></dd>
+    </dl>
+    <dl class="lineD">
+	    <dt><span class="redstar">*</span>限制公里数：</dt>
+	    <dd><input type="text" name="paiche_limitKm" id="paiche_limitKm" size="16"  value="{$list.paiche_limitKm}" {if $list.paiche_unlimitKm=="Y"}readonly{else}{/if}/>&nbsp;
+	    超公里费用：<input type="text" name="paiche_overKm" id="paiche_overKm" size="6"  value="{$list.paiche_overKm}" {if $list.paiche_unlimitKm=="Y"}readonly{else}{/if} />/公里&nbsp;
+	    不限公里<input type="checkbox" id="paiche_unlimitKm" name="paiche_unlimitKm" onClick="unlimited(this,'paiche_limitKm','paiche_overKm')" {if $list.paiche_unlimitKm=="Y"}checked{else}{/if} value="Y" />
+	    <div class="showprice list" id="price" style="width: 510px;"></div>
+	    </dd>
+	</dl>
+
+	{if $busitype == '4'}
+	<dl class="lineD">
+	    <dt><span class="redstar">*</span>油费：</dt>
+	    <dd>
+	    	100公里<input type="text" name="youfei_shen" id="youfei_shen" size="16"  value="{$list.youfei_shen}" />升&nbsp;
+
+	    油价：<input type="text" name="youfei_danjia" id="youfei_danjia" size="6"  value="{$list.youfei_danjia}"  />/升&nbsp;
+
+	    没有油费<input type="checkbox" id="youfei" name="youfei"  {if $list.youfei=="Y"}checked{else}{/if} value="Y" />
+	    
+	    </dd>
+	</dl>	
+	{/if}
+
+
+	{if $busitype == '1' || $busitype == '2'}
+	<dl class="lineD">
+    	<dt>客户要求车型：</dt>
+    	<dd><input type="text" name="paiche_requestCar" id="paiche_requestCar" size="45"  value="{$list.paiche_requestCar}"/></dd>
+  	</dl>
+  	{/if}
+  	{if $busitype == '2'}
+	<dl class="lineD">
+	    <dt>路程：</dt>
+	    <dd><input type="radio" name="paiche_route" value="单" {if $list.paiche_route == "单"}checked{/if} />单程&nbsp;&nbsp;<input type="radio" name="paiche_route" value="双" {if $list.paiche_route == "双"}checked{/if} />双程</dd>
+	</dl>
+	<dl class="lineD">
+	    <dt>内外：</dt>
+	    <dd><input type="radio" name="paiche_scope" value="内" {if $list.paiche_scope == "内"}checked{/if} />市内&nbsp;&nbsp;<input type="radio" name="paiche_scope" value="外" {if $list.paiche_scope == "外"}checked{/if} />市外</dd>
+	</dl>
+	{/if}
+	{if ($busitype == '3' || $busitype == '4' || $busitype == '5') && $task=="insert111"}
+    <dl class="lineD">
+	    <dt>上次结账截止日期：</dt>
+	    <dd><input type="text" name="paiche_AccountendDate" id="paiche_AccountendDate" size="12" onClick="calendar.show(this);" readonly="readonly" /></dd>
+	</dl>
+	<dl class="lineD">
+	    <dt>上次统计超公里日期：</dt>
+	    <dd><input type="text" name="paiche_lastTotalDate" id="paiche_lastTotalDate" size="12" onClick="calendar.show(this);" readonly="readonly" /></dd>
+	</dl>
+	{/if}
+	<dl class="lineD" id="dlitems">
+	    <dt>其他条款约定：</dt>
+	    <dd>
+	    <div id="divitems" style="width:344px;">
+	    <ul>
+          <li class="aaa">编号</li><li class="bbb">约定条款</li><li class="aaa">约定结果</li><li class="aaa">删除</li>
+        </ul>
+	    
+        {foreach from=$itemlist key=i item=row}
+	    <ul id="V{$row.item_id}">
+          <li class="aaa"><input type="hidden" id="Recid" name="Recid[]" value="{$row.id}" />{$row.item_id}<input type="hidden" id="Iid" name="Iid[]" value="{$row.item_id}" /></li>
+          <li class="bbb">{$row.item_name}</li>
+          <li class="aaa">{$row.conv_result}<input type="hidden" id="result" name="result[]" value="{$row.conv_result}" /></li>
+          <li class="aaa"><a href="javascript:delV({$row.item_id})"><img src="../../../css/error.gif" /></a><input type="hidden" id="DV{$row.item_id}" name="DVid[]" value="0" /></li>
+        </ul>
+        {/foreach}
+        
+	    </div><div style="padding:5px 0 0 276px;"><a href="javascript:select_items();"><img src="../../../css/list.gif" height="15" class="peoplePic" /></a></div>
+	    </dd>
+	</dl>
+	{if $busitype == '3' || $busitype == '1' || $busitype == '4' || $busitype == '5'}
+	<dl class="lineD" >
+	    <dt><span class="redstar">*</span>押金：</dt>
+	    <dd><input type="hidden" id="Rid" name="Rid[]" value="{$row.id}" /><input type="hidden" name="paiche_deposit_id" value="1" />
+	    <input type="text" id="paiche_deposit" name="paiche_deposit" value="{$paiche_deposit}" size="6"/>&nbsp;&nbsp;需退金额：<input type="text" id="paiche_deposit_back" name="paiche_deposit_back" value="{$paiche_deposit_back}" size="6" onFocus="this.blur()"/></dd>
+	</dl>
+	{/if}
+	<dl class="lineD" >
+	    <dt id="showrent"><span class="redstar">*</span>租金：</dt>
+	    <dd><input type="hidden" id="Rid" name="Rid[]" value="{$row.id}" /><input type="hidden" name="paiche_rent_id" value="2" />
+	    <input type="text" id="paiche_rent" name="paiche_rent" value="{$paiche_rent}" size="6"/>
+	    {if $busitype == '1' || $busitype == '2'}&nbsp;&nbsp;<input type="radio" name="paiche_needtax" value="0" {if $list.paiche_needtax == "0"}checked{/if} />不需要开票&nbsp;<input type="radio" name="paiche_needtax" value="1" {if $list.paiche_needtax == "1"}checked{/if} />需要开票{/if}
+	    <ul id="showpaiche_shunt" style="display:none;">本公司收现：<input type="text" name="paiche_brother_rented" id="paiche_brother_rented" size="6"  value="{$list.paiche_shuntline.shunt_rented}"/>元</ul>
+	    </dd>
+	</dl>
+    
+    
+    {if $busitype == '1' || $busitype == '2'}
+    <dl class="lineD">
+	    <dt>约定定金：</dt>
+	    <dd><input type="text" name="paiche_front" id="paiche_front" size="6"  value="{$list.paiche_front}"/>元</dd>
+	</dl>
+    <dl class="lineD">
+	    <dt><span class="redstar">*</span>开车线路：</dt>
+	    <dd><textarea name="paiche_line" id="paiche_line" cols="40" rows="5">{$list.paiche_line}</textarea></dd>
+	</dl>
+	
+	{/if}
+	<dl class="lineD">
+	    <dt>特殊说明：</dt>
+	    <dd><textarea name="paiche_specialRemarks" id="paiche_specialRemarks" cols="40" rows="5">{$list.paiche_specialRemarks}</textarea></dd>
+	</dl>
+	{if $task=="update"}
+	{if $list.paiche_shunt==1}
+	<dl class="lineD">
+	    <dt>调车公司：</dt>
+	    <dd><input type="text" name="shuntCom" id="shuntCom" size="38" onFocus="this.blur()" value="{$list.paiche_shuntline.bro_name}" /></dd>
+    </dl>
+    <dl class="lineD">
+	    <dt>司机：</dt>
+	    <dd><input type="text" name="shunt_driver" id="shunt_driver" size="18" onFocus="this.blur()" value="{$list.paiche_shuntline.shunt_driver}" /></dd>
+    </dl>
+    <dl class="lineD">
+	    <dt>司机号码：</dt>
+	    <dd><input type="text" name="shunt_driverPhone" id="shunt_driverPhone" size="16" onFocus="this.blur()" value="{$list.paiche_shuntline.shunt_driverPhone}" /></dd>
+	</dl>
+    <dl class="lineD">
+	    <dt>租金：</dt>
+	    <dd><input type="text" name="shunt_rent" id="shunt_rent" size="8" onFocus="this.blur()" value="{$list.paiche_shuntline.shunt_rent}"/></dd>
+	</dl>
+    {/if}
+    {if ($busitype == '2' || $busitype == '4' || $busitype == '5') && $list.paiche_shunt!=1}
+    <dl class="lineD">
+	    <dt>司机：</dt>
+	    <dd><input type="text" name="paicheDriver" id="paicheDriver" size="18" onFocus="this.blur()" value="{$list.siji}" /></dd>
+    </dl>
+    {/if}
+	{/if}
+    <div class="page_btm">
+      <input type="submit" class="btn_b" name="btn_save" value="确定" />
+    </div>
+  </div>
+  <input type="hidden" name="uid" value="{$list.paiche_id}" />
+  <input type="hidden" name="task" value="{$task}" />
+  <input type="hidden" name="b_id" id="b_id" value="{$busitype}" />
+  <input type="hidden" name="paiche_parent" value="{$list.paiche_parent}" />
+  
+  </form>
+</div>
+<script type="text/javascript" src="../../../js/create.js"></script>
+<!-{literal}->
+<script>
+//编辑状态下显示光宝报价
+if ($("#b_id").val()==2 && ($("#paiche_name2").children('option:selected').val()==11 || $("#paiche_name2").children('option:selected').val()==12)){
+	getClientPrice($("#paiche_name2").val());
+}
+
+</script>
+<!-{/literal}->
+</body>
+</html>

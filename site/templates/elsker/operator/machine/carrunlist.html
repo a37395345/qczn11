@@ -1,0 +1,309 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>管理后台</title>
+<link href="../../../css/style.css" rel="stylesheet" type="text/css">
+<link href="../../../css/float.css" rel="stylesheet" type="text/css" />
+<link href="../../../js/jbox/jBox/Skins/GreyBlue/jbox.css" rel="stylesheet"  />
+<script type="text/javascript" src="../../../js/jquery.js"></script>
+<script type="text/javascript" src="../../../js/jbox/jBox/jquery.jBox-2.3.min.js"></script>
+<script type="text/javascript" src="../../../js/jbox/jBox/i18n/jquery.jBox-zh-CN.js"></script>
+
+
+<script src="../../../js/jquery.lazyload.js" type=text/javascript></script>
+</head>
+<body onload="winload();">
+<div class="geovindu3" id="shop"><a href="javascript://" class="pop_close">关闭</a>
+<input type="hidden" id="carid" value="0" />
+<span style="text-align: left;">
+	{foreach from=$shoplist key=i item=rows}
+            <input type="radio" name="car_shop" value="{$rows.shop_id}" />{$rows.shop_name}
+    {/foreach}<br/><br/><input type="checkbox" name="car_status" id="car_status" value="2" style="float:left;"><label style="float:left;">维修</label>
+    <em id="radiospan"><input type="radio" name="car_maintreason" value="0">一般故障<input type="radio" name="car_maintreason" value="1">被骗<input type="radio" name="car_maintreason" value="2">损毁</em>
+    <br/><br/><input type="button" id="btnsave" value="提交" />
+</span>
+</div>
+<div id="waitbackbg" style="display:none;">
+	<img src="../../../images/wait2.gif" style="position:absolute;left:50%;top:50%;"/>
+</div>
+
+<div class="so_main">
+  <div class="page_tit">车辆当前状况一览表   </div>
+  <div id="searchTopic_div" style="margin-left:10px;">
+    <form action="list.php" method="get" id="SearchForm" name="SearchForm">
+    <input type="hidden" id="firstop" name="firstop" value="{$firstop}" /><input type="hidden" name="status" value="{$status}" />
+    <input type="hidden" name="task" value="carrun" /><input type="hidden" name="search_shop" value="{$search_shop}" />
+    <input type="hidden" name="maint" value="{$maint}" />
+    <input class="btn_b" type="button" value="返回" name="btnback" onclick="javascript:parent.history.go(-1);">&nbsp;&nbsp;&nbsp;&nbsp;
+  	按车牌检索：苏D<input type="text" name="car_num" size="6"  /><input class="btn_b" type="submit" value="确定">
+  	
+  &nbsp;&nbsp;&nbsp;&nbsp;
+  	{if $status==0}空闲{/if}{if $status==1}租用{/if}{if $status==2}维修{/if}合计：{$car.count}辆
+  	
+  	</form>
+  </div>
+  <div class="list">
+  <table width="100%" border="0" cellspacing="0" cellpadding="0">
+  <tr>
+  {foreach from=$car.list item=row name=foo}
+  {$count=$count+1}
+  {if $count==6}</tr><tr>{$count=1}{/if}
+	<td width="20%">
+	<table align="left" width="100%" border="0" cellspacing="0" cellpadding="0">
+	<tr>
+		<td style="border-bottom:0;">{if $row.car_status_code ==2}<img src="../../../images/carb.gif" width="30" />{elseif $row.car_status_code==1}<img src="../../../images/carr.gif" width="30" />{else}<img src="../../../images/carg.gif" width="30" />{/if}
+			
+		{if $row.car_status_code ==1}<a href="../business/detail.php?uid={$row.paiche_id}" target="blank">苏D{$row.car_num}</a>({$row.paiche_shopname}){else}苏D{$row.car_num}{/if}-{$row.car_model}
+		{if $row.car_status_code ==2}(<span date1="{$row.car_id}" date2="{$row.car_nowSite}" date3="{$row.car_status_code}" date4="{$row.car_maintreason}"><a href="javascript://">维修</a></span>){/if}
+		{if $row.car_status_code ==0}(<span date1="{$row.car_id}" date2="{$row.car_nowSite}" date3="{$row.car_status_code}" date4="{$row.car_maintreason}"><a href="javascript://">{if empty($row.shop_name)}设定{else}{$row.shop_name}{/if}</a></span>){/if}</td>
+	</tr>
+	<tr>
+		<td style="border-bottom:0;">
+		<div style="position: relative;">
+		<a href="javascript:cardetail({$row.car_id});">
+		{if $row.car_photo==""}<img src="../../../images/wait1.gif" data-original="../../../images/nopic.png" width="200" height="150" />
+		{else}<img src="../../../images/wait1.gif" data-original="../../../thumb/{$row.car_photo}" width="200" height="150" />{/if}
+		</a>
+		{if $row.car_status_code==1 && $row.drive>0}
+		<div style="position: absolute;top:80px;left:152px;">
+		<a href="javascript:drivedetail({$row.drive});" title="{$row.siji}">
+		{if $row.drive_photo==""}<img src="../../../images/wait3.gif" data-original="../../../images/nopic2.png" width="50" height="70"/>
+		{else}<img src="../../../images/wait3.gif" data-original="../../../thumb/{$row.drive_photo}" width="50" height="70" />{/if}</a>
+	  	</div>
+	  	{/if}
+		</div></td>
+	</tr>
+	<tr>
+		<td style="border-bottom:0;">
+
+		<a href="javascript:price({$row.car_id});">{if empty($row.car_price)}暂无租赁报价{else}租金：{$row.car_price}元/天{/if}</a>
+		
+		
+		<!--<span id="{$row.car_id}" ><a href="javascript://">{$row.car_price}元/天</a></span>-->
+		<div class="geovindu2" id="price{$row.car_id}"><a href="javascript://" class="pop_close">关闭</a>
+		<span>
+		<table id="carprice{$row.car_id}" width="100%" border="0" cellspacing="0" cellpadding="0">
+		<tr>
+		    <th style="width:25px;">序号	</th>
+			<th style="width:135px;">套餐名称</th>
+			<th style="width:30px;">天数</th>
+			<th style="width:55px;">租金</th>
+			<th style="width:50px;">套餐价</th>
+			<th style="width:50px;">本地押金</th>
+			<th style="width:50px;">外地押金</th>
+			<th>备注说明</th>
+		</tr>
+		<tr>
+			<td colspan="8"><img src="../../../images/wait3.gif" /></td>
+		</tr>
+		</table>
+		</span></div>
+		&nbsp;&nbsp;
+		<span ><a href="carrundetail.php?car_id={$row.car_id}" target="blank">查看租车记录</a></span>
+		
+		</td>
+	</tr>
+	</table>
+	</td>
+  {/foreach}
+  </tr>
+ </table>
+ </div>
+ <div class="bottom"></div>
+</div>
+<div class="float108" id="hhService" >
+    <div class="short-list">
+        <div title="更多" class="backToHead"><a href="javascript:;"><img src="../../../images/scroll_01.jpg" alt="" /></a></div>
+    </div>
+</div>
+<!-{literal}->
+<script>
+var wh = $(window).height();
+var wt = $(document).scrollTop();
+function winload(){ 
+    //$('html,body').animate({scrollTop:$('.bottom').offset().top}, 800);
+	$("#waitbackbg").css("display","none");
+} 
+
+var id="";
+$(document).ready(function(){
+	var firstop=$("#firstop").val();
+
+	
+    $("img").lazyload({ 
+        effect: "fadeIn"
+  	});
+    $("#car_status").click(function(){
+    	if($('#car_status').is(':checked')) {
+    		$("#radiospan").show();
+    	}else{
+    		$("#radiospan").hide();
+    	}
+    });
+	$('span').click(function(){
+		pid=$(this).attr("id");		
+		if (pid){
+			$.get("list.php?task=getcarprice",{carid:pid}, function(jsonmsg){
+				if (jsonmsg.status==0){
+					$("#carprice"+pid+" tr:not(:first)").empty();
+					var nRe=jsonmsg.totalRecords;
+					var dataObj = jsonmsg.data;
+					for (var i=0;i<nRe;i++){
+						if (i%2==0){
+							sResult="<tr style='background-color:#CAF2F3;'>";
+						}else{
+							sResult="<tr>";
+						}
+						sResult+="<td>"+(i+1)+"</td><td style='text-align:left;'>"+dataObj[i].plan_name+"</td><td>"+dataObj[i].plan_day+"天</td><td>"+dataObj[i].plan_rent+"元/天</td>";
+						sResult+="<td>"+dataObj[i].plan_rentamount+"元</td><td>"+dataObj[i].plan_deposit1+"元</td><td>"+dataObj[i].plan_deposit2+"元</td>";
+						sResult+="<td>"+dataObj[i].plan_rentRemarks+"</td></tr>";
+						$("#carprice"+pid).append(sResult);
+					}
+				}
+			},"json");
+		    var self = $(this); //当前对象  
+		    $(".geovindu2").css("display","none");
+			$("#price"+pid).css("display","block");
+			var p = self.position(); //获取这个元素的left和top  
+		        var x = p.left + self.width();//获取这个浮动层的left
+		        var y = p.top + self.height();//获取这个浮动层的bottom
+		        var docWidth = $(document).width();//获取网页的宽
+		        var docHeight= $(document).height();//获取网页的高
+		        if (x > docWidth - $("#price"+pid).width() - 20) {  
+		            x = p.left - $("#price"+pid).width()+80;  
+		        }else{
+		            x = x - 80;
+		        }
+		        $("#price"+pid).css("left", x);
+		        if (y > docHeight - $("#price"+pid).height()-20){
+		            y = p.top - $("#price"+pid).height();
+		        }
+		        $("#price"+pid).css("top", y);
+		}else{
+			if ($(this).attr("date1")){
+				shopid=$(this).attr("date2");
+				carstatus=$(this).attr("date3");
+				car_maintreason=$(this).attr("date4");
+				$("#carid").val($(this).attr("date1"));
+				$("input[name='car_shop'][value='"+shopid+"']").attr("checked",true);
+				if (carstatus==2){
+					$("#car_status").attr("checked",'true');
+					$("input[name='car_maintreason'][value='"+car_maintreason+"']").attr("checked",true);  
+					$("#radiospan").show();
+				}else{
+					$("#car_status").removeAttr("checked");
+					$("#radiospan").hide();
+				}
+				
+				var self = $(this); //当前对象
+				var p = self.position(); //获取这个元素的left和top  
+		        var x = p.left + self.width();//获取这个浮动层的left
+		        var y = p.top + self.height();//获取这个浮动层的bottom
+		        var docWidth = $(document).width();//获取网页的宽
+		        var docHeight= $(document).height();//获取网页的高
+		        if (x > docWidth - $(".geovindu3").width() - 20) {  
+		            x = p.left - $(".geovindu3").width()+80;  
+		        }else{
+		            x = x - 80;
+		        }
+		        $(".geovindu3").css("left", x);
+		        if (y > docHeight - $(".geovindu3").height()-20){
+		            y = p.top - $(".geovindu3").height();
+		        }
+		        $(".geovindu3").css("top", y);
+		        $(".geovindu3").css("display","block");
+			}
+			
+			
+		}
+    });
+	/*
+	$('.geovindu2').mouseover(function(){
+	    
+	    $(this).css("display","block");
+	});
+	$('.geovindu2').mouseout(function(){
+	    $(this).css("display","none");
+	});
+	$('span').mouseout(function(){
+		id=$(this).attr("id");
+		pid=$(this).attr("pid");
+		if (id){
+			//$("#price"+id).css("display","none");
+		}
+		if (pid){
+			$("#paiche"+pid).css("display","none");
+		}
+    });
+	*/
+	$("input[name=status],input[name=search_shop]").click(function(){
+		$("#waitbackbg").css({"display":"block","top":wt,"height":wh});
+		document.SearchForm.action = 'list.php?status=' + $("input[name=status]:checked").val()+'&search_shop'+ + $("input[name=search_shop]:checked").val();
+        document.SearchForm.submit();
+	});
+	$(".pop_close").click(function(){
+		$(this).parent().css("display","none");
+	});
+	$("#btnsave").click(function(){
+		wh = $(window).height();
+		wt = $(document).scrollTop();
+		var carstatus=car_maintreason=0;
+		if ($("#car_status").is(':checked')){
+			carstatus=2;
+			car_maintreason=$("input:radio[name='car_maintreason']:checked").val();
+		}
+		
+		$.get("list.php?task=changeshop",{carid:$("#carid").val(),shopid:$("input[name='car_shop']:checked").val(),carstatus:carstatus,car_maintreason:car_maintreason}, function(jsonmsg){
+			if (jsonmsg.status==0){
+				alert("设置成功！");
+				$(".geovindu3").css("display","none");
+				$("#waitbackbg").css({"display":"block","top":wt,"height":wh});
+				location.reload();
+				
+			}
+		},"json");
+	});
+});
+function cardetail(uid){
+	demo_iframe('list.php?task=detail&uid='+uid,'车辆详细资料',1000,480,'login_js');
+}
+function drivedetail(uid){
+	demo_iframe('../employee/list.php?task=detail&uid='+uid,'驾驶员详细资料',500,480,'login_js');
+}
+function price(carid){
+	demo_iframe('price_a.php?car_id='+carid,'租赁报价方案',980,520,'login_js');
+}
+function showprice(uid){
+	if ($("#price"+uid).css("display")=="none"){
+		$("#price"+uid).css("display","block");
+	}else{
+		$("#price"+uid).css("display","none");
+	}
+}
+function carshop(carid,shopid,self){
+	$(".geovindu3").css("display","block");
+	
+	var p = self.position(); //获取这个元素的left和top  
+	alert(p.left);
+    var x = p.left + self.width();//获取这个浮动层的left
+    var y = p.top + self.height();//获取这个浮动层的bottom
+    var docWidth = $(document).width();//获取网页的宽
+    var docHeight= $(document).height();//获取网页的高
+    if (x > docWidth - $(".geovindu3").width() - 20) {  
+        x = p.left - $(".geovindu3").width()+80;  
+    }else{
+        x = x - 80;
+    }
+    $(".geovindu3").css("left", x);
+    if (y > docHeight - $(".geovindu3").height()-20){
+        y = p.top - $(".geovindu3").height();
+    }
+    $(".geovindu3").css("top", y);
+}
+</script>
+<!-{/literal}->
+
+</body>
+</html>

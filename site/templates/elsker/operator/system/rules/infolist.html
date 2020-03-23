@@ -1,0 +1,43 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>管理后台</title>
+<link href="../../../../css/style.css" rel="stylesheet" type="text/css">
+<script type="text/javascript" src="../../../../js/jquery.js"></script>
+<style>
+/*{literal}*/
+	.navi_name{font-size:14px;font-weight:bold;}
+	.indent{padding-left:40px;
+
+
+	}
+	a:hover{
+
+color: red;
+
+}
+/*{/literal}*/
+</style>
+</head>
+<body>
+	<h2 style="margin-top: 50px">公司规章制度</h2>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+  {foreach from=$infoList key=i item=row}
+  <tr>
+	<td style="text-align:left; font-size: 16px;margin-top: 50px;margin-left: 100px;padding: 50px; font-weight: 600;">{$i+1}.<a href="detail.php?id={$row.id}" target="_blank"><u>{$row.info_title}</u></a></td>
+  </tr>
+ {/foreach}
+ </table>
+<div class="so_main">
+  <div class="page_tit" style="text-align:center;">{$info.info_content}</div>
+<div class="list">
+
+
+ 
+ 
+</div>
+</div>
+</body>
+</html>

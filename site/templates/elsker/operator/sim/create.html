@@ -1,0 +1,67 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>管理后台</title>
+<link href="../../../css/style.css" rel="stylesheet" type="text/css">
+<script type="text/javascript" src="../../../js/jquery.js"></script>
+<script type="text/javascript" src="../../../js/common.js"></script>
+<script type="text/javascript" src="../../../js/calendar.js"></script>
+<script type="text/javascript" src="../../../js/check_form.js"></script>
+<style>
+/*{literal}*/
+	.navi_name{font-size:14px;font-weight:bold;}
+	.indent{padding-left:40px;}
+/*{/literal}*/
+</style>
+</head>
+<body>
+<div class="so_main">
+  <div class="page_tit">{if $task=='inmoney_acc'}充值{else}编辑{/if}</div>  
+  <form method="post" action="list.php" onsubmit="return sim_check(this)" name="form1">
+  <div class="form2">
+	  {if $task=='inmoney_acc'}
+	  <dl class="lineD">
+	    <dt>手机号码：</dt>
+	    <dd>{$list.card_no}</dd>
+	  </dl>
+	  <dl class="lineD">
+	    <dt><span class="redstar">*</span>充值日期：</dt>
+	    <dd><input type="text" name="buy_date" id="buy_date" size="16" onclick="calendar.show(this);" readonly="readonly" value="{$info.buy_date}"/></dd>
+	  </dl>
+	  <dl class="lineD">
+	    <dt><span class="redstar">*</span>充值金额：</dt>
+	    <dd><input type="text" name="buy_money" size="8" value="{$info.buy_money}" />元</dd>
+	  </dl>
+	  {else}
+	  <dl class="lineD">
+	    <dt><span class="redstar">*</span>手机号码：</dt>
+	    <dd><input type="text" name="card_no" size="16" value="{$list.card_no}"/></dd>
+	  </dl>
+	  <dl class="lineD">
+	    <dt><span class="redstar">*</span>购买日期：</dt>
+	    <dd><input type="text" name="buy_date" id="buy_date" size="16" value="{$list.buy_date}" onclick="calendar.show(this);" readonly="readonly" /></dd>
+	  </dl>
+	  <dl class="lineD">
+	    <dt><span class="redstar">*</span>购买金额：</dt>
+	    <dd><input type="text" name="buy_money" size="8" value="{$list.buy_money}"/>元</dd>
+	  </dl>
+	  {/if}
+	  <dl class="lineD">
+	    <dt>备注：</dt>
+	    <dd><textarea name="remark" cols="40" rows="5">{$list.remark}{$info.remark}</textarea></dd>
+	  </dl>  
+    	
+    <div class="page_btm">
+      <input type="submit" class="btn_b" value="确定" /><b> 注：<span class="red">*</span>为必填项</b>
+    </div>
+  </div>
+  <input type="hidden" name="uid" value="{$list.sim_id}" />
+  <input type="hidden" name="rid" value="{$info.id}" />
+  <input type="hidden" name="task" value="{$task}" />
+  </form>
+</div>
+
+</body>
+</html>

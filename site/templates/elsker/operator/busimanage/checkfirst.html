@@ -1,0 +1,178 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>管理后台</title>
+<link href="../../../css/style.css" rel="stylesheet" type="text/css">
+<link href="../../../js/jbox/jBox/Skins/GreyBlue/jbox.css" rel="stylesheet"  />
+<script type="text/javascript" src="../../../js/jquery.js"></script>
+<script type="text/javascript" src="../../../js/common.js"></script>
+<script type="text/javascript" src="../../../js/calendar.js"></script>
+</head>
+<body>
+<div class="so_main">
+  <div class="page_tit">业务订单待审核记录</div>
+  <div id="searchTopic_div" style="display:none;">
+    <div class="page_tit">
+    搜索 [<a onclick="searchNews();" href="javascript:void(0);">隐藏</a>]
+    </div>
+    <div class="form2">
+        <form id="form1" action="list.php" method="get">
+        	<input type="hidden" name="op" id="op" value="check" />
+        	<input type="hidden" name="clientid" id="clientid" value="{$clientid}" />
+        	<input type="hidden" name="accountend" value="{$op_flag}" />
+        	<input type="hidden" name="brotherid" id="brotherid" value="{$brotherid}" />
+        	<input type="hidden" name="search_status" id="search_status" value="{$search_status}" />
+        	<input type="hidden" name="search_overtime" id="search_overtime" value="{$search_overtime}" />
+            <dl class="lineD">
+            <dt>合同号：</dt>
+            <dd>
+            <input type="text" name="paiche_contractNum" size="16"  />
+            </dd>
+            </dl>
+            <dl class="lineD">
+	          <dt>租赁类型：</dt>
+	          <dd>
+	              <select name="b_id" >
+	                  {foreach from=$category key=i item=rows}
+	                  <option value="{$rows.item_paicheType}" {if $busitype==$rows.item_paicheType}selected{/if}>{$rows.item_name}</option>
+	                  {/foreach}
+	              </select>
+	          </dd>
+	        </dl>
+	        <dl class="lineD">
+	          <dt>用车单位：</dt>
+	          <dd>
+	              <select name="company" id="company">
+	                  <option value="0" {if $companyid==0}selected{/if}>请选择</option>
+	                  {foreach from=$companylist key=i item=rows}
+	                  <option value="{$rows.client_id}" {if $companyid==$rows.client_id}selected{/if}>{$rows.client_name}</option>
+	                  {/foreach}
+	              </select><input type="text" id="search_key" size="4" placeholder="快速检索" />
+	          </dd>
+	        </dl>
+            <dl class="lineD">
+            <dt>开始时间：</dt>
+            <dd>
+            <input id="search_startDate" type="text" value="{$search_startDate}" name="search_startDate" onClick="calendar.show(this);">
+            </dd>
+            </dl>
+            <dl class="lineD">
+            <dt>结束时间：</dt>
+            <dd>
+            <input id="search_endDate" type="text" value="" name="search_endDate" onClick="calendar.show(this);">
+            </dd>
+            </dl>
+            <dl class="lineD">
+            <dt>联系人/单位：</dt>
+            <dd>
+            <input type="text" name="paiche_linker" size="16"  />
+            </dd>
+            </dl>
+            <dl class="lineD">
+            <dt>联系电话：</dt>
+            <dd>
+            <input type="text" name="paiche_linkerPhone" size="16"  />
+            </dd>
+            </dl>
+            <dl class="lineD">
+            <dt>车牌号：</dt>
+            <dd>
+            	苏D<input type="text" name="paiche_car" size="12"  />
+            </dd>
+            </dl>
+			<dl class="lineD">
+            <dt>审核状态：</dt>
+            <dd>
+            	<input type="radio" name="search_status" value="d" checked>未审核<input type="radio" name="search_status" value="y" {if $search_status=="y"}checked{/if}>已审核<input type="radio" name="search_status" value="a" {if $search_status=="a"}checked{/if}>全部
+            </dd>
+            </dl>
+            <dl class="lineD">
+            <dt>店铺：</dt>
+            <dd>
+            <input type="radio" name="search_shop" value="" {if empty($search_shop)}checked{/if} />全部 
+            {foreach from=$shoplist key=i item=rows}
+            <input type="radio" name="search_shop" value="{$rows.shop_id}" {if $search_shop==$rows.shop_id}checked{/if}/>{$rows.shop_name}负责
+            {/foreach}
+            </dd>
+            </dl>
+            
+			
+            <div class="page_btm">
+            	<input class="btn_b" type="submit" value="确定">
+            </div>
+        </form>
+    </div>
+  </div>
+  <!-------- 用户列表 -------->
+  <div class="Toolbar_inbox">
+    <a href="javascript:void(0);" class="btn_a" onclick="searchNews();" id="searchTopic_action"><span>搜索</span></a>
+  </div>
+  
+  <div class="list">
+  <table width="100%" border="1" cellspacing="0" cellpadding="0">
+  <tr style="height:50px;">
+    {foreach from=$list item=row name=foo}
+    <th>{$row.item_name}</th>
+    {/foreach}
+  </tr>
+  <tr style="height:60px;">
+ 	{foreach from=$list item=row name=foo}
+ 	<td style="text-align:center;background-color:#B1C9FF;">{if empty($row.nCount)}0{else}{$row.nCount}{/if}个</td>
+ 	{/foreach}
+ </tr>
+ <tr >
+    <td colspan="5" style="text-align:left;padding-left:50px;">
+    <input type="radio" name="search_shop" value="" {if empty($search_shop)}checked{/if} />全部 
+            {foreach from=$shoplist key=i item=rows}
+            <input type="radio" name="search_shop" value="{$rows.shop_id}" {if $search_shop==$rows.shop_id}checked{/if}/>{$rows.shop_name}
+            {/foreach}
+    </td>
+  </tr>
+ </table>
+ 
+  </div>
+
+</div>
+<!-{literal}->
+<script>
+var search_shop,search_user;
+	//鼠标移动表格效果
+	$(document).ready(function(){
+	    $("input[name='search_shop']").change(function(){
+	    	search_shop = $("input[name='search_shop']:checked").val();
+	    	location.href="checkfirst.php?search_shop="+search_shop;
+	    });
+	});
+	$("#search_key").live('input propertychange',function(){
+	    var aa=$("#search_key").val();
+	    if (aa!=""){
+			$("#company option").each(function (){  
+		        var txt = $(this).text();  
+		        if(txt.toLowerCase().indexOf(aa) >-1){  
+		            $(this).attr("selected",true);
+		            $("#company").change();
+		            return false;
+		        }
+		     });
+	    }
+	});
+	
+	var isSearchHidden = 1;
+    function searchNews() {
+      if(isSearchHidden == 1) {
+        $("#searchTopic_div").slideDown("fast");
+        isSearchHidden = 0;
+      }else {
+        $("#searchTopic_div").slideUp("fast");
+        isSearchHidden = 1;
+      }
+    }
+	
+	
+</script>
+<!-{/literal}->
+
+</body>
+</html>

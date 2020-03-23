@@ -1,0 +1,99 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>管理后台</title>
+<link href="../../../../css/style.css" rel="stylesheet" type="text/css">
+<link href="../../../../css/box.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="../../../../js/jquery.js"></script>
+<script type="text/javascript" src="../../../../js/common.js"></script>
+<script type="text/javascript" src="../../../../js/box.js"></script>
+<style>
+/*{literal}*/
+	.navi_name{font-size:14px;font-weight:bold;}
+	.indent{padding-left:40px;}
+/*{/literal}*/
+</style>
+</head>
+<body>
+<div class="so_main">
+  <div class="page_tit">发布</div>
+  
+  <form method="post" action="insert.php" onsubmit="return check(this)" enctype="multipart/form-data">
+    <table width="98%" style="border-collapse:collapse; margin: 0 auto; text-align:left; margin-left:10px; margin-top:5px">
+                    	<tr>
+                        	<td class="td1">信息标题:</td>
+                        	<td class="td2">
+                        		<input type="text" name="infotitle" id="infotitle" size="96" value="{$infoList.info_title}">
+                        	</td>
+                        </tr>  
+                        <tr>
+                        	<td class="td1">所属类别:</td>
+                        	<td class="td2">
+                            	{foreach from=$infotypeList key=i item=row name=foo}
+                            		<input type="radio" name="infotype" id="infotype" value="{$row.typeid}">{$row.typename}
+                            	{/foreach}
+                            </td>
+                        </tr>
+                        <tr>
+                        	<td class="td1">信息内容：</td>
+                            <td class="td2">{$editor}</td>
+                        </tr>
+                        <tr>
+                        	<td class="td1">附件:</td>
+                            <td class="td2"><input type="file" name="fj" id="fj"  /><a href="download.php?annexname={$infoList.attachname}" target="_blank">{$infoList.attachname}</a></td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" style="text-align:center">
+                            	<br>
+                            	<input type="submit" name="tj" value="提交" class="input2">
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                <input type="button" value="返回" class="input2" onclick="location.href='infolist.php';">
+                                <input type="hidden" id="infotype1" value="{$infoList.info_type}">
+                                <input type="hidden" name="id" id="id" value="{$infoList.id}">
+								<input type="hidden" name="task" value="{$task}" />
+                            </td>
+                        </tr> 
+                    </table>
+  </form>
+</div>
+
+<script type="text/javascript">
+	function selectAll(){
+		$("input[type='checkbox']").attr("checked",true);
+	}
+	function unselectAll(){
+		$("input[type='checkbox']").attr("checked",false);
+	}
+	$(document).ready(function(){
+		$(".subnavi").click(function(){
+			var checked = false;
+			$(this).parent().parent().find(".subnavi").each(function(){
+				if($(this).attr("checked")){
+					checked = true;
+				}
+			});
+			var navi = $(this).parent().parent().parent().find(".navi");
+			if(checked){
+				navi.attr("checked",true);
+			}else{
+				navi.attr("checked",false);
+			}
+		});
+		$(".navi").click(function(){
+			$(this).parent().find(".subnavi").attr("checked",$(this).attr("checked"));
+		});
+	});
+	function check(_form){
+		if(_form.infotitle.value==""){
+			alert("请输入标题名称！");
+			_form.infotitle.focus();
+			return false;
+		}
+		return true;
+	}
+</script>
+
+</body>
+</html>

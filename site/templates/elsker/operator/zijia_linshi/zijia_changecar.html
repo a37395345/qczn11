@@ -1,0 +1,102 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Insert title here</title>
+<link href="../../../css/style.css" rel="stylesheet" type="text/css">
+<link href="../../../js/jbox/jBox/Skins/GreyBlue/jbox.css" rel="stylesheet"  />
+<script type="text/javascript" src="../../../js/jquery.js"></script>
+<script type="text/javascript" src="../../../js/common.js"></script>
+<script type="text/javascript" src="../../../js/date_select.js"></script>
+<script type="text/javascript" src="../../../js/calendar.js"></script>
+<script type="text/javascript" src="../../../js/fancybox/jquery.mousewheel-3.0.4.pack.js"></script>
+<script type="text/javascript" src="../../../js/fancybox/jquery.fancybox-1.3.4.pack.js"></script>
+<script type="text/javascript" src="../../../js/jbox/jBox/jquery.jBox-2.3.min.js"></script>
+<script type="text/javascript" src="../../../js/jbox/jBox/i18n/jquery.jBox-zh-CN.js"></script>
+<script language="javascript" type="text/javascript" src="../../../js/My97DatePicker/WdatePicker.js"></script>
+</head>
+<body>
+<form method="post" action="zijiaChangecar_accept.php" name="form1" id="form1">
+<input type="hidden" name="pid" value="{$pid}" />
+<div class="so_main">
+  <div class="page_tit_1">中途换车</div>
+ 
+<div class="page_tit_3">&nbsp;</div>
+
+<div class="form2">
+	<dl class="lineD">
+		<dt><span class="redstar">*</span>被换车辆：</dt>
+		<dd>
+			苏D{$paiche.car_num} &nbsp;&nbsp;租金：{$paiche.plan_rentamount}/天&nbsp;&nbsp;超时费：{$paiche.plan_chaoshi}/小时&nbsp;&nbsp;{if $paiche.plan_chaokm!="y"}不限公里{else}限{$paiche.plan_chaokms}/天,超每公里{$paiche.plan_chaokmy}元 
+
+			{/if}&nbsp;&nbsp;开始时间{$paiche.stime}
+		</dd>
+		<dt><span class="redstar">*</span>目标车辆：</dt>
+		<dd >
+			<input type="text" name="mb" id="mb" readonly class="grey" size="38" />
+		</dd>
+		<dt><span class="redstar">*</span>预计结束时间：</dt>
+		<dd>
+			<input type="text" name="changecar_carA" id="changecar_carA" value="{$paiche.paiche_endDate}" readonly class="grey" size="38" />
+		</dd>
+	</dl>
+	<dl class="lineD">
+		<dt><span class="redstar">*</span>被换车辆起始公里数：</dt>
+		<dd><input type="text" name="changecar_carAStartKilo" id="changecar_carAStartKilo" size="5" />&nbsp;&nbsp;结束公里数：<input type="text" name="changecar_carAEndKilo" id="changecar_carAEndKilo" size="5" />
+		</dd>
+	</dl>
+
+
+
+		
+
+
+
+	<dl class="lineD">
+		<dt><span class="redstar">*</span>目标车辆：</dt>
+		<dd><input type="text" name="paicheCar" id="paicheCar" size="38" onFocus="this.blur()" /> 
+			关键字：<input type="text" name="paicheCarKey" id="paicheCarKey" size="10" />
+		<input type="hidden" name="paicheCar2" id="paicheCar2" size="16" />
+		
+		<input type="button" value="清 空" onClick="clearValue('paicheCar','paicheCar2')" />
+		<a href="javascript:select_car();"><img src="../../../css/car2.gif" height="15" class="peoplePic" /></a>
+		</dd>
+	</dl>
+
+	<dl class="lineD">
+		<dt>目标车辆当前公里数：</dt>
+		<dd><input type="text" name="changecar_kiloBNow" id="changecar_kiloBNow" value="" size="5"/>
+		</dd>
+	</dl>
+	
+	<dl class="lineD">
+		<dt>换车时间：</dt>
+		<dd><input type="text" name="addtime" size="18" value="{$addtime}" onclick="{literal}WdatePicker({dateFmt:'yyyy-MM-dd H:m:s'}){/literal}" />
+		</dd>
+	</dl>
+	
+	<dl class="lineD">
+		<dt>备注：</dt>
+		<dd><textarea name="changecar_rentRemarks" id="changecar_rentRemarks" cols="60" rows="3"></textarea>
+		</dd>
+	</dl>
+</div>
+
+  <div class="Toolbar_inbox">
+    <a href="javascript:void(0);" class="btn_a" name="btn_save" id="btn_save" onclick="ok();"><span>确定</span></a>
+    <a href="javascript:void(0);" class="btn_a" onclick="closebox();"><span>关闭</span></a>   	
+  </div> 
+</div>
+</form>
+<script type="text/javascript" src="../../../js/account.js"></script>
+<!-{literal}->
+<script>
+$(document).ready(function(){
+   
+   
+    
+});
+</script>
+<!-{/literal}->
+</body>
+</html>

@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+
+    <meta charset="utf-8">
+
+
+
+    <title>客户详细资料</title>
+    <meta name="keywords" content="H+后台主题,后台bootstrap框架,会员中心主题,后台HTML,响应式后台">
+    <meta name="description" content="H+是一个完全响应式，基于Bootstrap3最新版本开发的扁平化主题，她采用了主流的左右两栏式布局，使用了Html5+CSS3等现代技术">
+
+    <link rel="shortcut icon" href="favicon.ico"> <link href="../../../crm1/css/bootstrap.min.css?v=3.3.6" rel="stylesheet">
+    <link href="../../../crm1/css/font-awesome.css?v=4.4.0" rel="stylesheet">
+
+    <link href="../../../crm1/css/animate.css" rel="stylesheet">
+    <link href="../../../crm1/css/style.css?v=4.1.0" rel="stylesheet">
+    <style type="text/css">
+      th{
+        text-align: center;
+        }
+        td{
+        text-align: center;
+        }
+    </style>
+</head>
+<body class="gray-bg">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="wrapper wrapper-content animated fadeInUp">
+                <div class="ibox">
+                    <div class="ibox-content">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="m-b-md">
+                                    <h2>客户详细资料 &nbsp;&nbsp;&nbsp;{$data.paiche_linker}</h2>
+                                </div>
+                                <dl class="dl-horizontal">
+                                    <dt>身份证号码：</dt>
+                                    <dd>
+                                        {$data.paiche_linkerNum}
+                                    </dd>
+                                </dl>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-5">
+                                
+                                <dl class="dl-horizontal">
+                                    
+                        
+                                </dl>
+                            </div>
+                            <div class="col-sm-7" id="cluster_info">
+                                <dl class="dl-horizontal">
+                                   
+                               
+                                </dl>
+                            </div>
+                        </div>
+                        
+                        <div class="row m-t-sm">
+                            <div class="col-sm-12">
+                                <div class="panel blank-panel">
+                                    <div class="panel-heading">
+                                        <div class="panel-options">
+                                            <ul class="nav nav-tabs">
+                                                <li><a href="project_detail.html#tab-1" data-toggle="tab"></a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+
+                                    <div class="panel-body">
+
+                                        <div class="tab-content">
+
+                                            <div class="tab-pane active" id="tab-1">
+                                                <table class="table table-striped">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>租车合同号</th>
+                                                            <th>开始用车时间</th>
+                                                            <th>结束用车时间</th>
+                                                            <th>活动名称</th>
+                                                            <th>订单来源</th>
+                                                            <th>身份验证方式</th>
+                                                            <th>联系电话</th>
+                                                            <th>联系地址</th>
+                                                            <th>订单详细</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                       {foreach from=$list item=row name=foo}
+                                                       <tr>
+                                                         <td>
+                                                           {$row.paiche_contractNum}
+                                                         </td>
+                                                         <td>
+                                                           {$row.paiche_startDate}
+                                                         </td>
+                                                         <td>
+                                                           {$row.paiche_endDate}
+                                                         </td>
+                                                         <td>
+                                                           {$row.huodong}
+                                                         </td>
+                                                         <td>
+                                                           {if $row.name==""}
+                                                              临时散客
+                                                           {else}
+                                                              {$row.name}
+                                                           {/if}
+                                                         </td>
+                                                         <td>
+                                                           {if $row.paiche_stype==1}
+                                                           手动输入
+                                                           {else if $row.paiche_stype==2}
+                                                            刷身份证验证
+                                                           {else if $row.paiche_stype==3}
+                                                           老客户短信验证
+                                                           {else if $row.paiche_stype==4}
+                                                           新客户人脸验证
+                                                           {/if}
+                                                         </td>
+                                                         <td>
+                                                            {$row.paiche_linkerPhone}
+                                                         </td>
+                                                         <td>
+                                                            {$row.paiche_linkerAdd}
+                                                         </td>
+                                                         <td >
+                                                            {if $zijia_detail==1}
+                                                            <a href="/site/operator/zijia_linshi/zijia_detail.php?uid={$row.paiche_id}" target="_blank">明细</a>
+                                                            {else}
+                                                            详细
+                                                            {/if}
+                                                         </td>
+                                                       </tr>
+                                                       {/foreach}
+                                                    </tbody>
+                                                  </table>
+
+                                            </div>
+
+
+
+
+                                            
+                                            
+                                            
+
+                                            
+                                              
+
+
+
+
+
+
+
+
+
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+
+    <!-- 全局js -->
+    <script src="../../../crm1/js/jquery.min.js?v=2.1.4"></script>
+    <script src="../../../crm1/js/bootstrap.min.js?v=3.3.6"></script>
+
+
+
+    
+
+
+    <script>
+        $(document).ready(function () {
+
+            $('#loading-example-btn').click(function () {
+                btn = $(this);
+                simpleLoad(btn, true)
+
+                // Ajax example
+                //                $.ajax().always(function () {
+                //                    simpleLoad($(this), false)
+                //                });
+
+                simpleLoad(btn, false)
+            });
+        });
+
+        function simpleLoad(btn, state) {
+            if (state) {
+                btn.children().addClass('fa-spin');
+                btn.contents().last().replaceWith(" Loading");
+            } else {
+                setTimeout(function () {
+                    btn.children().removeClass('fa-spin');
+                    btn.contents().last().replaceWith(" Refresh");
+                }, 2000);
+            }
+        }
+    </script>
+
+    <script type="text/javascript" src="http://tajs.qq.com/stats?sId=9051096" charset="UTF-8"></script>
+    <!--统计代码，可删除-->
+
+</body>
+
+</html>
